@@ -1,0 +1,12 @@
+.page-login h1
+{
+}
+
+.page-login .login, .page-login .register
+{
+    background-color: #FCFCFC;
+    border: 1px solid #777;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+}

@@ -6,8 +6,8 @@ from app import views
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', views.login, name='login'),
-    # url(r'^blog/', include('blog.urls')),
+    url(r'^$', views.login_page, name='login_page'),
+    url(r'^do_login$', views.do_login, name='do_login'),
 
     #url(r'^admin/', include(admin.site.urls)),
 )
