@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+#Loads the login page.
 def login_page(request):
     return render(request, 'login.html')
 
+#Log a user in and display the correct response.
 def do_login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -20,3 +22,7 @@ def do_login(request):
             pass
     else:
         return HttpResponse('Incorrect username or password')
+
+#Loads the page for registering a new user.
+def register_user_page(request):
+	return render(request, 'register.html')
