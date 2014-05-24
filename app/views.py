@@ -26,3 +26,17 @@ def do_login(request):
 #Loads the page for registering a new user.
 def register_user_page(request):
 	return render(request, 'register.html')
+	
+#Register a new user account and log in.
+#TODO error checking.
+def register_user(request):
+	firstname = request.POST['firstname']
+	lastname = request.POST['lastname']
+	username = request.POST['username']
+	email = request.POST['email']
+	password = request.POST['password']
+	
+	user = User.objects.create_user(username, email, password, first_name=firstname, last_name=lastname)
+	user.save()
+	
+	return render(request, 'login.html');
