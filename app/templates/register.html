@@ -1,5 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-	test
+	<div class="container account-registration">
+		<form role="form" class="registration" method="post" action="{% url 'register_user' %}">
+			{% csrf_token %}
+		
+			<div class="form-group">
+				<label for="fullname">Full name</label>
+				
+				<div class="form-inline" id="fullname">
+					<label for="firstname" class="sr-only">First Name</label>
+					<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your first name">
+					
+					<label for="lastname" class="sr-only">Last Name</label>
+					<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your last name">
+				</div>
+		  	</div>
+		  	
+		  	<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" id="username" name="username" placeholder="Please select a username">
+		  	</div>
+		  	
+		  	<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
+		  	</div>
+		  	
+		  	<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" name="password" placeholder="Create a password">
+		  	</div>
+		  	
+		  	<!-- Add option for selecting group -->
+		
+			<button type="submit" class="btn btn-default">Create User Account</button>
+		</form>
+	</div>
 {% endblock %}
