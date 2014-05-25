@@ -40,6 +40,7 @@ class UserRegistrationForm(forms.Form):
 	username = UsernameRegistrationField(
 		label = "Username",
 		required = True,
+		max_length = 30,
 		widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Select a username'}),
 	)
     
