@@ -1,10 +1,25 @@
-.page-login h1
+.page-login .title
 {
+    font-size: 36pt;
+    color: #F33;
+    text-align: center;
+}
+
+.page-login .title div, .page-login .title img
+{
+    display: inline-block;
+}
+
+
+.page-login .title img
+{
+    height: 36pt;
+    margin-bottom: 10px; 
 }
 
 .lead-panel
 {
-    background-color: #FCFCFC;
+    background-color: #F9F9F9;
     border: 1px solid #777;
     border-radius: 10px;
     padding: 20px;
