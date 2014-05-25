@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from forms import UserRegistrationForm
 
 #Loads the login page.
 def login_page(request):
@@ -23,20 +24,34 @@ def do_login(request):
     else:
         return HttpResponse('Incorrect username or password')
 
-#Loads the page for registering a new user.
-def register_user_page(request):
-	return render(request, 'register.html')
-	
-#Register a new user account and log in.
-#TODO error checking.
-def register_user(request):
-	firstname = request.POST['firstname']
-	lastname = request.POST['lastname']
-	username = request.POST['username']
-	email = request.POST['email']
-	password = request.POST['password']
-	
-	user = User.objects.create_user(username, email, password, first_name=firstname, last_name=lastname)
-	user.save()
-	
-	return render(request, 'login.html');
+#Loads the page for registering a new user with proper form validation
+def register(request):
+	#Process the form if it has been submitted through post
+	if request.method == 'POST':
+
+		#Get the form corresponding to the post data
+		form = UserRegistrationForm(request.POST) 
+
+		#All validation rules pass - generate a new user account
+		if form.is_valid():			
+			#Generate a new user and save, username, email, and password are required.
+			user = User.objects.create_user(
+				form.cleaned_data['username'],
+				form.cleaned_data['email'],
+				form.cleaned_data['password'],
+				first_name = form.cleaned_data['firstname'],
+				last_name = form.cleaned_data['lastname']
+			)
+			user.save()
+			
+			#Redirect back to the login page
+			return HttpResponseRedirect('/')
+			
+	#Get a blank form if loaded from link (initial load)
+	else:
+		form = UserRegistrationForm()
+        
+    #Render the page using whichever form was loaded.
+	return render(request, 'register.html', {
+        'form': form,
+    })
