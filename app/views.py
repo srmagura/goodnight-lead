@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
-from user_registration_form import UserRegistrationForm
-import reset_password_form
+from forms.user_registration_form import UserRegistrationForm
+import forms.reset_password_form
 
 #Loads the login page.
 def login_page(request):
@@ -59,7 +59,7 @@ def register(request):
     })
 
 def reset_password_page(request):
-    form_cls = reset_password_form.SendEmailForm
+    form_cls = forms.reset_password_form.SendEmailForm
     success = False
 
     if request.method == 'POST':
