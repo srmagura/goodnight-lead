@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     url(r'^$', views.login_page, name='login_page'),
     url(r'^do_login$', views.do_login, name='do_login'),
     url(r'^register$', views.register, name='register'),
+    url(r'^reset_password_page$', views.reset_password_page, 
+        name='reset_password_page'),
 
     #url(r'^admin/', include(admin.site.urls)),
 )

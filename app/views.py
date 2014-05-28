@@ -3,7 +3,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from forms import UserRegistrationForm
+
+from user_registration_form import UserRegistrationForm
+import reset_password_form
 
 #Loads the login page.
 def login_page(request):
@@ -26,32 +28,47 @@ def do_login(request):
 
 #Loads the page for registering a new user with proper form validation
 def register(request):
-	#Process the form if it has been submitted through post
-	if request.method == 'POST':
+    #Process the form if it has been submitted through post
+    if request.method == 'POST':
 
-		#Get the form corresponding to the post data
-		form = UserRegistrationForm(request.POST) 
+        #Get the form corresponding to the post data
+        form = UserRegistrationForm(request.POST) 
 
-		#All validation rules pass - generate a new user account
-		if form.is_valid():			
-			#Generate a new user and save, username, email, and password are required.
-			user = User.objects.create_user(
-				form.cleaned_data['username'],
-				form.cleaned_data['email'],
-				form.cleaned_data['password'],
-				first_name = form.cleaned_data['firstname'],
-				last_name = form.cleaned_data['lastname']
-			)
-			user.save()
-			
-			#Redirect back to the login page
-			return HttpResponseRedirect('/')
-			
-	#Get a blank form if loaded from link (initial load)
-	else:
-		form = UserRegistrationForm()
+        #All validation rules pass - generate a new user account
+        if form.is_valid():         
+            #Generate a new user and save, username, email, and password are required.
+            user = User.objects.create_user(
+                form.cleaned_data['username'],
+                form.cleaned_data['email'],
+                form.cleaned_data['password'],
+                first_name = form.cleaned_data['firstname'],
+                last_name = form.cleaned_data['lastname']
+            )
+            user.save()
+            
+            #Redirect back to the login page
+            return HttpResponseRedirect('/')
+            
+    #Get a blank form if loaded from link (initial load)
+    else:
+        form = UserRegistrationForm()
         
     #Render the page using whichever form was loaded.
-	return render(request, 'register.html', {
+    return render(request, 'register.html', {
         'form': form,
     })
+
+def reset_password_page(request):
+    form_cls = reset_password_form.SendEmailForm
+    success = False
+
+    if request.method == 'POST':
+        form = form_cls(request.POST) 
+        if form.is_valid():
+            success = True
+            form = form_cls()
+    else:       
+        form = form_cls()
+        
+    return render(request, 'reset_password_page.html', 
+        {'form': form, 'success': success})
