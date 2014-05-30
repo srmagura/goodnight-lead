@@ -1,11 +1,16 @@
+#http imports
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
+#User imports
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from models import LeadUserInfo
 
+#forms
 from forms.user_registration_form import UserRegistrationForm
 import forms.reset_password_form
+
 
 #Loads the login page.
 def login_page(request):
@@ -45,6 +50,15 @@ def register(request):
                 last_name = form.cleaned_data['lastname']
             )
             user.save()
+            
+            userInfo = LeadUserInfo(
+                user = user,
+                gender = form.cleaned_data['gender'],
+                major = form.cleaned_data['major'],
+                year = form.cleaned_data['year'],
+                organization = form.cleaned_data['organization'],
+            )
+            userInfo.save()
             
             #Redirect back to the login page
             return HttpResponseRedirect('/')

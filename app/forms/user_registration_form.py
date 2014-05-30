@@ -19,7 +19,16 @@ class EmailRegistrationField(forms.EmailField):
             raise ValidationError(
                 "Email already in use"
             )
-        
+
+#Gender entry field which validates that an appropriate char was entered.
+class GenderRegistrationField(forms.CharField):
+    def validate(self, value):
+        super(GenderRegistrationField, self).validate(value)
+        if(not (value=='m' or value=='M' or value=='f' or value=='F')):
+            raise ValidationError(
+                "Must be M or F"
+            )
+
 #Form used for registering a new user account.
 class UserRegistrationForm(forms.Form):
     
@@ -52,4 +61,34 @@ class UserRegistrationForm(forms.Form):
 
     password = forms.CharField(
         widget = forms.PasswordInput(attrs = {'class': 'form-control', 'placeholder': 'Create a password'}),
+    )
+    
+    gender = GenderRegistrationField(
+        label="Gender",
+        required=True,
+        max_length = 1,
+        widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Gender'}),
+    )
+    
+    major = forms.CharField(
+        label="Major",
+        required=True,
+        max_length = 100,
+        widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Enter your current major'}),
+    )
+    
+    year = forms.IntegerField(
+        label="Year in university",
+        required = True,
+        min_value = 1,
+        max_value = 4,
+        localize = True,
+        widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': '1 - 4'}),
+    )
+    
+    organization = forms.CharField(
+        label="Group",
+        required=True,
+        max_length = 100,
+        widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'Group or organization you are associated with'}),
     )
