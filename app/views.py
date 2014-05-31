@@ -8,8 +8,9 @@ from django.contrib.auth.models import User
 from models import LeadUserInfo
 
 #forms
-from forms.user_registration_form import UserRegistrationForm
+from forms.user_registration_form import UserForm, InfoForm
 import forms.reset_password_form
+
 
 
 #Loads the login page.
@@ -37,39 +38,30 @@ def register(request):
     if request.method == 'POST':
 
         #Get the form corresponding to the post data
-        form = UserRegistrationForm(request.POST) 
+        userForm = UserForm(request.POST)
+        infoForm = InfoForm(request.POST)
+        forms = [userForm, infoForm]
 
         #All validation rules pass - generate a new user account
-        if form.is_valid():         
-            #Generate a new user and save, username, email, and password are required.
-            user = User.objects.create_user(
-                form.cleaned_data['username'],
-                form.cleaned_data['email'],
-                form.cleaned_data['password'],
-                first_name = form.cleaned_data['firstname'],
-                last_name = form.cleaned_data['lastname']
-            )
+        if all(form.is_valid() for form in forms):  
+            user = userForm.save()
+            user.set_password(user.password)
             user.save()
             
-            userInfo = LeadUserInfo(
-                user = user,
-                gender = form.cleaned_data['gender'],
-                major = form.cleaned_data['major'],
-                year = form.cleaned_data['year'],
-                organization = form.cleaned_data['organization'],
-            )
-            userInfo.save()
+            info = infoForm.save(commit=False)
+            info.user = user
+            info.save()
             
             #Redirect back to the login page
             return HttpResponseRedirect('/')
             
     #Get a blank form if loaded from link (initial load)
     else:
-        form = UserRegistrationForm()
+        forms = [UserForm(), InfoForm()]
         
     #Render the page using whichever form was loaded.
     return render(request, 'register.html', {
-        'form': form,
+        'forms': forms,
     })
 
 def reset_password_page(request):
