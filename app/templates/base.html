@@ -34,17 +34,7 @@
                 <div class="navbar-header pull-right">
                     <!-- Pull left to ensure element is positioned left of the button -->
                     {% if user.is_authenticated %}
-                        <ul class="nav navbar-nav pull-left no-right-margin">
-                            <li class="dropdown pull-left">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}<b class="caret"></b></a>
-                                <!-- pull right keeps the dropdown menu on the page -->
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="accountsettings">Account Settings</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="logout">Log out</a></li>
-                                </ul>
-                            </li>
-                        </ul> 
+                        <span class="nav navbar-nav navbar-text pull-left no-right-margin pointer" data-toggle="dropdown" data-target=".navbar-dropdown">{{ user.username }}<b class="caret"></b></span>
                     {% else %}
                         <!-- pull-left ensures proper alignment with other navbar items -->
                         <p class="navbar-text pull-left">Not logged in</p>
@@ -62,6 +52,18 @@
                         <li><a href="/inventories">Inventories</a></li>
                     </ul>
                 </div>
+                
+                {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav navbar-right clear">
+                        <li class="dropdown pull-left navbar-dropdown">
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="accountsettings">Account Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="logout">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </nav>
     
