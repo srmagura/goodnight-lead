@@ -13,9 +13,9 @@ def validate_email(value):
             )
 def validate_gender(value):           
     if(not (value=='m' or value=='M' or value=='f' or value=='F')):
-                raise ValidationError(
-                    "Must be M or F"
-                )
+            raise ValidationError(
+                "Must be M or F"
+            )
                 
 #The part of the form which deals with the User object    
 class UserForm(ModelForm):

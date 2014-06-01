@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^register$', views.register, name='register'),
     url(r'^reset_password_page$', views.reset_password_page, 
         name='reset_password_page'),
-
+    url(r'^logout$', views.logout_user, name='logout'),
+    
     #url(r'^admin/', include(admin.site.urls)),
 )

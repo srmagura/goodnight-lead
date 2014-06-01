@@ -1,3 +1,24 @@
+body {
+    padding-top:70px;
+}
+
+.navbar-centered-text:hover {
+    text-decoration:none;
+}
+
+.navbar-centered-text {
+    height:50px;
+    line-height:50px;
+}
+
+.navbar-logo-image {
+    height:36pt;
+}
+
+.navbar-logo-text {
+    color:#F33;
+}
+
 .page-login .title
 {
     font-size: 36pt;

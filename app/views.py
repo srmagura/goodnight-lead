@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
 #User imports
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from models import LeadUserInfo
 
@@ -78,3 +78,8 @@ def reset_password_page(request):
         
     return render(request, 'reset_password_page.html', 
         {'form': form, 'success': success})
+        
+#Logs out a user and redirects to the home page
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect("/")
