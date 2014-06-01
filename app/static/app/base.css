@@ -2,21 +2,16 @@ body {
     padding-top:70px;
 }
 
-.navbar-centered-text:hover {
-    text-decoration:none;
-}
-
-.navbar-centered-text {
-    height:50px;
-    line-height:50px;
-}
-
 .navbar-logo-image {
     height:36pt;
 }
 
 .navbar-logo-text {
-    color:#F33;
+    color:#F33 !important;
+}
+
+.no-right-margin {
+    margin-right:0;
 }
 
 .page-login .title
