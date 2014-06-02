@@ -5,21 +5,17 @@ class BigFiveQuestion(NumberQuestion):
     minimum = 1
     maximum = 7
     
-    # Not currently used
     choice_labels = (
-        'Disagree strongly', 
-        'Disagree moderately',
-        'Disagree a little', 
-        'Neither agree nor disagree',
-        'Agree a little',
-        'Agree moderately',
-        'Agree strongly'
+        'DS', 'DM', 'DL', 'N',
+        'AL', 'AM', 'AS'
     )
+    
     
 class BigFive:
 
     inventory_id = 0
     name = 'Big Five'
+    template = 'big_five.html'
 
     question_text = {
         1: 'Extraverted, enthusiastic.',

@@ -90,6 +90,7 @@ def take_inventory(request, inventory_id):
     inventory = inventories.inventoryById[int(inventory_id)]()
     form = inventories.InventoryForm(inventory=inventory)
     data = {'inventory': inventory, 'form': form}
+    template = 'take_inventory/{}'.format(inventory.template)
   
-    return render(request, 'take_inventory.html', data)
+    return render(request, template, data)
 

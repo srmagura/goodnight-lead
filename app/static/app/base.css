@@ -64,3 +64,36 @@ body {
     color: green;
     font-weight: bold;
 }
+
+.take-inventory .description
+{
+    padding: 10px 0;
+}
+
+.take-inventory .form-group ul
+{
+    margin: 0;
+    padding: 0 5px;
+}
+
+.take-inventory .form-group li
+{
+    display: inline-block;
+    list-style-type: none;
+    padding: 0 7px;
+}
+
+.take-inventory .form-group li label
+{
+    font-weight: normal;
+}
+
+.take-inventory .answer-codes td
+{
+    padding: 5px 7px;
+}
+
+.take-inventory .answer-codes td.code
+{
+    font-weight: bold;
+}

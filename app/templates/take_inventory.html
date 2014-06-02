@@ -5,11 +5,17 @@ Reset password
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="take-inventory container">
     <div class="row">
-        <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-offset-3 col-md-6">
             <div class="lead-panel">
                 <h2>{{inventory.name}}</h2>
+                
+                <div class="description">
+                    {% block description %}
+                    {% endblock %}
+                </div>
+                
                 <form role="form" method="post" action="{% url 'register' %}">
                     {% csrf_token %}		  	
                     
