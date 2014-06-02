@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^register$', views.register, name='register'),
     url(r'^reset_password$', views.reset_password_page, 
         name='reset_password_page'),
+    url(r'^logout$', views.logout_user, name='logout'),
     url(r'^inventory/(?P<inventory_id>[0-9]+)/$', views.take_inventory,
         name='take_inventory')
 

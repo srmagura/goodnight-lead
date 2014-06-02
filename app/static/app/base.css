@@ -1,3 +1,27 @@
+body {
+    padding-top:70px;
+}
+
+.navbar-logo-image {
+    height:36pt;
+}
+
+.navbar-logo-text {
+    color:#F33 !important;
+}
+
+.no-right-margin {
+    margin-right:0;
+}
+
+.pointer {
+    cursor:pointer;
+}
+
+.inline {
+    display:inline-block;
+}
+
 .page-login .title
 {
     font-size: 36pt;

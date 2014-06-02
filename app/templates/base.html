@@ -2,24 +2,72 @@
 
 <!doctype HTML>
 <html>
-<head>
-    <title>Goodnight LEAD -
-        {% block title %}
+    <head>
+        <title>
+            Goodnight LEAD - {% block title %}{% endblock %}
+        </title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'app/base.css' %}" />
+
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top" roll="navigation">
+            <!-- Fluid container allows absolute left/right positioning of logo/account settings -->
+            <div class="container-fluid">
+                <!-- Logo - pull left aligns left -->
+                <div class="navbar-header inline">
+                    <a class="logo" href="/">
+                        <!-- pull left assures proper order and vertical alignment -->
+                        <img class="navbar-logo-image pull-left" src="{% static 'app/logo.png' %}"/>
+                        <p class="navbar-text pull-left navbar-logo-text">L.E.A.D. Home</p>
+                    </a>
+                </div>
+                
+                <!-- Account settings and collapse button - pull right positions right -->
+                <div class="navbar-header pull-right">
+                    <!-- Pull left to ensure element is positioned left of the button -->
+                    {% if user.is_authenticated %}
+                        <span class="nav navbar-nav navbar-text pull-left no-right-margin pointer" data-toggle="dropdown" data-target=".navbar-dropdown">{{ user.username }}<b class="caret"></b></span>
+                    {% else %}
+                        <!-- pull-left ensures proper alignment with other navbar items -->
+                        <p class="navbar-text pull-left">Not logged in</p>
+                    {% endif %}
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                     
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav" id="navbar-links">
+                        <li><a href="/inventories">Inventories</a></li>
+                    </ul>
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown pull-left navbar-dropdown">
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="accountsettings">Account Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="logout">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+    
+        {% block content %}
         {% endblock %}
-    </title>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'app/base.css' %}" />
-
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-{% block content %}
-{% endblock %}
-</body>
+    </body>
 </html>
