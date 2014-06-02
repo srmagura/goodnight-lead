@@ -78,3 +78,9 @@ def reset_password_page(request):
         
     return render(request, 'reset_password_page.html', 
         {'form': form, 'success': success})
+        
+def take_inventory(request, inventory_id):
+    data = {'inventory_id': inventory_id}
+
+    
+    return render(request, 'take_inventory.html', data)
