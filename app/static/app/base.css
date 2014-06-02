@@ -18,8 +18,8 @@ body {
     cursor:pointer;
 }
 
-.clear {
-    clear:both;
+.inline {
+    display:inline-block;
 }
 
 .page-login .title
