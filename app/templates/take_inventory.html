@@ -9,7 +9,21 @@ Reset password
     <div class="row">
         <div class="col-md-offset-4 col-md-4">
             <div class="lead-panel">
-                <h2>Taking inventory {{inventory_id}}</h2>
+                <h2>{{inventory.name}}</h2>
+                <form role="form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}		  	
+                    
+                    {% for field in form %}
+                        <div class="form-group {% if field.errors %} has-error {% endif %}">
+                            <label class = "control-label"> {{ field.label }} </label>
+                            <span class = "form-control-feedback"> {{ field.errors }} </span>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                                          
+                    <input type="submit" class="btn btn-default" 
+                        value="Submit"/>
+                </form>
             </div>
         </div>
     </div>

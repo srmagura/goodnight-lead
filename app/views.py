@@ -5,13 +5,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 #User imports
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from models import LeadUserInfo
 
 #forms
 from forms.user_registration_form import UserForm, InfoForm
 import forms.reset_password_form
 
-
+import inventories
 
 #Loads the login page.
 def login_page(request):
@@ -83,9 +84,12 @@ def reset_password_page(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
-        
+     
+@login_required   
 def take_inventory(request, inventory_id):
-    data = {'inventory_id': inventory_id}
+    inventory = inventories.inventoryById[int(inventory_id)]()
+    form = inventories.InventoryForm(inventory=inventory)
+    data = {'inventory': inventory, 'form': form}
   
     return render(request, 'take_inventory.html', data)
 
