@@ -87,9 +87,23 @@ def logout_user(request):
      
 @login_required   
 def take_inventory(request, inventory_id):
+    success = False
     inventory = inventories.inventoryById[int(inventory_id)]()
-    form = inventories.InventoryForm(inventory=inventory)
-    data = {'inventory': inventory, 'form': form}
+    form_cls = inventories.InventoryForm
+    form_kwargs = {'inventory': inventory}
+    
+    if request.method == 'POST':
+        form = form_cls(request.POST, **form_kwargs) 
+        if form.is_valid():
+            success = True
+            inventory.submit(request.user, form)
+            
+            form = None
+    else:       
+        form = form_cls(**form_kwargs)
+    
+    data = {'inventory': inventory, 'form': form,
+        'success': success}
     template = 'take_inventory/{}'.format(inventory.template)
   
     return render(request, template, data)

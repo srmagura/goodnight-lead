@@ -11,7 +11,7 @@ class BigFiveQuestion(NumberQuestion):
     )
     
     
-class BigFive:
+class BigFive(Inventory):
 
     inventory_id = 0
     name = 'Big Five'

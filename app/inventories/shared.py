@@ -1,4 +1,20 @@
 from django import forms
+import app.models as models
+
+class Inventory:
+
+    def submit(self, user, form):
+        submission = models.Submission()
+        submission.inventory_id = self.inventory_id
+        submission.user = user
+        submission.save()
+        
+        for key, value in form.cleaned_data.items():
+            answer = models.Answer()
+            answer.submission = submission
+            answer.question_id = int(key)
+            answer.content = value
+            answer.save()
 
 class Question:
 

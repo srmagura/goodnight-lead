@@ -15,3 +15,13 @@ class LeadUserInfo(models.Model):
     year = models.IntegerField(max_length=2, validators=[MinValueValidator(1), MaxValueValidator(4)])
     organization = models.CharField(max_length=100)
     #Goals?
+    
+class Submission(models.Model):
+    user = models.OneToOneField(User)
+    inventory_id = models.IntegerField()
+    
+class Answer(models.Model):
+    submission = models.ForeignKey(Submission)
+    question_id = models.IntegerField()
+    content = models.CharField(max_length=1000)
+
