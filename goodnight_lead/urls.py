@@ -12,8 +12,10 @@ urlpatterns = patterns('',
     url(r'^reset_password$', views.reset_password_page, 
         name='reset_password_page'),
     url(r'^logout$', views.logout_user, name='logout'),
-    url(r'^inventory/(?P<inventory_id>[0-9]+)/$', views.take_inventory,
-        name='take_inventory')
-
+    
+    url(r'^inventory/take/(?P<inventory_id>[0-9]+)$', views.take_inventory,
+        name='take_inventory'),
+    url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', views.review_inventory,
+        name='review_inventory'),
     #url(r'^admin/', include(admin.site.urls)),
 )
