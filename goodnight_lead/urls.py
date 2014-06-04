@@ -13,17 +13,11 @@ urlpatterns = patterns('',
         name='reset_password_page'),
     url(r'^logout$', views.logout_user, name='logout'),
     
-<<<<<<< HEAD
-    url(r'^inventory/(?P<inventory_id>[0-9]+)/$', views.take_inventory,
-        name='take_inventory'),
-        
-    url(r'^.*$', views.page_not_found, name='page_not_found'),
-
-=======
     url(r'^inventory/take/(?P<inventory_id>[0-9]+)$', views.take_inventory,
         name='take_inventory'),
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', views.review_inventory,
         name='review_inventory'),
->>>>>>> master
+        
+    url(r'^.*$', views.page_not_found, name='page_not_found'),
     #url(r'^admin/', include(admin.site.urls)),
 )
