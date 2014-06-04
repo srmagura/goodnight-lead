@@ -5,9 +5,9 @@ from app import views
 #admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', views.login_page, name='login_page'),
-    url(r'^do_login$', views.do_login, name='do_login'),
+    url(r'^$', views.index, name='index'),
+    
+    url(r'^login$', views.login_page, name='login'),
     url(r'^register$', views.register, name='register'),
     url(r'^reset_password$', views.reset_password_page, 
         name='reset_password_page'),
@@ -17,5 +17,7 @@ urlpatterns = patterns('',
         name='take_inventory'),
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', views.review_inventory,
         name='review_inventory'),
+        
+    url(r'^.*$', views.page_not_found, name='page_not_found'),
     #url(r'^admin/', include(admin.site.urls)),
 )

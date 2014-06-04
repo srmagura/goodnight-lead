@@ -16,26 +16,53 @@ import forms.reset_password_form
 
 import inventories
 
-#Loads the login page.
-def login_page(request):
-    return render(request, 'login.html')
+#We don't want logged in user to access certain pages (like the login page, so they can log in again)
+#If they're already logged in, redirect to the home page
+def logout_required(function):
+    def _dec(view_func):
+        def _view(request, *args, **kwargs):
+            if request.user.is_authenticated():
+                return HttpResponseRedirect('/')
+            else:
+                return view_func(request, *args, **kwargs)
 
-#Log a user in and display the correct response.
-def do_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return HttpResponse('Logged in as {}'.format(username))
-        else:                                  
-            # Return a 'disabled account' error message
-            pass
+        _view.__name__ = view_func.__name__
+        _view.__dict__ = view_func.__dict__
+        _view.__doc__ = view_func.__doc__
+
+        return _view
+
+    if function is None:
+        return _dec
     else:
-        return HttpResponse('Incorrect username or password')
+        return _dec(function)
+
+
+@login_required(redirect_field_name = None)
+def index(request):
+    return render(request, 'index.html')
+
+#Loads the login page.
+@logout_required
+def login_page(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:                                  
+                # Return a 'disabled account' error message
+                return HttpResponse('disabled')
+        else:
+            return HttpResponse('Incorrect username or password')
+    else:
+        return render(request, 'login.html')
 
 #Loads the page for registering a new user with proper form validation
+@logout_required
 def register(request):
     #Process the form if it has been submitted through post
     if request.method == 'POST':
@@ -67,6 +94,7 @@ def register(request):
         'forms': forms,
     })
 
+@logout_required
 def reset_password_page(request):
     form_cls = forms.reset_password_form.SendEmailForm
     success = False
@@ -81,13 +109,14 @@ def reset_password_page(request):
         
     return render(request, 'reset_password_page.html', 
         {'form': form, 'success': success})
-        
+
+@login_required(redirect_field_name = None)      
 #Logs out a user and redirects to the home page
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
      
-@login_required   
+@login_required(redirect_field_name = None)  
 def take_inventory(request, inventory_id):
     success = False
     inventory = inventories.inventoryById[int(inventory_id)]()
@@ -123,3 +152,6 @@ def review_inventory(request, inventory_id):
     
     return render(request, template, data)
 
+#If the user types in an incorrect url or somehow follows a bad link
+def page_not_found(request):
+    return HttpResponse('Requested page could not be found - proper html later')
