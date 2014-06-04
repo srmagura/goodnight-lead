@@ -1,0 +1,11 @@
+{% extends "review_inventory.html" %}
+
+{% block review_content %}
+<ul>
+    {% for metric in metrics %}
+        <li>{{metric.key}} = {{metric.value}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+

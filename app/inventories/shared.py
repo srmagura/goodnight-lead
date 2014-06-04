@@ -4,17 +4,27 @@ import app.models as models
 class Inventory:
 
     def submit(self, user, form):
-        submission = models.Submission()
-        submission.inventory_id = self.inventory_id
-        submission.user = user
-        submission.save()
+        self.submission = models.Submission()
+        self.submission.inventory_id = self.inventory_id
+        self.submission.user = user
+        self.submission.save()
         
+        self.answers = {}
         for key, value in form.cleaned_data.items():
             answer = models.Answer()
-            answer.submission = submission
+            answer.submission = self.submission
             answer.question_id = int(key)
             answer.content = value
             answer.save()
+            self.answers[answer.question_id] = answer.content
+            
+        self.compute_metrics()
+        for key, value in self.metrics.items():
+            metric = models.Metric()
+            metric.submission = self.submission
+            metric.key = key
+            metric.value = value
+            metric.save()
 
 class Question:
 

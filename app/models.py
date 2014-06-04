@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 #Additional user info which extends the django User class using a one-to-one relationship.
-#Saved in the app_leaduserinfo db
+#Saved in the app_leaduserinfo table
 #Access through user.leaduserinfo
 class LeadUserInfo(models.Model):
     #Linked User
@@ -25,3 +25,7 @@ class Answer(models.Model):
     question_id = models.IntegerField()
     content = models.CharField(max_length=1000)
 
+class Metric(models.Model):
+    submission = models.ForeignKey(Submission)
+    key = models.CharField(max_length=50)
+    value = models.FloatField()

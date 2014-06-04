@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+
+import models
 from models import LeadUserInfo
 
 #forms
@@ -135,6 +137,19 @@ def take_inventory(request, inventory_id):
         'success': success}
     template = 'take_inventory/{}'.format(inventory.template)
   
+    return render(request, template, data)
+    
+@login_required
+def review_inventory(request, inventory_id):
+    inventory = inventories.inventoryById[int(inventory_id)]()
+    submission = models.Submission.objects.filter(
+        user=request.user, inventory_id=inventory_id
+    )
+    metrics = models.Metric.objects.filter(submission=submission)
+    
+    data = {'inventory': inventory, 'metrics': metrics}
+    template = 'review_inventory/{}'.format(inventory.template)
+    
     return render(request, template, data)
 
 #If the user types in an incorrect url or somehow follows a bad link
