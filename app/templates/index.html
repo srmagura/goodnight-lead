@@ -4,12 +4,31 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-4 col-md-4" style="text-align:center;">
-                <h1>Page Title</h1>
+            <div class="col-md-offset-4 col-md-4 text-center">
+                <h1>L.E.A.D. Home Page</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-md-offset-1 col-md-5">
+                <div class="lead-panel hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="inventories">View Inventories</a>
+                        </div>
+                        <div class="panel-body">
+                            Take an inventory which you haven't taken yet, or view the results from one you have.
+                        </div>
+                        <table class="table">
+                            {% for id, inventory in inventories.items %}
+                                <tr>
+                                    <td>{{ inventory.name }}</td>
+                                    <td><a href="inventory/take/{{ inventory.inventory_id }}">Take</a></td>
+                                    <td><a href="inventory/review/{{ inventory.inventory_id }}">View Results</a></td>
+                                </tr>
+                             {% endfor %}
+                        </table>
+                    </div>
+                </div>
                 <div class="lead-panel hidden-xs">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -40,38 +59,11 @@
                             <a href="notreallyalink">View (more) Stuff!</a>
                         </div>
                         <div class="panel-body">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum <br /><br />
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-offset-1 col-md-5">
-                <div class="lead-panel hidden-xs">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a href="notreallyalink">View Stuff!</a>
-                        </div>
-                        <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-                        </div>
-                        <table class="table">
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5">
                 <div class="lead-panel hidden-xs">
                     <div class="panel panel-default">
                         <div class="panel-heading">

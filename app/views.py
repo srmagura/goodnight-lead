@@ -40,7 +40,8 @@ def logout_required(function):
 
 @login_required(redirect_field_name = None)
 def index(request):
-    return render(request, 'index.html')
+    lead_inventories = inventories.inventoryById
+    return render(request, 'index.html', {'inventories':lead_inventories})
 
 #Loads the login page.
 @logout_required
