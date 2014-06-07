@@ -40,7 +40,8 @@ def logout_required(function):
 
 @login_required(redirect_field_name = None)
 def index(request):
-    return render(request, 'index.html')
+    lead_inventories = inventories.inventoryById
+    return render(request, 'index.html', {'inventories':lead_inventories})
 
 #Loads the login page.
 @logout_required
@@ -139,7 +140,7 @@ def take_inventory(request, inventory_id):
   
     return render(request, template, data)
     
-@login_required
+@login_required(redirect_field_name = None)
 def review_inventory(request, inventory_id):
     inventory = inventories.inventoryById[int(inventory_id)]()
     submission = models.Submission.objects.filter(
@@ -153,5 +154,6 @@ def review_inventory(request, inventory_id):
     return render(request, template, data)
 
 #If the user types in an incorrect url or somehow follows a bad link
+@login_required(redirect_field_name = None)
 def page_not_found(request):
-    return HttpResponse('Requested page could not be found - proper html later')
+    return render(request, 'page_not_found.html')
