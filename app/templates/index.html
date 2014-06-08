@@ -13,57 +13,69 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="inventories">View Inventories</a>
+                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#inventories-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
-                    <div class="panel-body">
-                        Take an inventory which you haven't taken yet, or view the results from one you have.
+                    <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
+                        <div class="panel-body">
+                            Take an inventory which you haven't taken yet, or view the results from one you have.
+                        </div>
+                        <table class="table">
+                            {% for id, inventory in inventories.items %}
+                                <tr>
+                                    <td>{{ inventory.name }}</td>
+                                    <td><a href="inventory/take/{{ inventory.inventory_id }}">Take</a></td>
+                                    <td><a href="inventory/review/{{ inventory.inventory_id }}">View Results</a></td>
+                                </tr>
+                             {% endfor %}
+                        </table>
                     </div>
-                    <table class="table">
-                        {% for id, inventory in inventories.items %}
-                            <tr>
-                                <td>{{ inventory.name }}</td>
-                                <td><a href="inventory/take/{{ inventory.inventory_id }}">Take</a></td>
-                                <td><a href="inventory/review/{{ inventory.inventory_id }}">View Results</a></td>
-                            </tr>
-                         {% endfor %}
-                    </table>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="notreallyalink">View Stuff!</a>
+                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel2-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                    <div class="panel-collapse collapse collapse-xs in" id="panel2-collapse">
+                        <div class="panel-body">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                            </tr>
+                        </table>
                     </div>
-                    <table class="table">
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                        </tr>
-                    </table>
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="notreallyalink">View (more) Stuff!</a>
+                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel3-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum <br /><br />
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                    <div class="panel-collapse collapse collapse-xs in" id="panel3-collapse">
+                        <div class="panel-body">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum <br /><br />
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="notreallyalink">View (more) Stuff!</a>
+                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel4-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                    <div class="panel-collapse collapse collapse-xs in" id="panel4-collapse">
+                        <div class="panel-body">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                        </div>
                     </div>
                 </div>
             </div>
