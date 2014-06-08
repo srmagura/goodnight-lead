@@ -34,11 +34,18 @@ toggleCollapse = function() {
     if($size == "full") {
         $(".collapse-xs").height("auto");
         $(".collapse-xs").addClass("in");
-    
     }
     //Collapse the collapse for mobile
     else {
         $(".collapse-xs").removeClass("in");
+        
+        //Make sure the chevron points the correct direction.
+        $span = $(document).find(".visible-xs-icon");
+        
+        if($span.hasClass("glyphicon-chevron-down")) {
+            $span.removeClass("glyphicon-chevron-down");
+            $span.addClass("glyphicon-chevron-up");
+        }
     }
 }
 
