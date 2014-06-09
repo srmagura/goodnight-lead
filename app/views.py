@@ -14,6 +14,8 @@ from models import LeadUserInfo
 from forms.user_registration_form import UserForm, InfoForm
 import forms.reset_password_form
 
+import copy
+
 import inventories
 
 #We don't want logged in user to access certain pages (like the login page, so they can log in again)
@@ -40,8 +42,19 @@ def logout_required(function):
 
 @login_required(redirect_field_name = None)
 def index(request):
-    lead_inventories = inventories.inventoryById
-    return render(request, 'index.html', {'inventories':lead_inventories})
+    entries = []
+    for inventory_id, cls in inventories.inventoryById.items():
+        submissions = models.Submission.objects.filter(
+            user=request.user, inventory_id=inventory_id
+        )
+        
+        entry = {'inventory_id': inventory_id, 
+            'name': cls.name}
+        entry['taken'] = len(submissions) != 0
+        entries.append(entry)
+
+    data = {'inventories': entries}
+    return render(request, 'index.html', data)
 
 #Loads the login page.
 @logout_required
@@ -117,10 +130,28 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
      
+def validate_inventory_id(inventory_id):
+    try:
+        inventory_id = int(inventory_id)
+    except ValueError:
+        return False
+    
+    return inventory_id in inventories.inventoryById 
+
 @login_required(redirect_field_name = None)  
 def take_inventory(request, inventory_id):
     success = False
-    inventory = inventories.inventoryById[int(inventory_id)]()
+     
+    if validate_inventory_id(inventory_id):    
+        inventory = inventories.inventoryById[int(inventory_id)]()
+    else:
+        return page_not_found(request)
+    
+    submissions = models.Submission.objects.filter(
+        user=request.user, inventory_id=inventory_id
+    )
+    already_taken = len(submissions) != 0
+    
     form_cls = inventories.InventoryForm
     form_kwargs = {'inventory': inventory}
     
@@ -134,19 +165,25 @@ def take_inventory(request, inventory_id):
     else:       
         form = form_cls(**form_kwargs)
     
+    show_form = not (success or already_taken)
     data = {'inventory': inventory, 'form': form,
-        'success': success}
+        'success': success, 'already_taken': already_taken,
+        'show_form': show_form}
     template = 'take_inventory/{}'.format(inventory.template)
   
     return render(request, template, data)
     
 @login_required(redirect_field_name = None)
 def review_inventory(request, inventory_id):
-    inventory = inventories.inventoryById[int(inventory_id)]()
-    submission = models.Submission.objects.filter(
+    if validate_inventory_id(inventory_id):    
+        inventory = inventories.inventoryById[int(inventory_id)]()
+    else:
+        return page_not_found(request)
+        
+    submissions = models.Submission.objects.filter(
         user=request.user, inventory_id=inventory_id
     )
-    metrics = models.Metric.objects.filter(submission=submission)
+    metrics = models.Metric.objects.filter(submission=submissions)
     
     data = {'inventory': inventory, 'metrics': metrics}
     template = 'review_inventory/{}'.format(inventory.template)

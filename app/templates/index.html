@@ -19,12 +19,22 @@
                         <div class="panel-body">
                             Take an inventory which you haven't taken yet, or view the results from one you have.
                         </div>
-                        <table class="table">
-                            {% for id, inventory in inventories.items %}
+                        <table class="table inventory-table">
+                            {% for entry in inventories %}
                                 <tr>
-                                    <td>{{ inventory.name }}</td>
-                                    <td><a href="inventory/take/{{ inventory.inventory_id }}">Take</a></td>
-                                    <td><a href="inventory/review/{{ inventory.inventory_id }}">View Results</a></td>
+                                    <td>{{ entry.name }}</td>
+                                    <td>
+                                    {% if entry.taken %}
+                                        taken
+                                    {% else %}
+                                        <a href="inventory/take/{{ entry.inventory_id }}">Take</a>
+                                    {% endif %}
+                                    </td>
+                                    <td>
+                                    {% if entry.taken %}
+                                        <a href="inventory/review/{{ entry.inventory_id }}">View Results</a>
+                                    {% endif %}
+                                    </td>
                                 </tr>
                              {% endfor %}
                         </table>

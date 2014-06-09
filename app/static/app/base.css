@@ -69,6 +69,17 @@ body {
     font-weight: bold;
 }
 
+.error
+{
+    color: red;
+    font-weight: bold;
+}
+
+.inventory-table td
+{
+    width: 33%;
+}
+
 .take-inventory .description
 {
     padding: 10px 0;

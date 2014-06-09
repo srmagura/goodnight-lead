@@ -15,6 +15,10 @@
                     <p class="success">
                         Your responses have been submitted!
                     </p>
+                {% elif already_taken %}
+                    <p class="error">
+                        You have already taken this inventory.
+                    </p>
                 {% endif %}
                 
                 <div class="description">
@@ -22,7 +26,7 @@
                     {% endblock %}
                 </div>
                 
-                {% if not success %}
+                {% if show_form %}
                     <form role="form" method="post" action="{% url 'take_inventory' inventory.inventory_id %}">
                         {% csrf_token %}		  	
                     
