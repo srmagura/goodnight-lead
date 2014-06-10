@@ -2,12 +2,16 @@ body {
     padding-top:70px;
 }
 
-.navbar-logo-image {
-    height:36pt;
+.navbar-logo-image 
+{
+    height: 28pt;
+    margin: 4pt 0;
 }
 
-.navbar-logo-text {
+.navbar-logo-text 
+{
     color:#F33 !important;
+    margin-left: 4pt;
 }
 
 .no-right-margin {
