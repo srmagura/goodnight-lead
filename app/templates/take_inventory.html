@@ -10,12 +10,8 @@
         <div class="col-md-offset-3 col-md-6">
             <div class="lead-panel">
                 <h2>{{inventory.name}}</h2>
-                
-                {% if success %}
-                    <p class="success">
-                        Your responses have been submitted!
-                    </p>
-                {% elif already_taken %}
+  
+                {% if already_taken %}
                     <p class="error">
                         You have already taken this inventory.
                     </p>

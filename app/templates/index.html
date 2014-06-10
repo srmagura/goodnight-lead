@@ -25,7 +25,7 @@
                                     <td>{{ entry.name }}</td>
                                     <td>
                                     {% if entry.taken %}
-                                        taken
+                                        <span class="glyphicon glyphicon-ok"></span>
                                     {% else %}
                                         <a href="inventory/take/{{ entry.inventory_id }}">Take</a>
                                     {% endif %}
