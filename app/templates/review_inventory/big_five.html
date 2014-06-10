@@ -1,11 +1,22 @@
 {% extends "review_inventory.html" %}
+{% load static %}
 
 {% block review_content %}
-<ul>
+<div class="review-big-five">
     {% for metric in metrics %}
-        <li>{{metric.key}} = {{metric.value}}</li>
+        <div>
+            <div class="label-left">
+                {{ metric.labels.0 }}
+            </div>
+            <div class="label-right">
+                {{ metric.labels.1 }}
+            </div>
+            <div class="scale">
+                <img src="{% static 'app/scale.png' %}" />
+            </div>
+        </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
 
 

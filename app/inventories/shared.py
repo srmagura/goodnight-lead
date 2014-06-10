@@ -25,6 +25,10 @@ class Inventory:
             metric.key = key
             metric.value = value
             metric.save()
+            
+    # Subclasses may override, but are not required to
+    def review_add_data(self, data):
+        pass
 
 class Question:
 

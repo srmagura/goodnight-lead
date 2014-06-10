@@ -60,3 +60,26 @@ class BigFive(Inventory):
         # Openness to Experiences: 5, 10R
         self.metrics['openness'] +=\
             int(self.answers[5]) - int(self.answers[10])
+            
+    def review_add_data(self, data):      
+        population_norms = {
+            'extraversion': 0, # 4.44
+            'agreeableness': 0, # 5.23 
+            'conscientiousness': 0, # 5.4 
+            'emotional_stability': 0, #4.83
+            'openness': 0, # 5.38  
+        }
+                
+        labels = {
+            'extraversion': ('Introverted', 'Extroverted'),
+            'agreeableness': ('Assertive', 'Agreeable'),
+            'conscientiousness': ('Impulsive', 'Conscientious'),
+            'emotional_stability': ('Anxious', 'Emotionally stable'),
+            'openness': ('Traditional', 'Open to experience')  
+        }
+        
+        for metric in data['metrics']:
+            metric.population_norm = population_norms[metric.key]
+            metric.labels = labels[metric.key]
+        
+        

@@ -58,6 +58,8 @@ def review_inventory(request, inventory_id):
     metrics = models.Metric.objects.filter(submission=submissions)
     
     data = {'inventory': inventory, 'metrics': metrics}
+    inventory.review_add_data(data)
+    
     template = 'review_inventory/{}'.format(inventory.template)
     
     return render(request, template, data)
