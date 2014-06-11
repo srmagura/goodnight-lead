@@ -1,18 +1,56 @@
 {% extends "review_inventory.html" %}
 {% load static %}
 
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/css/big_five.css' %}" />
+    <script src="{% static 'app/js/bigFive.js' %}"></script>
+{% endblock %}
+
 {% block review_content %}
+<script>
+$(document).ready(function(){
+    bigFiveReviewInit()
+})
+</script>
+
 <div class="review-big-five">
-    {% for metric in metrics %}
-        <div>
+    {% for datum in metric_data.values %}
+        <div class="metric-container">
             <div class="label-left">
-                {{ metric.labels.0 }}
+                {{ datum.labels.0 }}
             </div>
             <div class="label-right">
-                {{ metric.labels.1 }}
+                {{ datum.labels.1 }}
             </div>
             <div class="scale">
-                <img src="{% static 'app/scale.png' %}" />
+                <img src="{% static 'app/images/scale.png' %}" />
+                
+                <div class="marker marker-you">
+                    <div class="line">
+                        <div class="left">
+                        </div><div class="right">
+                        </div></div>
+                    <div class="info">
+                        <div class="wrapper">
+                            You <br />
+                            <span class="value">{{ datum.value }}</span>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="marker marker-population">
+                    <div class="line">
+                        <div class="left">
+                        </div><div class="right">
+                        </div></div>
+                    <div class="info">
+                        <div class="wrapper">
+                            Norm <br />
+                            <span class="value">{{ datum.population_norm }}</span>
+                        </div>
+                    </div>
+                </div>               
             </div>
         </div>
     {% endfor %}
