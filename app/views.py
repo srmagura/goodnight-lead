@@ -1,6 +1,7 @@
 #http imports
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 #User imports
 from django.contrib.auth import authenticate, login, logout
@@ -17,6 +18,9 @@ import forms.reset_password_form
 import copy
 
 import inventories
+
+#Other imports
+from django.contrib import messages
 
 #We don't want logged in user to access certain pages (like the login page, so they can log in again)
 #If they're already logged in, redirect to the home page
@@ -52,7 +56,6 @@ def index(request):
             'name': cls.name}
         entry['taken'] = len(submissions) != 0
         entries.append(entry)
-
     data = {'inventories': entries}
     return render(request, 'index.html', data)
 
@@ -96,8 +99,13 @@ def register(request):
             info.user = user
             info.save()
             
-            #Redirect back to the login page
-            return HttpResponseRedirect('/')
+            #log the user in
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            login(request, user)
+            
+            #Redirect back to the login page, sending a success message
+            messages.success(request, 'User account created successfully.')
+            return HttpResponseRedirect(reverse('index'))
             
     #Get a blank form if loaded from link (initial load)
     else:
