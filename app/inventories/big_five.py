@@ -61,7 +61,10 @@ class BigFive(Inventory):
         self.metrics['openness'] +=\
             int(self.answers[5]) - int(self.answers[10])
             
-    def review_add_data(self, data): 
+    def review_add_data(self, data):
+        if not data['metrics']:
+            return
+    
         keys = (
             'extraversion',
             'agreeableness',
