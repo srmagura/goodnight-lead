@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from big_five import BigFive
 from core_self import CoreSelf
+from career_commitment import CareerCommitment
 
 def set_answers(inv, answers):
     inv.answers = {}
@@ -39,3 +40,11 @@ class InventoryScoringTest(TestCase):
         
         self.generic_test(CoreSelf(), answers, expected_metrics)
         
+    def test_career_commitment(self):
+        answers = '43252422'
+        expected_metrics = {
+            'identity': 10,
+            'planning': -2
+        }
+        
+        self.generic_test(CareerCommitment(), answers, expected_metrics)
