@@ -37,28 +37,26 @@ class BigFive(Inventory):
             self.questions.append(BigFiveQuestion(qid, text))
            
     def compute_metrics(self):
-        keys = ('extraversion', 'agreeableness', 'conscientiousness',
-            'emotional_stability', 'openness')
-        self.metrics = {k: 0 for k in keys}
+        self.metrics = {}
         
         # Extraversion: 1, 6R 
-        self.metrics['extraversion'] +=\
+        self.metrics['extraversion'] =\
             int(self.answers[1]) - int(self.answers[6])
             
         # Agreeableness: 2R, 7
-        self.metrics['agreeableness'] +=\
+        self.metrics['agreeableness'] =\
             -int(self.answers[2]) + int(self.answers[7])
             
         # Conscientiousness: 3, 8R
-        self.metrics['conscientiousness'] +=\
+        self.metrics['conscientiousness'] =\
             int(self.answers[3]) - int(self.answers[8])
             
         # Emotional Stability: 4R, 9
-        self.metrics['emotional_stability'] +=\
+        self.metrics['emotional_stability'] =\
             -int(self.answers[4]) + int(self.answers[9])
             
         # Openness to Experiences: 5, 10R
-        self.metrics['openness'] +=\
+        self.metrics['openness'] =\
             int(self.answers[5]) - int(self.answers[10])
             
     def review_add_data(self, data):
