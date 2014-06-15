@@ -12,7 +12,13 @@ class LeadUserInfo(models.Model):
     #Additional fields
     gender = models.CharField(max_length=1)
     major = models.CharField(max_length=100)
-    year = models.IntegerField(max_length=2, validators=[MinValueValidator(1), MaxValueValidator(4)])
+    year_choices = (
+        (1, 'Freshman'),
+        (2, 'Sophmore'),
+        (3, 'Junior'),
+        (4, 'Senior'),
+    )
+    year = models.IntegerField(max_length=2, choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
     organization = models.CharField(max_length=100)
     #Goals?
     

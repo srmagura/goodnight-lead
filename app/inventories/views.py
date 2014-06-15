@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.inventories import *
 import app.models as models
+from app.views import page_not_found
 
 def validate_inventory_id(inventory_id):
     try:

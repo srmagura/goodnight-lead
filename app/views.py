@@ -92,15 +92,13 @@ def register(request):
         #All validation rules pass - generate a new user account
         if all(form.is_valid() for form in forms):  
             user = userForm.save()
-            user.set_password(user.password)
-            user.save()
             
             info = infoForm.save(commit=False)
             info.user = user
             info.save()
             
             #log the user in
-            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             login(request, user)
             
             #Redirect back to the login page, sending a success message
