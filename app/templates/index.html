@@ -31,14 +31,14 @@
                             {% for entry in inventories %}
                                 <tr>
                                     <td>{{ entry.name }}</td>
-                                    <td>
+                                    <td class="take">
                                     {% if entry.taken %}
                                         <span class="glyphicon glyphicon-ok"></span>
                                     {% else %}
                                         <a href="inventory/take/{{ entry.inventory_id }}">Take</a>
                                     {% endif %}
                                     </td>
-                                    <td>
+                                    <td class="review">
                                     {% if entry.taken %}
                                         <a href="inventory/review/{{ entry.inventory_id }}">View Results</a>
                                     {% endif %}
