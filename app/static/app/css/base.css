@@ -84,6 +84,11 @@ body {
     width: 33%;
 }
 
+.inventory-table .take, .inventory-table .review
+{
+    text-align: center;
+}
+
 .take-inventory .description
 {
     padding: 10px 0;
