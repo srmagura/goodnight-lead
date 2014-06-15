@@ -23,7 +23,7 @@ class LeadUserInfo(models.Model):
     #Goals?
     
 class Submission(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     inventory_id = models.IntegerField()
     
 class Answer(models.Model):
