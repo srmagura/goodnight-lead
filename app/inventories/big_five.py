@@ -13,7 +13,6 @@ class BigFiveQuestion(NumberQuestion):
     
 class BigFive(Inventory):
 
-    inventory_id = 0
     name = 'Big Five'
     template = 'big_five.html'
 
