@@ -1,0 +1,6 @@
+# LEAD project
+
+Authors: Eric Horton, Sam Magura
+
+To run unit tests:
+$ python manage.py test
