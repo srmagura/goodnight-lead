@@ -3,6 +3,7 @@ from django.test import TestCase
 from big_five import BigFive
 from core_self import CoreSelf
 from career_commitment import CareerCommitment
+from ambiguity import Ambiguity
 
 def set_answers(inv, answers):
     inv.answers = {}
@@ -48,3 +49,9 @@ class InventoryScoringTest(TestCase):
         }
         
         self.generic_test(CareerCommitment(), answers, expected_metrics)
+        
+    def test_ambiguity(self):
+        answers = '2343255727467626'
+        expected_metrics = {'score': 49}
+        
+        self.generic_test(Ambiguity(), answers, expected_metrics)
