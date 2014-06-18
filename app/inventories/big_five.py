@@ -58,10 +58,7 @@ class BigFive(Inventory):
         self.metrics['openness'] =\
             int(self.answers[5]) - int(self.answers[10])
             
-    def review_add_data(self, data):
-        if not data['metrics']:
-            return
-    
+    def review_process_metrics(self, data, metrics):
         keys = (
             'extraversion',
             'agreeableness',
@@ -88,7 +85,7 @@ class BigFive(Inventory):
         
         metric_data = {k: {} for k in keys}
         
-        for metric in data['metrics']:
+        for metric in metrics:
             metric_data[metric.key]['value'] = metric.value
             
         for i in range(len(keys)):

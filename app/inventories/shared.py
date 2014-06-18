@@ -2,8 +2,11 @@ from django import forms
 import app.models as models
 
 class Inventory:
+
+    # Default value
+    n_pages = 1
           
-    def find_submission(self, user):
+    def set_submission(self, submission):
         self.submission = submission      
 
     def submit(self, user, form):
@@ -11,8 +14,23 @@ class Inventory:
             self.submission = models.Submission()
             self.submission.inventory_id = self.inventory_id
             self.submission.user = user
-            self.submission.save()
+            self.submission.current_page = 0
+           
+        self.submission.current_page += 1       
+        if self.submission.current_page == self.n_pages:
+            self.submission.current_page = None
+            
+        self.submission.save()   
+        self.save_answers(form)
         
+        if self.submission.is_complete():
+            if self.n_pages > 1:
+                #load answers
+                pass
+                
+            self.save_metrics()
+      
+    def save_answers(self, form):  
         self.answers = {}
         for key, value in form.cleaned_data.items():
             answer = models.Answer()
@@ -21,7 +39,8 @@ class Inventory:
             answer.content = value
             answer.save()
             self.answers[answer.question_id] = answer.content
-            
+           
+    def save_metrics(self):     
         self.compute_metrics()
         for key, value in self.metrics.items():
             metric = models.Metric()

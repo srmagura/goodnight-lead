@@ -44,11 +44,8 @@ class CareerCommitment(Inventory):
                 int(self.answers[8])
         }
             
-    def review_add_data(self, data):
-        if not data['metrics']:
-            return
-            
-        for metric in data['metrics']:
+    def review_process_metrics(self, data, metrics):          
+        for metric in metrics:
             data[metric.key + '_factor'] = int(metric.value)
     
         

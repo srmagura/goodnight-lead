@@ -32,10 +32,16 @@
                                 <tr>
                                     <td>{{ entry.name }}</td>
                                     <td class="take">
-                                    {% if entry.taken %}
+                                    {% if entry.is_complete %}
                                         <span class="glyphicon glyphicon-ok"></span>
                                     {% else %}
-                                        <a href="inventory/take/{{ entry.inventory_id }}">Take</a>
+                                        <a href="inventory/take/{{ entry.inventory_id }}">
+                                            {% if entry.is_started %}
+                                                Continue
+                                            {% else %}
+                                                Take
+                                            {% endif %}
+                                        </a>
                                     {% endif %}
                                     </td>
                                     <td class="review">

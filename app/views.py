@@ -54,7 +54,8 @@ def index(request):
         
         entry = {'inventory_id': inventory_id, 
             'name': cls.name,
-            'is_complete': is_complete}
+            'is_complete': is_complete,
+            'is_started': submission is not None}
         entries.append(entry)
         
     data = {'inventories': entries}
