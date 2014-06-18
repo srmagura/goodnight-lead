@@ -2,12 +2,16 @@ from django import forms
 import app.models as models
 
 class Inventory:
+          
+    def find_submission(self, user):
+        self.submission = submission      
 
     def submit(self, user, form):
-        self.submission = models.Submission()
-        self.submission.inventory_id = self.inventory_id
-        self.submission.user = user
-        self.submission.save()
+        if self.submission is None:
+            self.submission = models.Submission()
+            self.submission.inventory_id = self.inventory_id
+            self.submission.user = user
+            self.submission.save()
         
         self.answers = {}
         for key, value in form.cleaned_data.items():
@@ -27,8 +31,9 @@ class Inventory:
             metric.save()
             
     # Subclasses may override, but are not required to
-    def review_add_data(self, data):
+    def review_process_metrics(self, data, metrics):
         pass
+
 
 class Question:
 

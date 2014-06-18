@@ -25,6 +25,10 @@ class LeadUserInfo(models.Model):
 class Submission(models.Model):
     user = models.ForeignKey(User)
     inventory_id = models.IntegerField()
+    current_page = models.IntegerField(default=None, null=True)
+    
+    def is_complete(self):
+        return self.current_page is None
     
 class Answer(models.Model):
     submission = models.ForeignKey(Submission)

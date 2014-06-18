@@ -10,34 +10,26 @@
         <div class="col-md-offset-3 col-md-6">
             <div class="lead-panel">
                 <h2>{{inventory.name}}</h2>
-  
-                {% if already_taken %}
-                    <p class="error">
-                        You have already taken this inventory.
-                    </p>
-                {% endif %}
-                
+
                 <div class="description">
                     {% block description %}
                     {% endblock %}
                 </div>
                 
-                {% if show_form %}
-                    <form role="form" method="post" action="{% url 'take_inventory' inventory.inventory_id %}">
-                        {% csrf_token %}		  	
+                <form role="form" method="post" action="{% url 'take_inventory' inventory.inventory_id %}">
+                    {% csrf_token %}		  	
                     
-                        {% for field in form %}
-                            <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                <label class = "control-label"> {{ field.label }} </label>
-                                <span class = "form-control-feedback"> {{ field.errors }} </span>
-                                {{ field }}
-                            </div>
-                        {% endfor %}
+                    {% for field in form %}
+                        <div class="form-group {% if field.errors %} has-error {% endif %}">
+                            <label class = "control-label"> {{ field.label }} </label>
+                            <span class = "form-control-feedback"> {{ field.errors }} </span>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
                                           
-                        <input type="submit" class="btn btn-default" 
-                            value="Submit"/>
-                    </form>
-                {% endif %}
+                    <input type="submit" class="btn btn-default" 
+                        value="Submit"/>
+                </form>
             </div>
         </div>
     </div>

@@ -10,12 +10,8 @@
         <div class="col-md-offset-3 col-md-6">
             <div class="lead-panel">
                 <h2>{{inventory.name}} - Results</h2>
-                {% if metrics %}
-                    {% block review_content %}
-                    {% endblock %}                
-                {% else %}
-                    <p class="error">You haven't taken this inventory.</p>
-                {% endif %}
+                {% block review_content %}
+                {% endblock %}                
             </div>
         </div>
     </div>
