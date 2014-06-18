@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.inventories import *
 import app.models as models
-from app.views import page_not_found
+import app.views
 
 def validate_inventory_id(inventory_id):
     try:
@@ -11,37 +11,48 @@ def validate_inventory_id(inventory_id):
     except ValueError:
         return False
     
-    return inventory_id in inventoryById 
-
+    return inventory_id in inventoryById
+    
+def get_submission(user, inventory_id):
+    submissions = models.Submission.objects.filter(
+        user=user, inventory_id=inventory_id
+    )
+    
+    if len(submissions) != 0:
+        return submissions[0]
+    else:
+        return None
+        
+def submission_is_complete(submission):
+    return submission is not None and submission.is_complete()
+        
 @login_required(redirect_field_name = None)  
 def take_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):    
         inventory = inventoryById[int(inventory_id)]()
     else:
-        return page_not_found(request)
+        return app.views.page_not_found(request)
     
-    submissions = models.Submission.objects.filter(
-        user=request.user, inventory_id=inventory_id
-    )
-    already_taken = len(submissions) != 0
+    submission = get_submission(request.user, inventory_id)      
+    is_complete = submission_is_complete(submission)
+    inventory.set_submission(submission)
     
     form_cls = InventoryForm
     form_kwargs = {'inventory': inventory}
     
+    valid_submission = False
     if request.method == 'POST':
         form = form_cls(request.POST, **form_kwargs) 
         if form.is_valid():
             inventory.submit(request.user, form)
-            
-            form = None
-            return redirect('review_inventory', inventory_id=inventory_id)
+            is_complete = True           
     else:       
         form = form_cls(**form_kwargs)
     
-    show_form = not already_taken
-    data = {'inventory': inventory, 'form': form,
-        'already_taken': already_taken,
-        'show_form': show_form}
+    if is_complete:
+        return redirect('review_inventory', inventory_id=inventory_id)
+    
+    data = {'inventory': inventory, 'form': form}
     template = 'take_inventory/{}'.format(inventory.template)
   
     return render(request, template, data)
@@ -51,15 +62,18 @@ def review_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):    
         inventory = inventoryById[int(inventory_id)]()
     else:
-        return page_not_found(request)
+        return app.views.page_not_found(request)
         
-    submissions = models.Submission.objects.filter(
-        user=request.user, inventory_id=inventory_id
-    )
-    metrics = models.Metric.objects.filter(submission=submissions)
+    submission = get_submission(request.user, inventory_id)
+    is_complete = submission_is_complete(submission)
     
-    data = {'inventory': inventory, 'metrics': metrics}
-    inventory.review_add_data(data)
+    if not is_complete:
+        return redirect('take_inventory', inventory_id=inventory_id)
+    
+    data = {'inventory': inventory}
+    
+    metrics = models.Metric.objects.filter(submission=submission)
+    inventory.review_process_metrics(data, metrics)
     
     template = 'review_inventory/{}'.format(inventory.template)
     

@@ -52,11 +52,8 @@ class Ambiguity(Inventory):
     
         self.metrics = {'score': score}
             
-    def review_add_data(self, data):
-        if not data['metrics']:
-            return
-            
-        data['score'] = int(data['metrics'][0].value)
+    def review_process_metrics(self, data, metrics):           
+        data['score'] = int(metrics[0].value)
 
     
         

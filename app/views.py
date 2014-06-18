@@ -18,6 +18,7 @@ import forms.reset_password_form
 import copy
 
 import inventories
+from inventories.views import get_submission, submission_is_complete
 
 #Other imports
 from django.contrib import messages
@@ -48,14 +49,14 @@ def logout_required(function):
 def index(request):
     entries = []
     for inventory_id, cls in inventories.inventoryById.items():
-        submissions = models.Submission.objects.filter(
-            user=request.user, inventory_id=inventory_id
-        )
+        submission = get_submission(request.user, inventory_id)
+        is_complete = submission_is_complete(submission)
         
         entry = {'inventory_id': inventory_id, 
-            'name': cls.name}
-        entry['taken'] = len(submissions) != 0
+            'name': cls.name,
+            'is_complete': is_complete}
         entries.append(entry)
+        
     data = {'inventories': entries}
     return render(request, 'index.html', data)
 
