@@ -36,27 +36,30 @@ class BigFive(Inventory):
             self.questions.append(BigFiveQuestion(qid, text))
            
     def compute_metrics(self):
+        def reverse(s):
+            return 8 - int(s)
+    
         self.metrics = {}
         
         # Extraversion: 1, 6R 
         self.metrics['extraversion'] =\
-            int(self.answers[1]) - int(self.answers[6])
+            int(self.answers[1]) + reverse(self.answers[6])
             
         # Agreeableness: 2R, 7
         self.metrics['agreeableness'] =\
-            -int(self.answers[2]) + int(self.answers[7])
+            reverse(self.answers[2]) + int(self.answers[7])
             
         # Conscientiousness: 3, 8R
         self.metrics['conscientiousness'] =\
-            int(self.answers[3]) - int(self.answers[8])
+            int(self.answers[3]) + reverse(self.answers[8])
             
         # Emotional Stability: 4R, 9
         self.metrics['emotional_stability'] =\
-            -int(self.answers[4]) + int(self.answers[9])
+            reverse(self.answers[4]) + int(self.answers[9])
             
         # Openness to Experiences: 5, 10R
         self.metrics['openness'] =\
-            int(self.answers[5]) - int(self.answers[10])
+            int(self.answers[5]) + reverse(self.answers[10])
             
     def review_process_metrics(self, data, metrics):
         keys = (
@@ -68,11 +71,11 @@ class BigFive(Inventory):
         )
          
         population_norms = (
-            0, # 4.44
-            0, # 5.23 
-            0, # 5.4 
-            0, #4.83
-            0, # 5.38  
+            8, # 4.44
+            8, # 5.23 
+            8, # 5.4 
+            8, #4.83
+            8, # 5.38  
         )
                 
         labels = (

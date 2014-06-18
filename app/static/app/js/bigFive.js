@@ -11,7 +11,7 @@
       marker = _ref[_i];
       marker = $(marker);
       value = marker.find('.value').text();
-      factor = .5 + value / 12;
+      factor = .5 + (value - 8) / 12;
       left = factor * scaleWidth - lineDivWidth;
       _results.push(marker.css('left', left));
     }

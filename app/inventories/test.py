@@ -26,26 +26,26 @@ class InventoryScoringTest(TestCase):
         answers = '2615472635'
             
         expected_metrics = {
-            'extraversion': -5,
-            'agreeableness': -4,
-            'conscientiousness': -5,
-            'emotional_stability': -2,
-            'openness': -1
+            'extraversion': 3,
+            'agreeableness': 4,
+            'conscientiousness': 3,
+            'emotional_stability': 6,
+            'openness': 7
         }  
         
         self.generic_test(BigFive(), answers, expected_metrics)
         
     def test_core_self(self):
         answers = '454454423244'         
-        expected_metrics = {'score': 3}  
+        expected_metrics = {'score': 39}  
         
         self.generic_test(CoreSelf(), answers, expected_metrics)
         
     def test_career_commitment(self):
         answers = '43252422'
         expected_metrics = {
-            'identity': 10,
-            'planning': -2
+            'identity': 16,
+            'planning': 16
         }
         
         self.generic_test(CareerCommitment(), answers, expected_metrics)
