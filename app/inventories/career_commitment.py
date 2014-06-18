@@ -33,15 +33,18 @@ class CareerCommitment(Inventory):
             self.questions.append(CareerCommitmentQuestion(qid, text))
            
     def compute_metrics(self):
+        def reverse(s):
+            return 6 - int(s)
+    
         self.metrics = {
             'identity': int(self.answers[1]) +
-                int(self.answers[2]) -
-                int(self.answers[3]) +
+                int(self.answers[2]) +
+                reverse(self.answers[3]) +
                 int(self.answers[4]),
-            'planning': -int(self.answers[5]) +
-                int(self.answers[6]) -
-                int(self.answers[7]) -
-                int(self.answers[8])
+            'planning': reverse(self.answers[5]) +
+                int(self.answers[6]) +
+                reverse(self.answers[7]) +
+                reverse(self.answers[8])
         }
             
     def review_process_metrics(self, data, metrics):          

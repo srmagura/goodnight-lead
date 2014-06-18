@@ -37,12 +37,11 @@ class CoreSelf(Inventory):
             self.questions.append(CoreSelfQuestion(qid, text))
            
     def compute_metrics(self):
-        reverse_score = {2, 4, 6, 8, 10, 12}
         score = 0
         
         for qid, value in self.answers.items():
-            if qid in reverse_score:
-                score -= int(value)
+            if qid % 2 == 0:
+                score += 6 - int(value)
             else:
                 score += int(value)
         
