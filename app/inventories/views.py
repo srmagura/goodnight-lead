@@ -52,7 +52,12 @@ def take_inventory(request, inventory_id):
     if is_complete:
         return redirect('review_inventory', inventory_id=inventory_id)
     
-    data = {'inventory': inventory, 'form': form}
+    is_final_page = (inventory.n_pages == 1 or
+        (submission is not None and
+        submission.current_page == inventory.n_pages - 1))
+    
+    data = {'inventory': inventory, 'form': form,
+        'is_final_page': is_final_page}
     template = 'take_inventory/{}'.format(inventory.template)
   
     return render(request, template, data)

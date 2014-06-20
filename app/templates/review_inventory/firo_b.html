@@ -2,7 +2,11 @@
 
 {% block review_content %}
 <div>
-    
+<ul>
+{% for metric in metrics %}
+<li>{{metric.key}} = {{metric.value}}</li>
+{% endfor %}
+</ul>
 </div>
 {% endblock %}
 

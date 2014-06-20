@@ -27,11 +27,10 @@ class Inventory:
         
         if self.submission.is_complete():
             if self.n_pages > 1:
-                #load answers
-                pass
+                self.load_answers()
                 
             self.save_metrics()
-      
+       
     def save_answers(self, form):  
         self.answers = {}
         for key, value in form.cleaned_data.items():
@@ -50,6 +49,13 @@ class Inventory:
             metric.key = key
             metric.value = value
             metric.save()
+       
+    def load_answers(self):
+        self.answers = {}
+        qs = models.Answer.objects.filter(submission=self.submission)
+        
+        for answer in qs:
+            self.answers[answer.question_id] = answer.content    
             
     # Subclasses may override, but are not required to
     def review_process_metrics(self, data, metrics):
