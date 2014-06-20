@@ -30,7 +30,7 @@
                         <table class="table inventory-table">
                             {% for entry in inventories %}
                                 <tr>
-                                    <td>{{ entry.name }}</td>
+                                    <td class="name">{{ entry.name }}</td>
                                     <td class="take">
                                     {% if entry.is_complete %}
                                         <span class="glyphicon glyphicon-ok"></span>
@@ -45,7 +45,7 @@
                                     {% endif %}
                                     </td>
                                     <td class="review">
-                                    {% if entry.taken %}
+                                    {% if entry.is_complete %}
                                         <a href="inventory/review/{{ entry.inventory_id }}">View Results</a>
                                     {% endif %}
                                     </td>

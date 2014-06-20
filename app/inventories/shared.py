@@ -14,6 +14,8 @@ class Inventory:
             self.submission = models.Submission()
             self.submission.inventory_id = self.inventory_id
             self.submission.user = user
+            
+        if self.submission.current_page is None:
             self.submission.current_page = 0
            
         self.submission.current_page += 1       
