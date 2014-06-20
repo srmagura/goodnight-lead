@@ -79,9 +79,19 @@ body {
     font-weight: bold;
 }
 
-.inventory-table td
+.inventory-table td.name
 {
-    width: 33%;
+    width: 50%;
+}
+
+.inventory-table td.take
+{
+    width: 20%;
+}
+
+.inventory-table td.review
+{
+    width: 30%;
 }
 
 .inventory-table .take, .inventory-table .review
