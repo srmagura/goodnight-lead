@@ -86,6 +86,39 @@ class FiroB(Inventory):
             54: 'I take charge of things when I\'m with people.'
         }
     )
+    
+    scoring_table = {
+        'expressed_inclusion': (
+            (1, 1, 3), (3, 1, 4), (5, 1, 4), (7, 1, 3),
+            (9, 1, 2), (11, 1, 2), (13, 1, 2), (15, 1, 1),
+            (16, 1, 1)
+        ),
+        'wanted_inclusion': (
+            (28, 1, 2), (31, 1, 2), (34, 1, 2), (37, 1, 1),
+            (39, 1, 1), (42, 1, 2), (45, 1, 2), (48, 1, 2),
+            (51, 1, 2)
+        ),
+        'expressed_control': (
+            (30, 1, 3), (33, 1, 3), (36, 1, 2), (41, 1, 4),
+            (44, 1, 3), (47, 1, 3), (50, 1, 2), (53, 1, 2),
+            (54, 1, 2)
+        ),
+        'wanted_control': (
+            (2, 1, 4), (6, 1, 4), (10, 1, 3), (14, 1, 3),
+            (18, 1, 3), (20, 1, 3), (22, 1, 4), (24, 1, 3),
+            (26, 1, 3)
+        ),
+        'expressed_affection': (
+            (4, 1, 2), (8, 1, 2), (12, 1, 1), (17, 1, 2),
+            (19, 4, 6), (21, 1, 2), (23, 1, 2), (25, 4, 6),
+            (27, 1, 2)
+        ),
+        'wanted_affection': (
+            (29, 1, 2), (32, 1, 2), (35, 5, 6), (38, 1, 2),
+            (40, 5, 6), (43, 1, 1), (46, 5, 6), (49, 1, 2),
+            (52, 5, 6)
+        )
+    }
 
     def __init__(self):
         self.n_pages = len(self.question_text)
@@ -106,6 +139,39 @@ class FiroB(Inventory):
            
     def compute_metrics(self):
         self.metrics = {}
+        
+        for metric_name, items in self.scoring_table.items():
+            score = 0
+            
+            for qid, a, b in items:
+                ans = int(self.answers[qid])
+                if a <= ans and ans <= b:
+                    score += 1
+                    
+            self.metrics[metric_name] = score
+            
+        modifiers = ('expressed', 'wanted')
+        categories = ('inclusion', 'control', 'affection')
+        
+        self.metrics['social_interaction_index'] = 0
+            
+        for modifier in modifiers:
+            key = 'total_' + modifier
+            self.metrics[key] = 0
+            
+            for category in categories:
+                key2 = modifier + '_' + category
+                self.metrics[key] += self.metrics[key2]
+                
+            self.metrics['social_interaction_index'] += self.metrics[key]
+                
+        for category in categories:
+            key = 'total_' + category
+            self.metrics[key] = 0
+            
+            for modifier in modifiers:
+                key2 = modifier + '_' + category
+                self.metrics[key] += self.metrics[key2]
             
     def review_process_metrics(self, data, metrics):          
         pass
