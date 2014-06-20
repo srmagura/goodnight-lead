@@ -174,7 +174,11 @@ class FiroB(Inventory):
                 self.metrics[key] += self.metrics[key2]
             
     def review_process_metrics(self, data, metrics):          
-        pass
+        data['metrics'] = []
+        
+        for metric in metrics:
+            data['metrics'].append(
+                {'key': metric.key, 'value': int(metric.value)})
 
     
         
