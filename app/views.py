@@ -110,9 +110,11 @@ def register(request):
         forms = [UserForm(), InfoForm()]
         
     #Render the page using whichever form was loaded.
-    return render(request, 'register.html', {
-        'forms': forms,
-    })
+    return render(
+        request, 
+        'register.html', 
+        {'forms': forms,}
+    )
 
 @logout_required
 def reset_password_page(request):
