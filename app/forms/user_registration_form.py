@@ -23,7 +23,7 @@ class UserForm(UserCreationForm):
     class Meta:
         #Use the User object as a model with the desired fields
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+        fields = ['username', 'email',  'first_name', 'last_name']
         
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -63,6 +63,24 @@ class InfoForm(ModelForm):
         
         #Set custom class on all widgets
         for name, field in self.fields.items():
+            if field.widget.attrs.has_key('class'):
+                field.widget.attrs['class'] += 'form-control'
+            else:
+                field.widget.attrs.update({'class':'form-control'})
+                
+class UserSettingsForm(forms.Form):
+    username = forms.CharField(max_length=30)
+    email = forms.CharField()
+    
+    def __init__(self, *args, **kwargs):
+        readonly = kwargs.pop('readonly')
+        super(UserSettingsForm, self).__init__(*args, **kwargs)
+        
+        #Set custom class on all widgets
+        for name, field in self.fields.items():
+            if(readonly):
+                field.widget.attrs['readonly'] = True
+                
             if field.widget.attrs.has_key('class'):
                 field.widget.attrs['class'] += 'form-control'
             else:

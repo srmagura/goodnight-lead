@@ -13,8 +13,9 @@ import models
 from models import LeadUserInfo
 
 #forms
-from forms.user_registration_form import UserForm, InfoForm
+from forms.user_registration_form import UserForm, InfoForm, UserSettingsForm
 import forms.reset_password_form
+from django.forms.models import model_to_dict
 
 #Inventory inports
 import inventories
@@ -138,10 +139,12 @@ def reset_password_page(request):
     )
 
 @login_required(redirect_field_name = None)        
-def account_settings(request):
+def account_settings(request):        
+        form = UserSettingsForm(model_to_dict(request.user), readonly = readonly)
         return render(
             request,
-            'user_templates/account_settings.html'
+            'user_templates/account_settings.html',
+            {'form': form}
         )
 
 @login_required(redirect_field_name = None)      

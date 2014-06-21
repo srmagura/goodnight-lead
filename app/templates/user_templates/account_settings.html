@@ -2,5 +2,25 @@
 {% block title %} Account Settings {% endblock %}
 
 {% block content %}
-    Content test
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="lead-panel">
+                    <form method="post" action="/account-settings">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                <label class = "control-label"> {{ field.label }} </label>
+                                <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        
+                        <input class="btn btn-default" type="submit" value="Save"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
