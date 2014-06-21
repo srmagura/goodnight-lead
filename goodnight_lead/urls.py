@@ -14,6 +14,8 @@ urlpatterns = patterns('',
         name='reset_password_page'),
     url(r'^logout$', views.logout_user, name='logout'),
     
+    url(r'^account-settings$', views.account_settings, name='account_settings'),
+    
     url(r'^inventory/take/(?P<inventory_id>[0-9]+)$', inventory_views.take_inventory,
         name='take_inventory'),
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', inventory_views.review_inventory,
