@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
@@ -17,6 +17,7 @@ def validate_gender(value):
             raise ValidationError(
                 "Must be M or F"
             )
+
                 
 #The part of the form which deals with the User object    
 class UserForm(UserCreationForm):
@@ -68,20 +69,19 @@ class InfoForm(ModelForm):
             else:
                 field.widget.attrs.update({'class':'form-control'})
                 
-class UserSettingsForm(ModelForm):
+class UserSettingsForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        fields = ['username', 'email', 'first_name', 'last_name']
         
     def __init__(self, *args, **kwargs):
-        readonly = kwargs.pop('readonly')
         super(UserSettingsForm, self).__init__(*args, **kwargs)
         
+        #get rid of the password field we dont want
+        del self.fields['password']
+        
         #Set custom class on all widgets
-        for name, field in self.fields.items():
-            if(readonly):
-                field.widget.attrs['readonly'] = True
-                
+        for name, field in self.fields.items():                
             if field.widget.attrs.has_key('class'):
                 field.widget.attrs['class'] += 'form-control'
             else:

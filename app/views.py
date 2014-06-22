@@ -140,18 +140,29 @@ def reset_password_page(request):
 
 @login_required(redirect_field_name = None)        
 def account_settings(request):
-    if(request.POST):
-        readonly = False
+    if(request.method == 'POST'):
+        usersettingsform = UserSettingsForm(request.POST, instance=request.user)
+        infoform = InfoForm(request.POST, instance=request.user.leaduserinfo)
+        forms = [usersettingsform, infoform]
+        
+        if all(form.is_valid() for form in forms):
+            #Save the updated info
+            usersettingsform.save()
+            infoform.save()
+            
+            messages.success(request, 'Account Settings updated successfully')
+            return HttpResponseRedirect('/')
+            
     else:
-        readonly = True
-                    
-    form = UserSettingsForm(instance=request.user, readonly=readonly)
+        usersettingsform = UserSettingsForm(instance=request.user)
+        infoform = InfoForm(instance=request.user.leaduserinfo)
+        
     return render(
         request,
         'user_templates/account_settings.html',
         {
-            'form': form,
-            'edit': not readonly,
+            'usersettingsform': usersettingsform,
+            'infoform': infoform,
         }
     )
 

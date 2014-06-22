@@ -14,22 +14,12 @@
                     <fieldset class="lead-panel">
                         <legend class="legend">User Information</legend>
                         <div>
-                            {% for field in form %}
-                                {% if edit %}
-                                    {% if "Password" not in field.label %}
-                                        <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                            <label class = "control-label"> {{ field.label }} </label>
-                                            <span class = "form-control-feedback"> {{ field.errors }} </span>
-                                            {{ field }}
-                                        </div>
-                                    {% endif %}
-                                {% else %}
-                                    <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                        <label class = "control-label"> {{ field.label }} </label>
-                                        <span class = "form-control-feedback"> {{ field.errors }} </span>
-                                        <span>{{ field.value }}</span>
-                                    </div>
-                                {% endif %}
+                            {% for field in usersettingsform %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                    <label class = "control-label"> {{ field.label }} </label>
+                                    <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                    {{ field }}
+                                </div>
                             {% endfor %}
                         </div>
                     </fieldset>
@@ -38,7 +28,13 @@
                     <fieldset class="lead-panel">
                         <legend class="legend">Demographics</legend>
                         <div>
-<!--                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in lacus at neque commodo fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum dictum bibendum neque vitae dignissim. Phasellus posuere ornare quam. Vivamus eu mauris non dolor vehicula sollicitudin ut at leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque non justo cursus, ultrices neque eget, euismod nisl. Maecenas eget ante quis nunc sodales viverra. Suspendisse condimentum quis neque ac tempor. Ut malesuada augue posuere, facilisis mauris sit amet, dignissim nisi. Donec viverra dapibus est id convallis. Phasellus lacinia dui quis leo cursus cursus. Curabitur eu tellus elementum, luctus ipsum ac, fermentum sem. Donec dignissim ac risus sit amet sodales. Phasellus dolor arcu, aliquet ac lacinia non, vestibulum ut nibh. Donec ac suscipit odio, in sodales justo. -->
+                            {% for field in infoform %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                    <label class = "control-label"> {{ field.label }} </label>
+                                    <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
                         </div>
                     </fieldset>
                 </div>
