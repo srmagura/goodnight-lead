@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 from app import views
 from app.inventories import views as inventory_views
+from app.accounts import views as account_views
+
 #from django.contrib import admin
 #admin.autodiscover()
 
@@ -14,8 +16,8 @@ urlpatterns = patterns('',
         name='reset_password_page'),
     url(r'^logout$', views.logout_user, name='logout'),
     
-    url(r'^account-settings$', views.account_settings, name='account-settings'),
-    url(r'^account-settings/password$', views.password, name='password'),
+    url(r'^account-settings$', account_views.account_settings, name='account-settings'),
+    url(r'^account-settings/password$', account_views.password, name='password'),
     
     url(r'^inventory/take/(?P<inventory_id>[0-9]+)$', inventory_views.take_inventory,
         name='take_inventory'),
