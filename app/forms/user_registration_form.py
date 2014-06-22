@@ -17,7 +17,16 @@ def validate_gender(value):
             raise ValidationError(
                 "Must be M or F"
             )
-
+#Need to pass the old email to the validator, best way to do this seems to be 
+#to write a function which returns a function.
+#Set the validator to the outer function and pass it the old email       
+def validate_email_uniqueOrUnchanged(old_email):
+    def validate(new_email):
+        if(old_email != new_email and User.objects.filter(email=new_email).exists()):
+            raise ValidationError(
+                "Email already in use"
+            )
+    return validate
                 
 #The part of the form which deals with the User object    
 class UserForm(UserCreationForm):
@@ -79,6 +88,10 @@ class UserSettingsForm(UserChangeForm):
         
         #get rid of the password field we dont want
         del self.fields['password']
+        
+        print(self.instance.email)
+        #set validators
+        self.fields['email'].validators = [validate_email_uniqueOrUnchanged(self.instance.email)]
         
         #Set custom class on all widgets
         for name, field in self.fields.items():                
