@@ -77,7 +77,8 @@ class InfoForm(ModelForm):
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
-                
+
+#Used for changing all user info except passwords.
 class UserSettingsForm(UserChangeForm):
     class Meta:
         model = User
@@ -99,3 +100,30 @@ class UserSettingsForm(UserChangeForm):
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
+                
+class PasswordChangeForm(forms.Form):
+    password1 = forms.CharField(widget = forms.PasswordInput)
+    password2 = forms.CharField(widget = forms.PasswordInput)
+    
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        
+        self.fields['password1'].label = "New Password"
+        self.fields['password2'].label = "Password Confirmation"
+        
+        #Set custom class on all widgets
+        for name, field in self.fields.items():             
+            if field.widget.attrs.has_key('class'):
+                field.widget.attrs['class'] += 'form-control'
+            else:
+                field.widget.attrs.update({'class':'form-control'})
+                
+    def clean(self):
+        super(PasswordChangeForm, self).clean()
+        
+        if('password1' in self.cleaned_data and 'password2' in self.cleaned_data):
+            pass1 = self.cleaned_data['password1']
+            pass2 = self.cleaned_data['password2']
+        
+            if(pass1 != pass2):
+                raise ValidationError("Passwords did not match")

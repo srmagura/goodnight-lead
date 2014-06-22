@@ -13,7 +13,7 @@ import models
 from models import LeadUserInfo
 
 #forms
-from forms.user_registration_form import UserForm, InfoForm, UserSettingsForm
+from forms.user_registration_form import UserForm, InfoForm, UserSettingsForm, PasswordChangeForm
 import forms.reset_password_form
 from django.forms.models import model_to_dict
 
@@ -164,6 +164,29 @@ def account_settings(request):
             'usersettingsform': usersettingsform,
             'infoform': infoform,
         }
+    )
+    
+@login_required(redirect_field_name = None)
+def password(request):
+    if(request.method == 'POST'):
+        passwordform = PasswordChangeForm(request.POST)
+
+        if(passwordform.is_valid()):
+            password = request.POST['password1']
+            user = request.user
+            user.set_password(password)
+            user.save()
+            
+            messages.success(request, "Password set successfully")
+            return HttpResponseRedirect(reverse('account-settings'))
+        
+    else:
+        passwordform = PasswordChangeForm()
+        
+    return render(
+        request,
+        'user_templates/password.html',
+        {'form': passwordform }
     )
 
 @login_required(redirect_field_name = None)      
