@@ -23,7 +23,7 @@ class UserForm(UserCreationForm):
     class Meta:
         #Use the User object as a model with the desired fields
         model = User
-        fields = ['username', 'email',  'first_name', 'last_name']
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
         
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -68,10 +68,11 @@ class InfoForm(ModelForm):
             else:
                 field.widget.attrs.update({'class':'form-control'})
                 
-class UserSettingsForm(forms.Form):
-    username = forms.CharField(max_length=30)
-    email = forms.CharField()
-    
+class UserSettingsForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        
     def __init__(self, *args, **kwargs):
         readonly = kwargs.pop('readonly')
         super(UserSettingsForm, self).__init__(*args, **kwargs)

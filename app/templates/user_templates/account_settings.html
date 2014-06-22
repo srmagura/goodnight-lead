@@ -1,26 +1,57 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block title %} Account Settings {% endblock %}
+{% block script %} 
+    <script type="text/javascript" language="javascript" src="{% static 'app/js/equal-cols.js' %}"></script>
+{% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-offset-4 col-md-4">
-                <div class="lead-panel">
-                    <form method="post" action="/account-settings">
-                        {% csrf_token %}
-                        
-                        {% for field in form %}
-                            <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                <label class = "control-label"> {{ field.label }} </label>
-                                <span class = "form-control-feedback"> {{ field.errors }} </span>
-                                {{ field }}
-                            </div>
-                        {% endfor %}
-                        
-                        <input class="btn btn-default" type="submit" value="Save"/>
-                    </form>
+        <form method="post" action="/account-settings">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-offset-2 col-md-4 col-equal-height">
+                    <fieldset class="lead-panel">
+                        <legend class="legend">User Information</legend>
+                        <div>
+                            {% for field in form %}
+                                {% if edit %}
+                                    {% if "Password" not in field.label %}
+                                        <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                            <label class = "control-label"> {{ field.label }} </label>
+                                            <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                            {{ field }}
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                        <label class = "control-label"> {{ field.label }} </label>
+                                        <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                        <span>{{ field.value }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-4 col-equal-height">
+                    <fieldset class="lead-panel">
+                        <legend class="legend">Demographics</legend>
+                        <div>
+<!--                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in lacus at neque commodo fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum dictum bibendum neque vitae dignissim. Phasellus posuere ornare quam. Vivamus eu mauris non dolor vehicula sollicitudin ut at leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque non justo cursus, ultrices neque eget, euismod nisl. Maecenas eget ante quis nunc sodales viverra. Suspendisse condimentum quis neque ac tempor. Ut malesuada augue posuere, facilisis mauris sit amet, dignissim nisi. Donec viverra dapibus est id convallis. Phasellus lacinia dui quis leo cursus cursus. Curabitur eu tellus elementum, luctus ipsum ac, fermentum sem. Donec dignissim ac risus sit amet sodales. Phasellus dolor arcu, aliquet ac lacinia non, vestibulum ut nibh. Donec ac suscipit odio, in sodales justo. -->
+                        </div>
+                    </fieldset>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="lead-panel">
+                        <a class="btn btn-default" href="/">Cancel</a>
+                        <a class="btn btn-default" href="password">Change Password</a>
+                        <input class="btn btn-default" type="submit" value="Save"/>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 {% endblock %}

@@ -139,13 +139,21 @@ def reset_password_page(request):
     )
 
 @login_required(redirect_field_name = None)        
-def account_settings(request):        
-        form = UserSettingsForm(model_to_dict(request.user), readonly = readonly)
-        return render(
-            request,
-            'user_templates/account_settings.html',
-            {'form': form}
-        )
+def account_settings(request):
+    if(request.POST):
+        readonly = False
+    else:
+        readonly = True
+                    
+    form = UserSettingsForm(instance=request.user, readonly=readonly)
+    return render(
+        request,
+        'user_templates/account_settings.html',
+        {
+            'form': form,
+            'edit': not readonly,
+        }
+    )
 
 @login_required(redirect_field_name = None)      
 #Logs out a user and redirects to the home page
