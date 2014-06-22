@@ -2,6 +2,11 @@ body {
     padding-top:70px;
 }
 
+.legend {
+    width:auto; 
+    border:none;
+}
+
 .navbar-logo-image 
 {
     height: 28pt;

@@ -8,22 +8,24 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+#Model imports
 import models
 from models import LeadUserInfo
 
 #forms
-from forms.user_registration_form import UserForm, InfoForm
+from forms.user_registration_form import UserForm, InfoForm, UserSettingsForm, PasswordChangeForm
 import forms.reset_password_form
+from django.forms.models import model_to_dict
 
-import copy
-
+#Inventory inports
 import inventories
 from inventories.views import get_submission, submission_is_complete
 
 #Other imports
+import copy
 from django.contrib import messages
 
-#We don't want logged in user to access certain pages (like the login page, so they can log in again)
+#We don't want logged in users to access certain pages (like the login page, so they can log in again)
 #If they're already logged in, redirect to the home page
 def logout_required(function):
     def _dec(view_func):
@@ -78,7 +80,7 @@ def login_page(request):
         else:
             return HttpResponse('Incorrect username or password')
     else:
-        return render(request, 'login.html')
+        return render(request, 'user_templates/login.html')
 
 #Loads the page for registering a new user with proper form validation
 @logout_required
@@ -112,9 +114,11 @@ def register(request):
         forms = [UserForm(), InfoForm()]
         
     #Render the page using whichever form was loaded.
-    return render(request, 'register.html', {
-        'forms': forms,
-    })
+    return render(
+        request, 
+        'user_templates/register.html', 
+        {'forms': forms,}
+    )
 
 @logout_required
 def reset_password_page(request):
@@ -129,8 +133,10 @@ def reset_password_page(request):
     else:       
         form = form_cls()
         
-    return render(request, 'reset_password_page.html', 
-        {'form': form, 'success': success})
+    return render(request, 
+        'user_templates/reset_password_page.html', 
+        {'form': form, 'success': success}
+    )
 
 @login_required(redirect_field_name = None)      
 #Logs out a user and redirects to the home page

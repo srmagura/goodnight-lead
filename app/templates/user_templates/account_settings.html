@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} Account Settings {% endblock %}
+{% block script %} 
+    <script type="text/javascript" language="javascript" src="{% static 'app/js/equal-cols.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if messages %}
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <form method="post" action="{% url 'account-settings' %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-offset-2 col-md-4 col-equal-height">
+                    <fieldset class="lead-panel">
+                        <legend class="legend">User Information</legend>
+                        <div>
+                            {% for field in usersettingsform %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                    <label class = "control-label"> {{ field.label }} </label>
+                                    <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-4 col-equal-height">
+                    <fieldset class="lead-panel">
+                        <legend class="legend">Demographics</legend>
+                        <div>
+                            {% for field in infoform %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                    <label class = "control-label"> {{ field.label }} </label>
+                                    <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="lead-panel text-center">
+                        <a class="btn btn-default" href="/">Cancel</a>
+                        <a class="btn btn-default" href="{% url 'password' %}">Change Password</a>
+                        <input class="btn btn-default" type="submit" value="Save"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
