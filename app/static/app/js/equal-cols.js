@@ -2,5 +2,7 @@
 //since there is no convenient native way to do so.
 
 $(window).load(function() {
-    $('.col-equal-height').children().height($('.col-equal-height').parent().height())
+    if($(window).width >= 768) {
+        $('.col-equal-height').children().height($('.col-equal-height').parent().height());
+    }
 });

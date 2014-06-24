@@ -5,6 +5,15 @@ body {
 .legend {
     width:auto; 
     border:none;
+    background:none;
+    background-color:none;
+    margin:0;
+    padding:0;
+}
+
+.panel-no-horizontal-padding {
+    padding-left:0;
+    padding-right:0;
 }
 
 .navbar-logo-image 
