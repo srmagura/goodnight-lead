@@ -53,10 +53,12 @@
             </div>
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    <div class="lead-panel text-center">
-                        <a class="btn btn-default" href="/">Cancel</a>
-                        <a class="btn btn-default" href="{% url 'password' %}">Change Password</a>
-                        <input class="btn btn-default" type="submit" value="Save"/>
+                    <div class="lead-panel text-center panel-no-horizontal-padding">
+                        <div class="btn-group">
+                            <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"></input>
+                            <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Password"></input>
+                            <input class="btn btn-default" type="submit" value="Save"/>
+                        </div>
                     </div>
                 </div>
             </div>
