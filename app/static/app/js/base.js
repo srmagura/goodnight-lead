@@ -10,6 +10,14 @@ $(window).load(
         //Toggle the initial collapse (for mobile devices or small browser windows)
         toggleCollapse();
 
+        //Set the initial state for the navbar positioning
+        if($size == "full") {
+            $('.navbar-slide').css('position', 'static');
+        }
+        else {
+            $('.navbar-slide').css('position', 'fixed');
+        }
+
         //Set the behavior for .navbar-toggle
         $('.navbar-toggle').click(function() {
             //If the nav is collapsed, show the correct menu and
