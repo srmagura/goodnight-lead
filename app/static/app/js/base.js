@@ -49,10 +49,12 @@ $(window).resize(
             //Make sure the .navbar-slide has the appropriate width
             //Hide the collapses
             if($size == "full") {
+                $('.navbar-slide').css('position', 'static');
                 $('.navbar-slide').width("100%");
                 $('.navbar-collapse').hide();
             }
             else {
+                $('.navbar-slide').css('position', 'fixed');
                 $('.navbar-slide').width("0%");
             }
         }
