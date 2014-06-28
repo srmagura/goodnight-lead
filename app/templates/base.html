@@ -16,66 +16,79 @@
 
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        
-        <script src="{% static 'app/js/collapse-xs.js' %}"></script>
-        
+
+        <script src="{% static 'app/js/base.js' %}"></script>
+
         {% block script %}{% endblock %}
-        
+
         {% block head %}
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" roll="navigation">
-            <!-- Fluid container allows absolute left/right positioning of logo/account settings -->
-            <div class="container-fluid">
-                <div>
-                    <!-- Logo - inline ensures proper positioning -->
-                    <div class="navbar-header inline">
-                        <a class="logo" href="/">
-                            <!-- pull left assures proper order and vertical alignment -->
-                            <img class="navbar-logo-image pull-left" src="{% static 'app/images/logo.png' %}"/>
-                            <p class="navbar-text pull-left navbar-logo-text">L.E.A.D. Home</p>
-                        </a>
+        <!-- Navbar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <!-- Navbar Header -->
+                <div class="navbar-header">
+                    <!-- Navbar Toggles -->
+                    <div class="pull-right">
+                        <!-- User Toggle -->
+                        <div class="pull-left">
+                            {% if user.is_authenticated %}
+                                <span class="sr-only" for="#username-dropdown">Show user settigns</span>
+                                <a class="navbar-text navbar-toggle" id="#username-dropdown"  data-target="#collapse-2">{{user.username }}<span class="caret"></span></a>
+                            {% else %}
+                                <p class="navbar-text visible-xs">Not logged in</p>
+                            {% endif %}
+                        </div>
+                        <!-- Links toggle, commented till we have use of it -->
+                        <div class="pull-right">
+                            <!-- <button type="button" class="navbar-toggle" data-target="#bs-example-navbar-collapse-1">
+                                <span class="sr-only">Show links</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button> -->
+                        </div>
                     </div>
-                
-                    <!-- Account settings and collapse button - pull right positions right -->
-                    <div class="navbar-header pull-right">
-                        <!-- Pull left to ensure element is positioned left of the button -->
-                        {% if user.is_authenticated %}
-                            <span class="nav navbar-nav navbar-text pull-left no-right-margin pointer" data-toggle="dropdown" data-target=".navbar-dropdown">{{ user.username }}<b class="caret"></b></span>
-                        {% else %}
-                            <!-- pull-left ensures proper alignment with other navbar items -->
-                            <p class="navbar-text pull-left">Not logged in</p>
-                        {% endif %}
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
+                    <!-- Navbar Brand -->
+                    <a class="navbar-brand" href="{% url 'index' %}"><img class="navbar-logo pull-left" src="{% static 'app/images/logo.png' %}"/><p class="navbar-text">Home</p></a>
                 </div>
-                     
-                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                    <ul class="nav navbar-nav" id="navbar-links">
-                        
-                    </ul>
-                </div>
-                
-                {% if user.is_authenticated %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown pull-left navbar-dropdown">
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="/account-settings">Account Settings</a></li>
-                                <li class="divider"></li>
-                                <li><a href="/logout">Log out</a></li>
+                <!-- Inner Navbar -->
+                <nav class="navbar-inverse navbar-slide" role="navigation">
+                    <!-- Navbar Links, commented till we have use of it -->
+                    <!-- <div class="collapse navbar-collapse navbar-left" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                        </ul>
+                    </div> -->
+
+                    <!-- User dropdown/slideout menu -->
+                    {% if user.is_authenticated %}
+                        <div class="collapse navbar-collapse navbar-right" id="collapse-2">
+                            <ul class="nav navbar-nav navbar-right">
+                                <!-- Dropdown hidden on mobile -->
+                                <li class="dropdown hidden-xs">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="{% url 'account-settings' %}">Account Settings</a></li>
+                                        <li><a href="{% url 'logout' %}">Log out</a></li>
+                                    </ul>
+                                </li>
+                                <!-- Links only visible on mobile -->
+                                <li class="visible-xs"><a href="{% url 'account-settings' %}">Account Settings</a></li>
+                                <li class="visible-xs"><a href="{% url 'logout' %}">Log out</a></li>
                             </ul>
-                        </li>
-                    </ul>
-                {% endif %}
+                        </div>
+                    {% else %}
+                        <!-- Not logged in replacement text -->
+                        <p class="navbar-text navbar-right hidden-xs">Not logged in</p>
+                    {% endif %}
+                </nav>
             </div>
         </nav>
-    
+
         {% block content %}
         {% endblock %}
     </body>
