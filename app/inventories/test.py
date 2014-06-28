@@ -101,3 +101,35 @@ class InventoryScoringTest(TestCase):
         
         self.generic_test(FiroB(), answers, expected_metrics)
         
+    def test_firo_b1(self):
+        answers = {
+            1: 2, 2: 2, 3: 1, 4: 1, 5: 3,
+            6: 3, 7: 2, 8: 1, 9: 2, 10: 5,
+            11: 2, 12: 1, 13: 4, 14: 3, 15: 4,
+            16: 2, 17: 2, 18: 3, 19: 3, 20: 3,
+            21: 1, 22: 3, 23: 1, 24: 4, 25: 3, 26: 3,
+            27: 1, 28: 1, 29: 1, 30: 2, 31: 1,
+            32: 1, 33: 3, 34: 1, 35: 4, 36: 1,
+            37: 1, 38: 1, 39: 1, 40: 5, 41: 3,
+            42: 1, 43: 1, 44: 1, 45: 1, 46: 5,
+            47: 3, 48: 1, 49: 1, 50: 3, 51: 1,
+            52: 5, 53: 1, 54: 3
+        }
+
+        expected_metrics = {
+            'expressed_inclusion': 6,
+            'wanted_inclusion': 9,
+            'expressed_control': 7,
+            'wanted_control': 7,
+            'expressed_affection': 7,
+            'wanted_affection': 8,
+            'total_expressed': 20,
+            'total_wanted': 24,
+            'total_inclusion': 15,
+            'total_control': 14,
+            'total_affection': 15,
+            'social_interaction_index': 44       
+        }
+        
+        self.generic_test(FiroB(), answers, expected_metrics)
+        
