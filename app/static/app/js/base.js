@@ -1,26 +1,31 @@
 $size = ""; //Current size of the window
 $prev_size = ""; //Previous size of the window
 
-$mobileBreakpoint = 768; //Breakpoint between mobile and full in px
+$xsBreakpoint = 768; //Breakpoint between mobile and full in px
+$mdBreakpoint = 992; //Breakpoint between tablet and full
+
 $animationTime = 500; //Time taken to animate extensions
 $extendedWidth = 150; //The width of the extended navbar
 
 $(window).load(
     function() {
         //Get the initial window size - breakpoint at 768px (bootstrap xs breakpoint)
-        $size = ($(window).width() >= $mobileBreakpoint) ? "full" : "mobile";
+        $windowWidth = $(window).width();
+        $size = ($windowWidth <= $xsBreakpoint) ? "mobile" : (($windowWidth < $mdBreakpoint) ? "tablet" : "full");
+        
         $prev_size = $size;
 
         //Toggle the initial collapse (for mobile devices or small browser windows)
         toggleCollapse();
 
         //Set the initial state for the navbar positioning
-        if($size == "full") {
-            $('.navbar-slide').css('position', 'static');
-        }
-        else {
+        if($size == "mobile") {
             $('.navbar-slide').css('position', 'fixed');
         }
+        else {
+            $('.navbar-slide').css('position', 'static');
+        }
+
 
         //Set the behavior for .navbar-toggle
         $('.navbar-toggle').click(function() {
@@ -52,22 +57,21 @@ $(window).load(
 $(window).resize(
     function(){
         //Get the current size
-        $size = ($(window).width() >= $mobileBreakpoint) ? "full" : "mobile";
-
+        $windowWidth = $(window).width();
+        $size = ($windowWidth <= $xsBreakpoint) ? "mobile" : (($windowWidth < $mdBreakpoint) ? "tablet" : "full");
         //If the size has changed
         if($size != $prev_size) {
             toggleCollapse();
 
             //Make sure the .navbar-slide has the appropriate width
-            //Hide the collapses
-            if($size == "full") {
-                $('.navbar-slide').css('position', 'static');
-                $('.navbar-slide').width("100%");
-                $('.navbar-collapse').hide();
-            }
-            else {
+            if($size == "mobile") {
                 $('.navbar-slide').css('position', 'fixed');
                 $('.navbar-slide').width("0%");
+            }
+            else {
+                $('.navbar-slide').css('position', 'static');
+                $('.navbar-slide').width("100%");
+                $('.navbar-collapse').hide(); //Hide the collapses
             }
         }
 
@@ -78,13 +82,8 @@ $(window).resize(
 
 //Expand if size is full, collapse if size is mobile
 toggleCollapse = function() {
-    //Expand the collapse to make sure it is always visible
-    if($size == "full") {
-        $(".collapse-xs").height("auto");
-        $(".collapse-xs").addClass("in");
-    }
     //Collapse the collapse for mobile
-    else {
+    if($size == "mobile") {
         $(".collapse-xs").removeClass("in");
 
         //Make sure the chevron points the correct direction.
@@ -94,6 +93,11 @@ toggleCollapse = function() {
             $span.removeClass("glyphicon-chevron-down");
             $span.addClass("glyphicon-chevron-up");
         }
+    }
+    //Expand the collapse to make sure it is always visible
+    else {
+        $(".collapse-xs").height("auto");
+        $(".collapse-xs").addClass("in");
     }
 }
 

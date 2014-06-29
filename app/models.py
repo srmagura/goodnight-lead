@@ -10,7 +10,13 @@ class LeadUserInfo(models.Model):
     user = models.OneToOneField(User)
 
     #Additional fields
-    gender = models.CharField(max_length=1)
+    gender_choices = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+        ('N', 'Prefer not to respond'),
+    )
+    gender = models.CharField(max_length=1, choices=gender_choices)
     major = models.CharField(max_length=100)
     year_choices = (
         (1, 'Freshman'),
