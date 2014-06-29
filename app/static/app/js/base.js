@@ -1,10 +1,14 @@
 $size = ""; //Current size of the window
 $prev_size = ""; //Previous size of the window
 
+$mobileBreakpoint = 768; //Breakpoint between mobile and full in px
+$animationTime = 500; //Time taken to animate extensions
+$extendedWidth = 150; //The width of the extended navbar
+
 $(window).load(
     function() {
         //Get the initial window size - breakpoint at 768px (bootstrap xs breakpoint)
-        $size = ($(window).width() >= 768) ? "full" : "mobile";
+        $size = ($(window).width() >= $mobileBreakpoint) ? "full" : "mobile";
         $prev_size = $size;
 
         //Toggle the initial collapse (for mobile devices or small browser windows)
@@ -24,21 +28,21 @@ $(window).load(
             //slide the nav out
             if($('.navbar-slide').width() == 0) {
                 $($(this).data('target')).show();
-                $('.navbar-slide').animate({width: "40%"}, 500);
+                $('.navbar-slide').animate({width: $extendedWidth}, $animationTime);
             }
             //If the nav is not collapsed and the toggle for the
             //currently shown menu is pressed, hide the navbar-slider
             //and then hide the menus
             else if($($(this).data('target')).css('display') == "block") {
-                $('.navbar-slide').animate({width: "0%"}, 500, function(){
+                $('.navbar-slide').animate({width: "0"}, $animationTime, function(){
                         $('.navbar-collapse').hide();
                 });
             }
             //If the nav is not collapsed, and the toggle for the other menu
             //is pressed, hide the current menu and display the other
             else {
-                $($(this).data('target')).slideDown(500);
-                $('.navbar-collapse').not($(this).data('target')).slideUp(500);
+                $($(this).data('target')).slideDown($animationTime);
+                $('.navbar-collapse').not($(this).data('target')).slideUp($animationTime);
             }
         });
     }
@@ -48,7 +52,7 @@ $(window).load(
 $(window).resize(
     function(){
         //Get the current size
-        $size = ($(window).width() >= 768) ? "full" : "mobile";
+        $size = ($(window).width() >= $mobileBreakpoint) ? "full" : "mobile";
 
         //If the size has changed
         if($size != $prev_size) {
