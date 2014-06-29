@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class LeadUserInfo(models.Model):
     #Linked User
     user = models.OneToOneField(User)
-    
+
     #Additional fields
     gender = models.CharField(max_length=1)
     major = models.CharField(max_length=100)
@@ -21,15 +21,15 @@ class LeadUserInfo(models.Model):
     year = models.IntegerField(max_length=2, choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
     organization = models.CharField(max_length=100)
     #Goals?
-    
+
 class Submission(models.Model):
     user = models.ForeignKey(User)
     inventory_id = models.IntegerField()
     current_page = models.IntegerField(default=None, null=True)
-    
+
     def is_complete(self):
         return self.current_page is None
-    
+
 class Answer(models.Model):
     submission = models.ForeignKey(Submission)
     question_id = models.IntegerField()
