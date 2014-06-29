@@ -45,7 +45,7 @@ class CoreSelf(Inventory):
             else:
                 score += int(value)
         
-        self.metrics = {'score': score}    
+        self.metrics = {'score': score / 12.}    
             
     def review_process_metrics(self, data, metrics):         
         data['score'] = int(metrics[0].value)

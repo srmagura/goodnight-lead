@@ -1,3 +1,4 @@
+from __future__ import division
 from shared import *
 
 class BigFiveQuestion(NumberQuestion):
@@ -61,6 +62,9 @@ class BigFive(Inventory):
         self.metrics['openness'] =\
             int(self.answers[5]) + reverse(self.answers[10])
             
+        for key in self.metrics:
+            self.metrics[key] /= 2
+            
     def review_process_metrics(self, data, metrics):
         keys = (
             'extraversion',
@@ -71,11 +75,11 @@ class BigFive(Inventory):
         )
          
         population_norms = (
-            8, # 4.44
-            8, # 5.23 
-            8, # 5.4 
-            8, #4.83
-            8, # 5.38  
+            4, # 4.44
+            4, # 5.23 
+            4, # 5.4 
+            4, #4.83
+            4, # 5.38  
         )
                 
         labels = (

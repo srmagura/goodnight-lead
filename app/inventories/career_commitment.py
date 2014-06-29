@@ -37,14 +37,14 @@ class CareerCommitment(Inventory):
             return 6 - int(s)
     
         self.metrics = {
-            'identity': int(self.answers[1]) +
+            'identity': (int(self.answers[1]) +
                 int(self.answers[2]) +
                 reverse(self.answers[3]) +
-                int(self.answers[4]),
-            'planning': reverse(self.answers[5]) +
+                int(self.answers[4]))/4.,
+            'planning': (reverse(self.answers[5]) +
                 int(self.answers[6]) +
                 reverse(self.answers[7]) +
-                reverse(self.answers[8])
+                reverse(self.answers[8]))/4.
         }
             
     def review_process_metrics(self, data, metrics):          
