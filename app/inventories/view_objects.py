@@ -22,3 +22,17 @@ class Slider:
         }
         
         return render_to_string('slider.html', data)
+        
+class SliderContainer:
+
+    def __init__(self, labels, slider):
+        self.labels = labels
+        self.slider = slider
+        
+    def render(self):
+        data = {
+            'labels': self.labels,
+            'slider': self.slider
+        }
+        
+        return render_to_string('slider_container.html', data)

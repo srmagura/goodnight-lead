@@ -50,7 +50,7 @@ def logout_required(function):
 @login_required(redirect_field_name = None)
 def index(request):
     entries = []
-    for inventory_id, cls in inventories.inventoryById.items():
+    for inventory_id, cls in inventories.inventory_by_id.items():
         submission = get_submission(request.user, inventory_id)
         is_complete = submission_is_complete(submission)
         

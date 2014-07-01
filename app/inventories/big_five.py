@@ -1,6 +1,6 @@
 from __future__ import division
 from shared import *
-from view_objects import Slider, SliderMarker
+from view_objects import Slider, SliderMarker, SliderContainer
 
 class BigFiveQuestion(NumberQuestion):
 
@@ -95,16 +95,17 @@ class BigFive(Inventory):
         for metric in metrics:
             values[metric.key] = int(metric.value)
             
-        metric_data = {k: {} for k in keys}
+        slider_containers = []
             
         for i in range(len(keys)):
             key = keys[i]
-            d = metric_data[key]
-            d['labels'] = labels[i]
             
             marker_you = SliderMarker('you', 'You', values[key])
             marker_mean = SliderMarker('mean', 'Mean', means[i])
-            d['slider'] = Slider(1, 7, (marker_you, marker_mean))
+            slider = Slider(1, 7, (marker_you, marker_mean))
+            
+            slider_container = SliderContainer(labels[i], slider)
+            slider_containers.append(slider_container)
         
-        data['metric_data'] = metric_data
+        data['slider_containers'] = slider_containers
         

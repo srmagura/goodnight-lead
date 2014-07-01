@@ -3,23 +3,23 @@
     padding: 20px;
 }
 
-.metric-container
+.slider-container
 {
     margin: 20px 0 65px;
 }
 
-.metric-container .label-left
+.slider-container .label-left
 {
     float: left;
 }
 
-.metric-container .label-right
+.slider-container .label-right
 {
     float: right;
 }
 
-.metric-container .label-left,
-.metric-container .label-right
+.slider-container .label-left,
+.slider-container .label-right
 {
     font-weight: bold;
 }

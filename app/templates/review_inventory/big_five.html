@@ -16,18 +16,9 @@ $(document).ready(function(){
 </script>
 
 <div class="inventory-review-page">
-    {% for datum in metric_data.values %}
-        <div class="metric-container">
-            <div class="label-left">
-                {{ datum.labels.0 }}
-            </div>
-            <div class="label-right">
-                {{ datum.labels.1 }}
-            </div>
-            
-            {{ datum.slider.render }}
-        </div>
-    {% endfor %}
+{% for slider_container in slider_containers %}
+    {{ slider_container.render }}
+{% endfor %}
 </div>
 {% endblock %}
 
