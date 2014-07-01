@@ -1,4 +1,5 @@
 from shared import *
+from view_objects import *
 
 class CareerCommitmentQuestion(NumberQuestion):
 
@@ -47,8 +48,19 @@ class CareerCommitment(Inventory):
                 reverse(self.answers[8]))/4.
         }
             
-    def review_process_metrics(self, data, metrics):          
+    def review_process_metrics(self, data, metrics):
+        labels = {
+            'identity': 'Identity factor',
+            'planning': 'Planning factor'
+        }
+        
+        data['slider_containers'] = {}
+            
         for metric in metrics:
-            data[metric.key + '_factor'] = int(metric.value)
+            marker = SliderMarker('you', 'You', metric.value)
+            slider = Slider(1, 4, (marker,))
+            
+            labels2 = (labels[metric.key], '')
+            data['slider_containers'][metric.key] = SliderContainer(labels2, slider)
     
         

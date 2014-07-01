@@ -93,7 +93,7 @@ class BigFive(Inventory):
                 
         values = {}
         for metric in metrics:
-            values[metric.key] = int(metric.value)
+            values[metric.key] = metric.value
             
         slider_containers = []
             

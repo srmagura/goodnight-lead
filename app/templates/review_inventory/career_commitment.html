@@ -1,8 +1,11 @@
 {% extends "review_inventory.html" %}
 
 {% block review_content %}
+
+
 <div>
-    Identity factor = {{ identity_factor }}. Planning factor = {{ planning_factor }}.
+    {{ slider_containers.identity.render }}
+    {{ slider_containers.planning.render }}
 </div>
 {% endblock %}
 

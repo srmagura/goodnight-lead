@@ -13,7 +13,6 @@
       min = Number(slider.find('.min').text());
       max = Number(slider.find('.max').text());
       mid = (min + max) / 2;
-      console.log([min, max]);
       _results.push((function() {
         var _j, _len1, _ref, _results1;
         _ref = slider.find('.marker');

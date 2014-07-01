@@ -1,20 +1,6 @@
 {% extends "review_inventory.html" %}
-{% load static %}
-
-{% block head %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'app/css/slider.css' %}" />
-    <script src="{% static 'app/js/slider.js' %}"></script>
-    
-{% endblock %}
 
 {% block review_content %}
-<script>
-$(document).ready(function(){
-    initSliders()
-})
-</script>
-
 <div class="inventory-review-page">
 {% for slider_container in slider_containers %}
     {{ slider_container.render }}
