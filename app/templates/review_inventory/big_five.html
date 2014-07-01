@@ -3,18 +3,19 @@
 
 {% block head %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'app/css/big_five.css' %}" />
-    <script src="{% static 'app/js/bigFive.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'app/css/slider.css' %}" />
+    <script src="{% static 'app/js/slider.js' %}"></script>
+    
 {% endblock %}
 
 {% block review_content %}
 <script>
 $(document).ready(function(){
-    bigFiveReviewInit()
+    initSliders()
 })
 </script>
 
-<div class="review-big-five">
+<div class="inventory-review-page">
     {% for datum in metric_data.values %}
         <div class="metric-container">
             <div class="label-left">
@@ -23,35 +24,8 @@ $(document).ready(function(){
             <div class="label-right">
                 {{ datum.labels.1 }}
             </div>
-            <div class="scale">
-                <img src="{% static 'app/images/scale.png' %}" />
-                
-                <div class="marker marker-you">
-                    <div class="line">
-                        <div class="left">
-                        </div><div class="right">
-                        </div></div>
-                    <div class="info">
-                        <div class="wrapper">
-                            You <br />
-                            <span class="value">{{ datum.value }}</span>
-                        </div>
-                    </div>
-                </div>  
-                
-                <div class="marker marker-population">
-                    <div class="line">
-                        <div class="left">
-                        </div><div class="right">
-                        </div></div>
-                    <div class="info">
-                        <div class="wrapper">
-                            Mean <br />
-                            <span class="value">{{ datum.population_norm }}</span>
-                        </div>
-                    </div>
-                </div>               
-            </div>
+            
+            {{ datum.slider.render }}
         </div>
     {% endfor %}
 </div>

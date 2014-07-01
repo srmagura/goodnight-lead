@@ -1,5 +1,6 @@
 from __future__ import division
 from shared import *
+from view_objects import Slider, SliderMarker
 
 class BigFiveQuestion(NumberQuestion):
 
@@ -74,7 +75,7 @@ class BigFive(Inventory):
             'openness'
         )
          
-        population_norms = (
+        means = (
             4, # 4.44
             4, # 5.23 
             4, # 5.4 
@@ -89,17 +90,21 @@ class BigFive(Inventory):
             ('Anxious', 'Emotionally stable'),
             ('Traditional', 'Open to experience')  
         )
-        
-        metric_data = {k: {} for k in keys}
-        
+                
+        values = {}
         for metric in metrics:
-            metric_data[metric.key]['value'] = metric.value
+            values[metric.key] = int(metric.value)
+            
+        metric_data = {k: {} for k in keys}
             
         for i in range(len(keys)):
-            d = metric_data[keys[i]]
-            d['value'] = int(d['value'])
-            d['population_norm'] = population_norms[i]
+            key = keys[i]
+            d = metric_data[key]
             d['labels'] = labels[i]
+            
+            marker_you = SliderMarker('you', 'You', values[key])
+            marker_mean = SliderMarker('mean', 'Mean', means[i])
+            d['slider'] = Slider(1, 7, (marker_you, marker_mean))
         
         data['metric_data'] = metric_data
         

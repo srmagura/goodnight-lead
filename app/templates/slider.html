@@ -1,0 +1,23 @@
+{% load static %}
+
+<div class="slider">
+    <span class="hidden min">{{ min_value }}</span>
+    <span class="hidden max">{{ max_value }}</span>
+
+    <img src="{% static 'app/images/scale.png' %}" />
+    
+    {% for marker in markers %}
+        <div class="marker marker-{{ marker.css_id }}">
+            <div class="line">
+                <div class="left">
+                </div><div class="right">
+                </div></div>
+            <div class="info">
+                <div class="wrapper">
+                    {{ marker.label }} <br />
+                    <span class="value">{{ marker.value }}</span>
+                </div>
+            </div>
+        </div>  
+    {% endfor %}       
+</div>

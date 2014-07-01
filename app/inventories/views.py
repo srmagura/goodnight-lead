@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from app.inventories import *
+from app.inventories import inventory_by_id
+from app.inventories.shared import *
+
 import app.models as models
 import app.views
 
@@ -11,7 +13,7 @@ def validate_inventory_id(inventory_id):
     except ValueError:
         return False
     
-    return inventory_id in inventoryById
+    return inventory_id in inventory_by_id
     
 def get_submission(user, inventory_id):
     submissions = models.Submission.objects.filter(
@@ -29,7 +31,7 @@ def submission_is_complete(submission):
 @login_required(redirect_field_name = None)  
 def take_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):    
-        inventory = inventoryById[int(inventory_id)]()
+        inventory = inventory_by_id[int(inventory_id)]()
     else:
         return app.views.page_not_found(request)
     
@@ -61,11 +63,12 @@ def take_inventory(request, inventory_id):
     template = 'take_inventory/{}'.format(inventory.template)
   
     return render(request, template, data)
-    
+
+       
 @login_required(redirect_field_name = None)
 def review_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):    
-        inventory = inventoryById[int(inventory_id)]()
+        inventory = inventory_by_id[int(inventory_id)]()
     else:
         return app.views.page_not_found(request)
         

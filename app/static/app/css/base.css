@@ -114,6 +114,11 @@ img.navbar-logo {
     font-weight: bold;
 }
 
+.hidden
+{
+    display: none;
+}
+
 .inventory-table td.name
 {
     width: 50%;
