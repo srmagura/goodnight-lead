@@ -75,20 +75,29 @@ class BigFive(Inventory):
             'openness'
         )
          
-        means = (
-            4.44,
-            5.23, 
-            5.4,
-            4.83,
-            5.38  
-        )
+        means = (4.44, 5.23, 5.4, 4.83, 5.38)
                 
         labels = (
-            ('Introverted', 'Extroverted'),
-            ('Assertive', 'Agreeable'),
-            ('Impulsive', 'Conscientious'),
-            ('Anxious', 'Emotionally stable'),
-            ('Traditional', 'Open to experience')  
+            (
+                ('Introverted', 'Extroverted'),
+                ('shy, reserved', 'kind, sociable')
+            ),
+            (   
+                ('Assertive', 'Agreeable'),
+                ('aggressive', 'cooperative')
+            ),
+            (
+                ('Impulsive', 'Conscientious'),
+                ('act on the moment', 'responsible, self-disciplined')
+            ),
+            (
+                ('Anxious', 'Emotionally stable'),
+                ('moody, worrisome', 'calm, self-confident')
+            ),
+            (
+                ('Traditional', 'Open to experience'),
+                ('conventional', 'curious, reflective')
+            )
         )
                 
         values = {}
@@ -104,7 +113,8 @@ class BigFive(Inventory):
             marker_mean = SliderMarker('mean', 'Mean', means[i])
             slider = Slider(1, 7, (marker_you, marker_mean))
             
-            slider_container = SliderContainer(labels[i], slider)
+            slider_container = SliderContainer(labels[i][0], slider)
+            slider_container.sublabels = labels[i][1]
             slider_containers.append(slider_container)
         
         data['slider_containers'] = slider_containers

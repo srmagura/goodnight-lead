@@ -16,12 +16,17 @@
 .slider-container .label-right
 {
     float: right;
+    text-align: right;
 }
 
-.slider-container .label-left,
-.slider-container .label-right
+.slider-container .slider-label
 {
     font-weight: bold;
+}
+
+.slider-container .slider-label .sublabel
+{
+    font-weight: normal;
 }
 
 .slider

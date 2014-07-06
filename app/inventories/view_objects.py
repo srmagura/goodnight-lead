@@ -32,11 +32,13 @@ class SliderContainer:
     def __init__(self, labels, slider):
         self.labels = labels
         self.slider = slider
+        self.sublabels = ('', '')
         
     def render(self):
         data = {
             'labels': self.labels,
-            'slider': self.slider
+            'sublabels': self.sublabels,
+            'slider': self.slider,
         }
-        
+                
         return render_to_string('slider_container.html', data)
