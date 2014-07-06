@@ -1,5 +1,6 @@
 from __future__ import division
 from shared import *
+from view_objects import Slider, SliderMarker, SliderContainer
 
 class BigFiveQuestion(NumberQuestion):
 
@@ -74,32 +75,47 @@ class BigFive(Inventory):
             'openness'
         )
          
-        population_norms = (
-            4, # 4.44
-            4, # 5.23 
-            4, # 5.4 
-            4, #4.83
-            4, # 5.38  
-        )
+        means = (4.44, 5.23, 5.4, 4.83, 5.38)
                 
         labels = (
-            ('Introverted', 'Extroverted'),
-            ('Assertive', 'Agreeable'),
-            ('Impulsive', 'Conscientious'),
-            ('Anxious', 'Emotionally stable'),
-            ('Traditional', 'Open to experience')  
+            (
+                ('Introverted', 'Extroverted'),
+                ('shy, reserved', 'kind, sociable')
+            ),
+            (   
+                ('Assertive', 'Agreeable'),
+                ('aggressive', 'cooperative')
+            ),
+            (
+                ('Impulsive', 'Conscientious'),
+                ('act on the moment', 'responsible, self-disciplined')
+            ),
+            (
+                ('Anxious', 'Emotionally stable'),
+                ('moody, worrisome', 'calm, self-confident')
+            ),
+            (
+                ('Traditional', 'Open to experience'),
+                ('conventional', 'curious, reflective')
+            )
         )
-        
-        metric_data = {k: {} for k in keys}
-        
+                
+        values = {}
         for metric in metrics:
-            metric_data[metric.key]['value'] = metric.value
+            values[metric.key] = metric.value
+            
+        slider_containers = []
             
         for i in range(len(keys)):
-            d = metric_data[keys[i]]
-            d['value'] = int(d['value'])
-            d['population_norm'] = population_norms[i]
-            d['labels'] = labels[i]
+            key = keys[i]
+            
+            marker_you = SliderMarker('you', 'You', values[key])
+            marker_mean = SliderMarker('mean', 'Mean', means[i])
+            slider = Slider(1, 7, (marker_you, marker_mean))
+            
+            slider_container = SliderContainer(labels[i][0], slider)
+            slider_container.sublabels = labels[i][1]
+            slider_containers.append(slider_container)
         
-        data['metric_data'] = metric_data
+        data['slider_containers'] = slider_containers
         

@@ -67,7 +67,7 @@ img.navbar-logo {
     width:auto;
     border:none;
     background:none;
-    background-color:none;
+    background-color:transparent;
     margin:0;
     padding:0;
 }
@@ -124,6 +124,11 @@ img.navbar-logo {
 {
     color: red;
     font-weight: bold;
+}
+
+.hidden
+{
+    display: none;
 }
 
 .inventory-table td.name

@@ -1,4 +1,5 @@
 from shared import *
+from view_objects import Slider, SliderMarker
 
 class CoreSelfQuestion(NumberQuestion):
 
@@ -47,7 +48,8 @@ class CoreSelf(Inventory):
         
         self.metrics = {'score': score / 12.}    
             
-    def review_process_metrics(self, data, metrics):         
-        data['score'] = int(metrics[0].value)
+    def review_process_metrics(self, data, metrics):
+        marker = SliderMarker('you', 'You', metrics[0].value)         
+        data['slider'] = Slider(1, 5, (marker,))
     
         

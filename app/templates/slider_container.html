@@ -1,0 +1,21 @@
+<div class="slider-container">
+    <div class="slider-label label-left">
+        {{ labels.0 }}
+        {% if sublabels.0 %}
+          
+            <p class="sublabel">         
+                {{ sublabels.0 }}
+            </p>
+        {% endif %}  
+    </div>
+    <div class="slider-label label-right">
+        {{ labels.1 }}
+        {% if sublabels.1 %}
+            <p class="sublabel">
+                {{ sublabels.1 }}
+            </p>
+        {% endif %}  
+    </div>
+            
+    {{ slider.render }}
+</div>

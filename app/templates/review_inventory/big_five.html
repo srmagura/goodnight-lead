@@ -1,59 +1,17 @@
 {% extends "review_inventory.html" %}
-{% load static %}
-
-{% block head %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'app/css/big_five.css' %}" />
-    <script src="{% static 'app/js/bigFive.js' %}"></script>
-{% endblock %}
 
 {% block review_content %}
-<script>
-$(document).ready(function(){
-    bigFiveReviewInit()
-})
-</script>
+<div class="inventory-review-page">
+<p>The Big Five refers to five personality traits that are fairly stable over your life. These traits are preferences that influence how you behave across situations and contexts.</p>
 
-<div class="review-big-five">
-    {% for datum in metric_data.values %}
-        <div class="metric-container">
-            <div class="label-left">
-                {{ datum.labels.0 }}
-            </div>
-            <div class="label-right">
-                {{ datum.labels.1 }}
-            </div>
-            <div class="scale">
-                <img src="{% static 'app/images/scale.png' %}" />
-                
-                <div class="marker marker-you">
-                    <div class="line">
-                        <div class="left">
-                        </div><div class="right">
-                        </div></div>
-                    <div class="info">
-                        <div class="wrapper">
-                            You <br />
-                            <span class="value">{{ datum.value }}</span>
-                        </div>
-                    </div>
-                </div>  
-                
-                <div class="marker marker-population">
-                    <div class="line">
-                        <div class="left">
-                        </div><div class="right">
-                        </div></div>
-                    <div class="info">
-                        <div class="wrapper">
-                            Mean <br />
-                            <span class="value">{{ datum.population_norm }}</span>
-                        </div>
-                    </div>
-                </div>               
-            </div>
-        </div>
-    {% endfor %}
+<p>Receive more detailed feedback on the Big Five by following this 
+<a target="_blank" href="http://similarminds.com/personality_tests.html">link</a>.
+Look down the column to the header ‘Big 5 / Global 5’ and take either the Big Five Short Form or Big 45 test (for an even more detailed analysis).</p>
+
+<p>Want to know more? <a target="_blank" href="http://en.wikipedia.org/wiki/Big_Five_personality_traits">Big Five on Wikipedia</a></p>
+{% for slider_container in slider_containers %}
+    {{ slider_container.render }}
+{% endfor %}
 </div>
 {% endblock %}
 
