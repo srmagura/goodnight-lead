@@ -58,7 +58,7 @@ class CareerCommitment(Inventory):
             
         for metric in metrics:
             marker = SliderMarker('you', 'You', metric.value)
-            slider = Slider(1, 4, (marker,))
+            slider = Slider(1, 5, (marker,))
             
             labels2 = (labels[metric.key], '')
             data['slider_containers'][metric.key] = SliderContainer(labels2, slider)
