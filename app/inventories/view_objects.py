@@ -5,7 +5,11 @@ class SliderMarker:
     def __init__(self, css_id, label, value):
         self.css_id = css_id
         self.label = label
-        self.value = value
+        
+        if type(value) is float:
+            self.value = round(value, 2)
+        else:
+            self.value = value
     
 class Slider:
 
