@@ -9,9 +9,9 @@ $(window).load(function() {
     }
 });
 
-$(window).resize(function() {
-    //Only if the size changes to full
-    if($size != $prev_size && $size == "full") {
+//Override the default resize
+$sizeChange = function() {
+    if($size == "full") {
         $('.col-equal-height').children().height($('.col-equal-height').parent().height());
     }
-});
+}

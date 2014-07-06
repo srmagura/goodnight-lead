@@ -9,10 +9,15 @@ $extendedWidth = 150; //The width of the extended navbar
 
 $(window).load(
     function() {
+        $('.popover-toggle').popover({
+            trigger: 'click',
+            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+
         //Get the initial window size - breakpoint at 768px (bootstrap xs breakpoint)
         $windowWidth = $(window).width();
         $size = ($windowWidth <= $xsBreakpoint) ? "mobile" : (($windowWidth < $mdBreakpoint) ? "tablet" : "full");
-        
+
         $prev_size = $size;
 
         //Toggle the initial collapse (for mobile devices or small browser windows)
@@ -61,7 +66,8 @@ $(window).resize(
         $size = ($windowWidth <= $xsBreakpoint) ? "mobile" : (($windowWidth < $mdBreakpoint) ? "tablet" : "full");
         //If the size has changed
         if($size != $prev_size) {
-            toggleCollapse();
+            //The size has changed
+            sizeChange();
 
             //Make sure the .navbar-slide has the appropriate width
             if($size == "mobile") {
@@ -79,6 +85,11 @@ $(window).resize(
         $prev_size = $size;
     }
 );
+
+//What to do when the size changes
+sizeChange = function() {
+    toggleCollapse();
+}
 
 //Expand if size is full, collapse if size is mobile
 toggleCollapse = function() {

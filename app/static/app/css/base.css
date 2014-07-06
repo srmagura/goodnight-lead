@@ -63,6 +63,20 @@ img.navbar-logo {
 }
 /******************/
 
+.popover {
+    min-width:200px;
+}
+.popover-toggle {
+    cursor:pointer;
+}
+.bottom-popover-container {
+    position:absolute;
+    bottom:15px;
+}
+.bottom-popover-container-wrapper {
+    margin-top:30px;
+}
+
 .legend {
     width:auto;
     border:none;
