@@ -48,6 +48,11 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        <div class="bottom-popover-container-wrapper">
+                            <div class="bottom-popover-container">
+                                <a class="popover-toggle" data-placement="top" data-title="Why we collect demographics" data-content="Demographic information is requested to enable you to see comparisons by gender, major, etc.">Why Demographics? <span class="glyphicon glyphicon-eye-open"></span></a>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -55,8 +60,8 @@
                 <div class="col-md-offset-2 col-md-8">
                     <div class="lead-panel text-center panel-no-horizontal-padding">
                         <div class="btn-group">
-                            <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"></input>
-                            <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Password"></input>
+                            <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"/>
+                            <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Password"/>
                             <input class="btn btn-default" type="submit" value="Save"/>
                         </div>
                     </div>

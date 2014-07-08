@@ -6,6 +6,13 @@ body {
     padding-top:70px;
     height:100%;
 }
+nav.navbar {
+    min-width:320px;
+}
+nav .container-fluid {
+    margin-left:15px;
+    margin-right:15px;
+}
 a.navbar-toggle {
     height:34px;
     vertical-align:middle;
@@ -36,9 +43,11 @@ a.navbar-brand .navbar-text {
     color:rgb(255, 51, 51);
 }
 img.navbar-logo {
-    height:50px;
+    height:40px;
+    margin-top:5px;
+    margin-bottom:5px;
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .navbar-slide {
         right:0%;
         height:100%;
@@ -48,8 +57,25 @@ img.navbar-logo {
         display:none;
         width:310px;
     }
+    nav .container-fluid {
+        margin:0;
+    }
 }
 /******************/
+
+.popover {
+    min-width:200px;
+}
+.popover-toggle {
+    cursor:pointer;
+}
+.bottom-popover-container {
+    position:absolute;
+    bottom:15px;
+}
+.bottom-popover-container-wrapper {
+    margin-top:30px;
+}
 
 .legend {
     width:auto;

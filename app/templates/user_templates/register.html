@@ -1,35 +1,75 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}
 Register
 {% endblock %}
 
+{% block script %}
+    <script type="text/javascript" language="javascript" src="{% static 'app/js/equal-cols.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-offset-4 col-md-4">
-            <div class="lead-panel">
-                <h2>Register</h2>
-                <form role="form" method="post" action="{% url 'register' %}">
-                    {% csrf_token %}		  	
-                    
-                    <!--
-                        Create each input with the appropriate label (and errors if any).
-                    -->
-                    {% for form in forms %}
-                        {% for field in form %}
+    {% if messages %}
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-offset-2 col-md-4 col-equal-height">
+                <fieldset class="lead-panel">
+                    <legend class="legend">User Information</legend>
+                    <div>
+                        {% for field in userForm %}
                             <div class="form-group {% if field.errors %} has-error {% endif %}">
                                 <label class = "control-label"> {{ field.label }} </label>
                                 <span class = "form-control-feedback"> {{ field.errors }} </span>
                                 {{ field }}
                             </div>
                         {% endfor %}
-                    {% endfor %}
-                    
-                    <button type="submit" class="btn btn-default">Create User Account</button>
-                </form>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-4 col-equal-height">
+                <fieldset class="lead-panel">
+                    <legend class="legend">Demographics</legend>
+                    <div>
+                        {% for field in infoForm %}
+                            <div class="form-group {% if field.errors %} has-error {% endif %}">
+                                <label class = "control-label"> {{ field.label }} </label>
+                                <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="bottom-popover-container-wrapper">
+                        <div class="bottom-popover-container">
+                            <a class="popover-toggle" data-placement="top" data-title="Why we collect demographics" data-content="Demographic information is requested to enable you to see comparisons by gender, major, etc.">Why Demographics? <span class="glyphicon glyphicon-eye-open"></span></a>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="lead-panel text-center panel-no-horizontal-padding">
+                    <div class="btn-group">
+                        <input type="button" class="btn btn-default" onclick="location.href='{% url 'login' %}'" value="Cancel"/>
+                        <input class="btn btn-default" type="submit" value="Register user account"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
