@@ -10,8 +10,11 @@ $(window).load(function() {
 });
 
 //Override the default resize
-$sizeChange = function() {
+sizeChange = function() {
     if($size == "full") {
         $('.col-equal-height').children().height($('.col-equal-height').parent().height());
+    }
+    else {
+        $('.col-equal-height').children().height('auto');
     }
 }

@@ -53,13 +53,13 @@ def index(request):
     for inventory_id, cls in inventories.inventory_by_id.items():
         submission = get_submission(request.user, inventory_id)
         is_complete = submission_is_complete(submission)
-        
-        entry = {'inventory_id': inventory_id, 
+
+        entry = {'inventory_id': inventory_id,
             'name': cls.name,
             'is_complete': is_complete,
             'is_started': submission is not None}
         entries.append(entry)
-        
+
     data = {'inventories': entries}
     return render(request, 'index.html', data)
 
@@ -74,7 +74,7 @@ def login_page(request):
             if user.is_active:
                 login(request, user)
                 return HttpResponseRedirect('/')
-            else:                                  
+            else:
                 # Return a 'disabled account' error message
                 return HttpResponse('disabled')
         else:
@@ -94,30 +94,34 @@ def register(request):
         forms = [userForm, infoForm]
 
         #All validation rules pass - generate a new user account
-        if all(form.is_valid() for form in forms):  
+        if all(form.is_valid() for form in forms):
             user = userForm.save()
-            
+
             info = infoForm.save(commit=False)
             info.user = user
             info.save()
-            
+
             #log the user in
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             login(request, user)
-            
+
             #Redirect back to the login page, sending a success message
             messages.success(request, 'User account created successfully.')
             return HttpResponseRedirect(reverse('index'))
-            
+
     #Get a blank form if loaded from link (initial load)
     else:
-        forms = [UserForm(), InfoForm()]
-        
+        userForm = UserForm()
+        infoForm = InfoForm()
+
     #Render the page using whichever form was loaded.
     return render(
-        request, 
-        'user_templates/register.html', 
-        {'forms': forms,}
+        request,
+        'user_templates/register.html',
+        {
+            'userForm': userForm,
+            'infoForm': infoForm,
+        }
     )
 
 @logout_required
@@ -126,24 +130,24 @@ def reset_password_page(request):
     success = False
 
     if request.method == 'POST':
-        form = form_cls(request.POST) 
+        form = form_cls(request.POST)
         if form.is_valid():
             success = True
             form = form_cls()
-    else:       
+    else:
         form = form_cls()
-        
-    return render(request, 
-        'user_templates/reset_password_page.html', 
+
+    return render(request,
+        'user_templates/reset_password_page.html',
         {'form': form, 'success': success}
     )
 
-@login_required(redirect_field_name = None)      
+@login_required(redirect_field_name = None)
 #Logs out a user and redirects to the home page
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
-     
+
 #If the user types in an incorrect url or somehow follows a bad link
 @login_required(redirect_field_name = None)
 def page_not_found(request):
