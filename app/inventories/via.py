@@ -13,6 +13,9 @@ class ViaQuestion(NumberQuestion):
         'Like me', 'Very much like me'
     )
 
+
+def strength_to_key(s):
+    return s.lower().replace(' ', '_')
     
 class Via(Inventory):
 
@@ -33,15 +36,16 @@ class Via(Inventory):
                 page_questions = OrderedDict()
                 self.question_text.append(page_questions)
         
-            qid_s, text, strength = line.split('\t')
+            qid_s, text, strength = line.replace('\n', '').split('\t')
             qid = int(qid_s)
             
             page_questions[qid] = text
             
-            if strength not in self.scoring_dict:
-                self.scoring_dict[strength] = set()
+            key = strength_to_key(strength)
+            if key not in self.scoring_dict:
+                self.scoring_dict[key] = set()
               
-            self.scoring_dict[strength].add(qid)
+            self.scoring_dict[key].add(qid)
             i += 1
     
         self.n_pages = len(self.question_text)
@@ -61,9 +65,19 @@ class Via(Inventory):
            
     def compute_metrics(self):
         self.metrics = {}
+        
+        for key, qid_set in self.scoring_dict.items():
+            total = 0           
+            for qid in qid_set:
+                total += int(self.answers[qid])
+                
+            self.metrics[key] = total
             
     def review_process_metrics(self, data, metrics):          
-        pass
+        data['metrics'] = {}
+        
+        for metric in metrics:
+            data['metrics'][metric.key] = metric.value
 
     
         

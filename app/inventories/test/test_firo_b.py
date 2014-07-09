@@ -1,66 +1,10 @@
-from django.test import TestCase
+from test import InventoryScoringTest
+from app.inventories.firo_b import FiroB
 
-from big_five import BigFive
-from core_self import CoreSelf
-from career_commitment import CareerCommitment
-from ambiguity import Ambiguity
-from firo_b import FiroB
-
-def set_answers(inv, answers):
-    if type(answers) is dict:
-        inv.answers = answers
-    else:
-        inv.answers = {}
-        i = 1
-        for answer in answers:
-            inv.answers[i] = answer
-            i += 1
-
-
-class InventoryScoringTest(TestCase):
-
-    def generic_test(self, inv, answers, expected_metrics):
-        set_answers(inv, answers)
-                
-        inv.compute_metrics()
-        self.assertEqual(expected_metrics, inv.metrics)
-
-    def test_big_five(self):
-        answers = '2615472635'
-            
-        expected_metrics = {
-            'extraversion': 1.5,
-            'agreeableness': 2,
-            'conscientiousness': 1.5,
-            'emotional_stability': 3,
-            'openness': 3.5
-        }  
-        
-        self.generic_test(BigFive(), answers, expected_metrics)
-        
-    def test_core_self(self):
-        answers = '454454423244'         
-        expected_metrics = {'score': 39/12.}  
-        
-        self.generic_test(CoreSelf(), answers, expected_metrics)
-        
-    def test_career_commitment(self):
-        answers = '43252422'
-        expected_metrics = {
-            'identity': 4,
-            'planning': 4
-        }
-        
-        self.generic_test(CareerCommitment(), answers, expected_metrics)
-        
-    def test_ambiguity(self):
-        answers = '2343255727467626'
-        expected_metrics = {'score': 49}
-        
-        self.generic_test(Ambiguity(), answers, expected_metrics)
+class FiroBTest(InventoryScoringTest):
         
     # Check that all question ID's appear in the table exactly once
-    def test_firo_b_scoring_table(self):
+    def test_scoring_table(self):
         qid_list = []
         for items in FiroB.scoring_table.values():
             for qid, a, b in items:
@@ -69,7 +13,7 @@ class InventoryScoringTest(TestCase):
         qid_list.sort()
         self.assertEqual(tuple(qid_list), tuple(range(1, 55)))
         
-    def test_firo_b0(self):
+    def test0(self):
         answers = {
             1: 2, 2: 2, 3: 4, 4: 3, 5: 4,
             6: 5, 7: 3, 8: 3, 9: 3, 10: 6,
@@ -101,7 +45,7 @@ class InventoryScoringTest(TestCase):
         
         self.generic_test(FiroB(), answers, expected_metrics)
         
-    def test_firo_b1(self):
+    def test1(self):
         answers = {
             1: 2, 2: 2, 3: 1, 4: 1, 5: 3,
             6: 3, 7: 2, 8: 1, 9: 2, 10: 5,
