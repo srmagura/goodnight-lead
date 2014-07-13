@@ -34,7 +34,8 @@ class BigFive(Inventory):
     def __init__(self):
         self.questions = []
         
-        for qid, text in self.question_text.items():
+        for qid in range(1, len(self.question_text)+1):
+            text = self.question_text[qid]
             self.questions.append(BigFiveQuestion(qid, text))
            
     def compute_metrics(self):
