@@ -112,6 +112,10 @@ img.navbar-logo {
 .section-table th {
     height:20px;
     background-color: grey;
+<<<<<<< HEAD
+=======
+    text-align:center;
+>>>>>>> erich_dev
 }
 .section-table td {
     border:1px solid black;

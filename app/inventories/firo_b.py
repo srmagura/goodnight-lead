@@ -189,7 +189,8 @@ class FiroB(Inventory):
 
         row_labels = (
             'Expressed',
-            'Wanted'
+            'Wanted',
+            'Overall'
         )
 
         category_range = '0-9'
@@ -249,23 +250,31 @@ class FiroB(Inventory):
                     'breakpoints': category_breakpoints
                 },
                 {
-                    'head': 'Expressed Control',
+                    'head': 'Wanted Control',
                     'value': int(data_metrics['wanted_control']),
                     'range': category_range,
                     'breakpoints': category_breakpoints
                 },
                 {
-                    'head': 'Expressed Affection',
+                    'head': 'Wanted Affection',
                     'value': int(data_metrics['wanted_affection']),
                     'range': category_range,
                     'breakpoints': category_breakpoints
                 },
                 {
-                    'head': 'Total Expressed',
+                    'head': 'Total Wanted',
                     'value': int(data_metrics['total_wanted']),
                     'range': subtotal_range,
                     'breakpoints': category_breakpoints
                 }
+            ),
+            (
+                {
+                    'head': 'Social Interaction Index',
+                    'value': int(data_metrics['social_interaction_index']),
+                    'range': overall_range,
+                    'breakpoints': overall_breakpoints
+                },
             )
         )
 
