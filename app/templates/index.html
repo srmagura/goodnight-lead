@@ -25,7 +25,14 @@
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
                         <div class="panel-body">
-                            Take an inventory which you haven't taken yet, or view the results from one you have.
+                            <p>Take an inventory which you haven't taken yet, or view the results from one you have.</p>
+                            
+                            <p>
+                                <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
+                                If you are depressed or experiencing other mental distress then these inventories 
+                                will not be useful for you. Please seek counseling, which is available from the 
+                                <a href="http://healthcenter.ncsu.edu/counseling-center/">NCSU Counseling Center</a>
+                            </p>
                         </div>
                         <table class="table inventory-table">
                             {% for entry in inventories %}
@@ -51,7 +58,7 @@
                                     </td>
                                 </tr>
                              {% endfor %}
-                        </table>
+                        </table>                      
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -105,5 +112,4 @@
             </div>
         </div>
     </div>
-    {% include "depression.html" %}
 {% endblock %}
