@@ -5,7 +5,7 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'app/css/slider.css' %}" />
     <script src="{% static 'app/js/slider.js' %}"></script>
-    
+
 {% endblock %}
 
 
@@ -26,7 +26,7 @@ $(document).ready(function(){
             <div class="lead-panel">
                 <h2>{{inventory.name}} - Results</h2>
                 {% block review_content %}
-                {% endblock %}                
+                {% endblock %}
             </div>
         </div>
     </div>

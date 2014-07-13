@@ -1,24 +1,26 @@
+from __future__ import division
 from shared import *
+from view_objects import Slider, SliderMarker, SliderContainer
 
 class FiroBQuestion(NumberQuestion):
 
     minimum = 1
     maximum = 6
-    
+
 class FiroBQuestion0(FiroBQuestion):
     choice_labels = (
         'Usually', 'Often', 'Sometimes',
         'Occasionally', 'Rarely', 'Never'
     )
- 
+
 class FiroBQuestion1(FiroBQuestion):
     choice_labels = (
         'Most people', 'Many people', 'Some people',
         'A few people',  'One or two people', 'Nobody'
-    )   
-   
+    )
+
 question_cls_list = (FiroBQuestion0, FiroBQuestion1, FiroBQuestion0)
-    
+
 class FiroB(Inventory):
 
     name = 'Fundamental Interpersonal Relations Orientation-behavior'
@@ -86,7 +88,7 @@ class FiroB(Inventory):
             54: 'I take charge of things when I\'m with people.'
         }
     )
-    
+
     scoring_table = {
         'expressed_inclusion': (
             (1, 1, 3), (3, 1, 4), (5, 1, 4), (7, 1, 3),
@@ -125,60 +127,147 @@ class FiroB(Inventory):
 
     def set_submission(self, submission):
         self.submission = submission
-        
+
         if self.submission is None:
             current_page = 0
         else:
-            current_page = self.submission.current_page       
-            
+            current_page = self.submission.current_page
+
         self.questions = []
-        
+
         for qid, text in self.question_text[current_page].items():
             cls = question_cls_list[current_page]
-            self.questions.append(cls(qid, text))           
-           
+            self.questions.append(cls(qid, text))
+
     def compute_metrics(self):
         self.metrics = {}
-        
+
         for metric_name, items in self.scoring_table.items():
             score = 0
-            
+
             for qid, a, b in items:
                 ans = int(self.answers[qid])
                 if a <= ans and ans <= b:
                     score += 1
-                    
+
             self.metrics[metric_name] = score
-            
+
         modifiers = ('expressed', 'wanted')
         categories = ('inclusion', 'control', 'affection')
-        
+
         self.metrics['social_interaction_index'] = 0
-            
+
         for modifier in modifiers:
             key = 'total_' + modifier
             self.metrics[key] = 0
-            
+
             for category in categories:
                 key2 = modifier + '_' + category
                 self.metrics[key] += self.metrics[key2]
-                
+
             self.metrics['social_interaction_index'] += self.metrics[key]
-                
+
         for category in categories:
             key = 'total_' + category
             self.metrics[key] = 0
-            
+
             for modifier in modifiers:
                 key2 = modifier + '_' + category
                 self.metrics[key] += self.metrics[key2]
-            
-    def review_process_metrics(self, data, metrics):          
-        data['metrics'] = []
-        
-        for metric in metrics:
-            data['metrics'].append(
-                {'key': metric.key, 'value': int(metric.value)})
 
-    
-        
+    def review_process_metrics(self, data, metrics):
+        data_metrics = {}
+        for metric in metrics:
+            data_metrics[metric.key] = metric.value
+
+        data['column_labels'] = (
+            '',
+            'Inclusion',
+            'Control',
+            'Affection',
+            'Totals'
+        )
+
+        row_labels = (
+            'Expressed',
+            'Wanted'
+        )
+
+        category_range = '0-9'
+        subtotal_range = '0-27'
+        overall_range = '0-56'
+
+        #Breakpoints for low (0-2), medium (3-6), high (7-9)
+        category_breakpoints = {
+            'lower': 3,
+            'upper': 7
+        }
+
+        #Breakpoints for low (0-8), medium (9-20), high (21-27)
+        subtotal_breakpoints = {
+            'lower': 9,
+            'upper': 21
+        }
+
+        #Breakpoints for low (0-17), medium (18-41), high (42-56)
+        overall_breakpoints = {
+            'lower': 18,
+            'upper': 42
+        }
+
+        rows = (
+            (
+                {
+                    'head': 'Expressed Inclusion',
+                    'value': int(data_metrics['expressed_inclusion']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Expressed Control',
+                    'value': int(data_metrics['expressed_control']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Expressed Affection',
+                    'value': int(data_metrics['expressed_affection']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Total Expressed',
+                    'value': int(data_metrics['total_expressed']),
+                    'range': subtotal_range,
+                    'breakpoints': category_breakpoints
+                }
+            ),
+            (
+                {
+                    'head': 'Wanted Inclusion',
+                    'value': int(data_metrics['wanted_inclusion']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Expressed Control',
+                    'value': int(data_metrics['wanted_control']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Expressed Affection',
+                    'value': int(data_metrics['wanted_affection']),
+                    'range': category_range,
+                    'breakpoints': category_breakpoints
+                },
+                {
+                    'head': 'Total Expressed',
+                    'value': int(data_metrics['total_wanted']),
+                    'range': subtotal_range,
+                    'breakpoints': category_breakpoints
+                }
+            )
+        )
+
+        data['rows'] = zip(row_labels, rows)

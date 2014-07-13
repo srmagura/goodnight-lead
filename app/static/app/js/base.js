@@ -10,7 +10,7 @@ $extendedWidth = 150; //The width of the extended navbar
 $(window).load(
     function() {
         $('.popover-toggle').popover({
-            trigger: 'click',
+            trigger: 'hover',
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
         });
 
