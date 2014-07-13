@@ -15,7 +15,7 @@
                 <p>{{ label }}</p>
             </td>
             {% for col in row %}
-                <td>
+                <td {% if forloop.parentloop.counter == rows|length %} colspan="4" {% endif %}>
                     <table class="section-table">
                         <tr>
                             <th>
@@ -25,7 +25,7 @@
                         <tr>
                             <td>
                                 <span class="results-value">
-                                    {{ col.value }}:
+                                    Score: {{ col.value }} -
                                 </span>
                                 <span class="results-descriptor">
                                     {% if col.value < col.breakpoints.lower %}
@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td>
-                                {{ col.range }}
+                                range: {{ col.range }}
                             </td>
                         </tr>
                     </table>

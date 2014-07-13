@@ -112,6 +112,7 @@ img.navbar-logo {
 .section-table th {
     height:20px;
     background-color: grey;
+    text-align:center;
 }
 .section-table td {
     border:1px solid black;
