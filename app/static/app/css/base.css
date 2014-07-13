@@ -63,6 +63,7 @@ img.navbar-logo {
 }
 /******************/
 
+/******Popover******/
 .popover {
     min-width:200px;
 }
@@ -76,7 +77,9 @@ img.navbar-logo {
 .bottom-popover-container-wrapper {
     margin-top:30px;
 }
+/*******************/
 
+/******AccountSettings******/
 .legend {
     width:auto;
     border:none;
@@ -90,6 +93,44 @@ img.navbar-logo {
     padding-left:0;
     padding-right:0;
 }
+/***************************/
+
+/******InventoryResults******/
+.results-table {
+    border-collapse:separate !important;
+    border-spacing: 2px;
+    font-size:13px;
+}
+.results-table tr {
+    height: 40px;
+}
+.section-table {
+    width:100%;
+    border:1px solid black;
+    border-collapse:collapse;
+}
+.section-table th {
+    height:20px;
+    background-color: grey;
+}
+.section-table td {
+    border:1px solid black;
+    text-align:center;
+}
+.header-row td {
+    text-align: center;
+}
+.row-label {
+    margin:0;
+    padding:0;
+    max-width: 30px;
+}
+.row-label p {
+    transform:rotate(270deg);
+    -ms-transform:rotate(270deg); /* IE 9 */
+    -webkit-transform:rotate(270deg); /* Opera, Chrome, and Safari */
+}
+/****************************/
 
 .page-login .title
 {

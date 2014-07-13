@@ -1,13 +1,52 @@
 {% extends "review_inventory.html" %}
 
 {% block review_content %}
-<div>
-<ul>
-{% for metric in metrics %}
-<li>{{metric.key}} = {{metric.value}}</li>
-{% endfor %}
-</ul>
-</div>
+<table class="results-table">
+    <tr class="header-row hidden-xs">
+        {% for label in column_labels %}
+            <td>
+                {{ label }}
+            </td>
+        {% endfor %}
+    </tr>
+    {% for label, row in rows %}
+        <tr>
+            <td class="row-label hidden-xs">
+                <p>{{ label }}</p>
+            </td>
+            {% for col in row %}
+                <td>
+                    <table class="section-table">
+                        <tr>
+                            <th>
+                                {{ col.head }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="results-value">
+                                    {{ col.value }}:
+                                </span>
+                                <span class="results-descriptor">
+                                    {% if col.value < col.breakpoints.lower %}
+                                        Low
+                                    {% elif col.value < col.breakpoints.upper %}
+                                        Medium
+                                    {% else %}
+                                        High
+                                    {% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ col.range }}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
 {% endblock %}
-
-
