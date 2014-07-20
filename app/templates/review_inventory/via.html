@@ -1,11 +1,29 @@
 {% extends "review_inventory.html" %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/css/via.css' %}" />
+
+{% endblock %}
 
 {% block review_content %}
-<ul>
-    {% for key, value in metrics.items %}
-        <li>{{ key }} = {{ value }}</li>
+<p>The following list shows your personal strengths. The first three in the list are your <span class="signature">signature strengths</span>. For each character trait, your numeric score is shown in parenthesis. These scores indicate the extent to which you exhibit the given character trait.</p>
+
+<ol>
+    {% for obj in strengths %}
+        <li>
+            <span
+                {% if obj.is_signature %}
+                    class="signature"
+                {% endif %}
+            />
+            {{ obj.strength }}</span>
+            - ({{ obj.score}}) 
+            
+        </li>
     {% endfor %}
-</ul>
+</ol>
 {% endblock %}
 
 
