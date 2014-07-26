@@ -4,13 +4,13 @@ $prev_size = ""; //Previous size of the window
 $xsBreakpoint = 768; //Breakpoint between mobile and full in px
 $mdBreakpoint = 992; //Breakpoint between tablet and full
 
-$animationTime = 500; //Time taken to animate extensions
+$animationTime = 300; //Time taken to animate extensions
 $extendedWidth = 150; //The width of the extended navbar
 
 $(window).load(
     function() {
         $('.popover-toggle').popover({
-            trigger: 'hover',
+            trigger: 'click',
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
         });
 
