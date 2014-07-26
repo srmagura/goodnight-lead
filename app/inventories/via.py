@@ -29,6 +29,7 @@ class Via(Inventory):
         
         self.question_text = []
         self.scoring_dict = {}
+        self.strength_dict = {}
         
         i = 0
         for line in infile:
@@ -44,6 +45,7 @@ class Via(Inventory):
             key = strength_to_key(strength)
             if key not in self.scoring_dict:
                 self.scoring_dict[key] = set()
+                self.strength_dict[key] = strength
               
             self.scoring_dict[key].add(qid)
             i += 1
@@ -74,10 +76,21 @@ class Via(Inventory):
             self.metrics[key] = total
             
     def review_process_metrics(self, data, metrics):          
-        data['metrics'] = {}
+        all_strengths = []
         
         for metric in metrics:
-            data['metrics'][metric.key] = metric.value
-
+            strength = self.strength_dict[metric.key]
+            all_strengths.append({
+                'strength': strength,
+                'score': int(metric.value),
+                'is_signature': False
+            })
+            
+        all_strengths.sort(key=(lambda obj: obj['score']), reverse=True)
+        
+        for obj in all_strengths[:3]:
+            obj['is_signature'] = True
+        
+        data['strengths'] = all_strengths[:10]
     
         
