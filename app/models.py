@@ -17,7 +17,9 @@ class LeadUserInfo(models.Model):
         ('N', 'Prefer not to respond'),
     )
     gender = models.CharField(max_length=1, choices=gender_choices)
+
     major = models.CharField(max_length=100)
+
     year_choices = (
         (1, 'Freshman'),
         (2, 'Sophmore'),
@@ -25,8 +27,12 @@ class LeadUserInfo(models.Model):
         (4, 'Senior'),
     )
     year = models.IntegerField(max_length=2, choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
-    organization = models.CharField(max_length=100)
-    #Goals?
+
+    #shortname -> fullname
+    organization_choices = (
+        ('gsp', 'Goodnight Scholars Program'),
+    )
+    organization = models.CharField(max_length=100, choices=organization_choices)
 
 class Submission(models.Model):
     user = models.ForeignKey(User)
