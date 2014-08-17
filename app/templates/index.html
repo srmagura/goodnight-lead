@@ -17,7 +17,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-offset-1 col-md-5">
+            <!-- Previously offset-1 -->
+            <div class="col-md-offset-4 col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <span>View Inventories</span>
@@ -26,11 +27,11 @@
                     <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
                         <div class="panel-body">
                             <p>Take an inventory which you haven't taken yet, or view the results from one you have.</p>
-                            
+
                             <p>
                                 <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
-                                If you are depressed or experiencing other mental distress then these inventories 
-                                will not be useful for you. Please seek counseling, which is available from the 
+                                If you are depressed or experiencing other mental distress then these inventories
+                                will not be useful for you. Please seek counseling, which is available from the
                                 <a href="http://healthcenter.ncsu.edu/counseling-center/">NCSU Counseling Center</a>.
                             </p>
                         </div>
@@ -58,10 +59,10 @@
                                     </td>
                                 </tr>
                              {% endfor %}
-                        </table>                      
+                        </table>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <!-- <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="notreallyalink">View Stuff!</a>
                         <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel2-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
@@ -83,9 +84,9 @@
                             </tr>
                         </table>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="col-md-5">
+            <!--{# <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="notreallyalink">View (more) Stuff!</a>
@@ -110,6 +111,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>#}-->
     </div>
 {% endblock %}
