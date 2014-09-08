@@ -132,6 +132,18 @@ img.navbar-logo {
     -webkit-transform:rotate(270deg); /* Opera, Chrome, and Safari */
 }
 /****************************/
+/******Quote Carousel******/
+.carousel-inner {
+    height:150px;
+    background-image: url('../images/background.jpeg');
+}
+.carousel-content-placeholder {
+    height:150px;
+}
+.carousel-control {
+    background-image:none;
+}
+/**************************/
 
 .page-login .title
 {

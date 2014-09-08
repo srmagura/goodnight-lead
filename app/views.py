@@ -24,6 +24,7 @@ from inventories.views import get_submission, submission_is_complete
 #Other imports
 import copy
 from django.contrib import messages
+from app.quotes.indexQuotes import quoteList as indexQuotes
 
 #We don't want logged in users to access certain pages (like the login page, so they can log in again)
 #If they're already logged in, redirect to the home page
@@ -60,7 +61,7 @@ def index(request):
             'is_started': submission is not None}
         entries.append(entry)
 
-    data = {'inventories': entries}
+    data = {'inventories': entries, 'quotes': indexQuotes}
     return render(request, 'index.html', data)
 
 #Loads the login page.
