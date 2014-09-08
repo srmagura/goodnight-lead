@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block title %} Home {% endblock %}
 
 {% block content %}
@@ -26,11 +27,11 @@
                     <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
                         <div class="panel-body">
                             <p>Take an inventory which you haven't taken yet, or view the results from one you have.</p>
-                            
+
                             <p>
                                 <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
-                                If you are depressed or experiencing other mental distress then these inventories 
-                                will not be useful for you. Please seek counseling, which is available from the 
+                                If you are depressed or experiencing other mental distress then these inventories
+                                will not be useful for you. Please seek counseling, which is available from the
                                 <a href="http://healthcenter.ncsu.edu/counseling-center/">NCSU Counseling Center</a>.
                             </p>
                         </div>
@@ -58,56 +59,70 @@
                                     </td>
                                 </tr>
                              {% endfor %}
-                        </table>                      
+                        </table>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="notreallyalink">View Stuff!</a>
+                        <span>On Leadership</span>
                         <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel2-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="panel2-collapse">
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                            Leadership is more than the leader. Most professional development focuses on leader development. However, it is just as important to consider followers and the contexts when learning about leadership. The LEAD Lab emphasizes all three parts of the Leadership Triangle.
                         </div>
-                        <table class="table">
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                            </tr>
-                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="notreallyalink">View (more) Stuff!</a>
+                        <span>About the LEAD Lab</span>
                         <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel3-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="panel3-collapse">
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum <br /><br />
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                            LEAD stands for Learn, Evaluate, Assess, and Develop. Effective leaders engage in all of these activities. The <b><i>lab</i></b> emphasizes that learning about leadership is experimental. You will make mistakes. However, labs are meant for experimentation to figure out what works. One leadership scholar Dr. Padilla has said that leadership cannot be taught but it can be learned.
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="notreallyalink">View (more) Stuff!</a>
+                        <span>LEAD Lab I</span>
                         <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel4-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="panel4-collapse">
                         <div class="panel-body">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                            This fall is the pilot of Lead Lab I. There are a series of leadership coaching sessions to help emerging leaders develop their self awareness, recognize leader preferences in others, and to have an appreciation of all three elements in the leadership triangle (leader, followers, contexts). The lab ends with<br /><br />
+                            Self -awareness is difficult to gain yet it is a necessary step if you want to excel or lead others. Emerging leaders who increase their self awareness
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10">
+                <div id="carousel" class="carousel slide" data-ride="carousel">
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        {% for quote in quotes %}
+                        <div class="item {% if forloop.counter = 1 %} active {% endif %}">
+                            <div class="carousel-content-placeholder"></div>
+                            <div class="carousel-caption">
+                                {{ quote }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
                 </div>
             </div>
         </div>
