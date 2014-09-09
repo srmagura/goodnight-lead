@@ -79,9 +79,9 @@ def login_page(request):
                 # Return a 'disabled account' error message
                 return HttpResponse('disabled')
         else:
-            return HttpResponse('Incorrect username or password')
-    else:
-        return render(request, 'user_templates/login.html')
+            messages.warning(request, "Incorrect username or password")
+
+    return render(request, 'user_templates/login.html')
 
 #Loads the page for registering a new user with proper form validation
 @logout_required
