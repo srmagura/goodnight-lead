@@ -18,6 +18,11 @@ Login
             <div class="login lead-panel">
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
                     <p>
                         <label>Username</label><br />
                         <input name="username" type="text" class="form-control" />
