@@ -1,10 +1,14 @@
 {% extends "review_inventory.html" %}
 
 {% block review_content %}
-<div>
-    The average score is between 40 and 44.
+<div class="inventory-review-page">
+    <p>
+        This scale measures your comfort or tolerance with ambiguous situations that might be new, complex, unstructured, vague, insoluble, or contradictory. High scores indicate a greater intolerance of ambiguity; the higher your score, the more uncomfortable you are with ambiguity. Lower scores indicate a tolerance of ambiguity, the lower your score the more comfortable you are with ambiguity.
+    </p>
+    <p>
+        The average score is between 40 and 44.
+    </p>
+
     {{ slider_container.render }}
 </div>
 {% endblock %}
-
-

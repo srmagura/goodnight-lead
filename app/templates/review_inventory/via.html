@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block review_content %}
-<p>The following list shows your personal strengths. The first three in the list are your <span class="signature">signature strengths</span>. For each character trait, your numeric score is shown in parenthesis. These scores indicate the extent to which you exhibit the given character trait.</p>
+<p>This inventory presents your <span class="signature">signature strengths</span>. The idea is the more you use your signature strengths in your personal and professional lives the more you increase your well-being. There are 24 virtues in total and usually the top five are called your signature strengths. <a target="_blank" href="http://www.viacharacter.org/www/">Learn more</a></p>
 
 <ol>
     {% for obj in strengths %}
@@ -19,11 +19,9 @@
                 {% endif %}
             />
             {{ obj.strength }}</span>
-            - ({{ obj.score}}) 
-            
+            - ({{ obj.score}})
+
         </li>
     {% endfor %}
 </ol>
 {% endblock %}
-
-

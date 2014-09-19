@@ -1,12 +1,16 @@
 {% extends "review_inventory.html" %}
 
 {% block review_content %}
+<div class="inventory-review-page">
 
+    <p>
+        Career commitment provides you an indicator of how much you are interested in planning for your profession and career and the extent to which you feel committed to your choice of major and profession.  Lower scores on the identity factor suggest you are unsure about your major and may need to connect with others and explore your options. Higher scores on the identity factor suggest he might now be ready to identify mentors who can help you further explore your future profession.
+    </p>
+    <p>
+        Lower scores on the planning factor suggest you are not interested in mapping out strategies to pursue your career at this time. Higher scores on the planning factor suggest you are ready to talk with faculty and industry professionals about internships, conferences, and other experiences that might best prepare you for your career.
+    </p>
 
-<div>
     {{ slider_containers.identity.render }}
     {{ slider_containers.planning.render }}
 </div>
 {% endblock %}
-
-
