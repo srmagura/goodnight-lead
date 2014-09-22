@@ -22,7 +22,7 @@ question_cls_list = (FiroBQuestion0, FiroBQuestion1, FiroBQuestion0)
 
 class FiroB(Inventory):
 
-    name = 'Fundamental Interpersonal Relations Orientation-behavior'
+    name = 'FIRO-B'
     template = 'firo_b.html'
 
     question_text = (
