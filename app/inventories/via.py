@@ -22,6 +22,7 @@ class Via(Inventory):
     name = 'VIA'
     template = 'via.html'
     questions_per_page = 20
+    n_signature = 3
 
     def __init__(self):
         format_str = '{}/app/inventories/via_items.dat'
@@ -88,7 +89,7 @@ class Via(Inventory):
             
         all_strengths.sort(key=(lambda obj: obj['score']), reverse=True)
         
-        for obj in all_strengths[:3]:
+        for obj in all_strengths[:self.n_signature]:
             obj['is_signature'] = True
         
         data['strengths'] = all_strengths[:10]
