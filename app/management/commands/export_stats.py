@@ -7,7 +7,8 @@ from django.core.management.base import BaseCommand, CommandError
 from app.models import Submission, Metric
 from app.inventories import inventory_by_id, BigFive, CoreSelf, CareerCommitment, Ambiguity, FiroB, Via
 
-numeric_inventories = ('BigFive', 'CoreSelf')
+numeric_inventories = ('BigFive', 'CoreSelf',
+    'CareerCommitment', 'Ambiguity', 'FiroB')
 
 class NumericResult:
 
@@ -21,6 +22,16 @@ class NumericResult:
                 *np.around((self.mean, self.stdev, self.min, self.max), 3))
         else:
             return '{}\tNO_DATA'.format(self.key)
+
+class ViaResult:
+
+    def get_header(self):
+        return 'Strength\tPeople who have as signature strength'
+
+    def get_row(self):
+        return '{}\t{}'.format(self.strength, self.count)
+       
+
 
 class Command(BaseCommand):
 
@@ -37,6 +48,8 @@ class Command(BaseCommand):
             inventory_name = inventory_cls.__name__
             if inventory_name in numeric_inventories:
                 self.handle_numeric(inventory_name, metrics)
+            elif inventory_name == 'Via':
+                self.handle_via(metrics)
                 
         self.do_calc()
         self.do_write()
@@ -45,22 +58,42 @@ class Command(BaseCommand):
         self.data = {}
         
         for inventory_cls in inventory_by_id.values():
-            self.data[inventory_cls.__name__] = OrderedDict()         
-        
+            self.data[inventory_cls.__name__] = OrderedDict()
+                  
         all_keys = OrderedDict({
             'BigFive': ('extraversion', 'agreeableness', 'conscientiousness',
                 'emotional_stability', 'openness'),
-            'CoreSelf': ('score',)
+            'CoreSelf': ('score',),
+            'CareerCommitment': ('identity', 'planning'),
+            'Ambiguity': ('score',),
+            'FiroB': ('expressed_inclusion', 'wanted_inclusion',
+                'expressed_control', 'wanted_control',
+                'expressed_affection', 'wanted_affection',
+                'social_interaction_index'),
         })
         
         for inventory in all_keys:
             for key in all_keys[inventory]:
                 self.data[inventory][key] = []
+        
+        via = Via()
+        for key in via.scoring_dict.keys():
+            self.data['Via'][key] = 0       
+        
                 
     def handle_numeric(self, inventory, metrics):
         for key in self.data[inventory]:
             metric = metrics.filter(key=key)[0]
             self.data[inventory][key].append(metric.value)
+            
+    def handle_via(self, metrics):
+        def sort_key(metric):
+            return metric.value
+    
+        strength_list = sorted(metrics, key=sort_key, reverse=True)
+        
+        for metric in strength_list[:Via.n_signature]:
+            self.data['Via'][metric.key] += 1
            
     def do_calc(self):
         self.result_objs = OrderedDict()
@@ -85,21 +118,35 @@ class Command(BaseCommand):
                 
         
                 self.result_objs[inventory].append(result)
+                
+        sorted_strengths = sorted(self.data['Via'].keys())
+        self.result_objs['Via'] = []
+        
+        for strength in sorted_strengths:
+            result = ViaResult()
+            result.strength = strength
+            result.count = self.data['Via'][strength]
+            self.result_objs['Via'].append(result)
         
     def do_write(self):
         outstream = StringIO()
         
         for inventory in self.result_objs:
             outstream.write('{}\n'.format(inventory))
-            outstream.write(self.result_objs[inventory][0].get_header()+'\n')
             
-            for result in self.result_objs[inventory]:                
+            first = True
+            
+            for result in self.result_objs[inventory]:
+                if first:
+                    outstream.write(result.get_header()+'\n') 
+                    first = False
+                               
                 outstream.write(result.get_row()+'\n')
             
             outstream.write('\n')
             
         print(outstream.getvalue())            
-        print('\n')
+        print('')
 
         outfile_name = 'export_stats.txt'        
         outfile = open(outfile_name, 'w')

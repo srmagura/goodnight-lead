@@ -59,6 +59,3 @@ class Ambiguity(Inventory):
         marker = SliderMarker('you', 'You', score)
         slider = Slider(16, 112, (marker,))
         data['slider_container'] = SliderContainer(('', ''), slider)
-
-    
-        
