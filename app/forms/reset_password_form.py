@@ -10,9 +10,8 @@ class EmailField(forms.EmailField):
             raise ValidationError(
                'There is no account associated with this email address.'
             )
-        
+
 class SendEmailForm(forms.Form):
-    
     email = EmailField(
         label = "Email",
         required = True,

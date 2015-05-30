@@ -50,7 +50,7 @@
     width: 84px;
 }
 
-.slider .marker .line 
+.slider .marker .line
 {
     height: 50px;
 }
@@ -74,14 +74,14 @@
 
 .slider .marker .info
 {
-    text-align: center;  
+    text-align: center;
 }
 
 .slider .marker .wrapper
 {
     display: inline-block;
     background-color: green;
-    color: white; 
+    color: white;
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 2.5px 2.5px 10px #333;

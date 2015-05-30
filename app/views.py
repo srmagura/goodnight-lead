@@ -1,28 +1,21 @@
 #http imports
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 
 #User imports
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-#Model imports
-import models
-from models import LeadUserInfo
-
 #forms
-from forms.user_registration_form import UserForm, InfoForm, UserSettingsForm, PasswordChangeForm
+from forms.user_registration_form import UserForm, InfoForm
 import forms.reset_password_form
-from django.forms.models import model_to_dict
 
 #Inventory inports
 import inventories
 from inventories.views import get_submission, submission_is_complete
 
 #Other imports
-import copy
 from django.contrib import messages
 from app.quotes.indexQuotes import quoteList as indexQuotes
 
@@ -92,10 +85,10 @@ def register(request):
         #Get the form corresponding to the post data
         userForm = UserForm(request.POST)
         infoForm = InfoForm(request.POST)
-        forms = [userForm, infoForm]
+        userForms = [userForm, infoForm]
 
         #All validation rules pass - generate a new user account
-        if all(form.is_valid() for form in forms):
+        if all(form.is_valid() for form in userForms):
             user = userForm.save()
 
             info = infoForm.save(commit=False)
