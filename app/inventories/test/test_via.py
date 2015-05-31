@@ -1,5 +1,11 @@
-from test import InventoryScoringTest
+from tests import InventoryScoringTest
 from app.inventories.via import Via
+
+# pylint:disable=no-member, E1002, no-init
+# Disable no member and super on old style class
+# warnings because pylint was having trouble finding
+# members existing in superclasses imported from
+# separate modules.
 
 def print_answers(answers):
     for x in answers:
@@ -9,7 +15,7 @@ class ViaTest(InventoryScoringTest):
 
     def test_scoring_dict(self):
         self.assertEqual(len(Via().scoring_dict), 24)
-        
+
     def test0(self):
         answers = (
             4, 4, 5, 2, 1, 2, 4, 3, 2, 4,
@@ -25,7 +31,7 @@ class ViaTest(InventoryScoringTest):
             2, 1, 5, 1, 4, 5, 3, 3, 1, 5,
             1, 2, 1, 5, 5, 1, 4, 5, 5, 1
         )
-        
+
         expected_metrics = {
             'creativity': 13,
             'bravery': 19,
@@ -52,5 +58,5 @@ class ViaTest(InventoryScoringTest):
             'vitality': 9,
             'humour': 18
         }
-    
+
         self.generic_test(Via(), answers, expected_metrics)
