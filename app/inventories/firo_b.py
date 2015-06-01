@@ -1,5 +1,10 @@
+# pylint: disable=no-init, no-member
+
+# Ordered dictionary for data management
 from collections import OrderedDict
-from shared import *
+
+
+from shared import Inventory, NumberQuestion
 
 class FiroBQuestion(NumberQuestion):
 

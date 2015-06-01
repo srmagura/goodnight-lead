@@ -10,7 +10,7 @@ class SliderMarker:
             self.value = round(value, 2)
         else:
             self.value = value
-    
+
 class Slider:
 
     def __init__(self, min_value, max_value, markers):

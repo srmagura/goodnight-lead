@@ -1,16 +1,18 @@
-from shared import *
+# pylint: disable=no-init, no-member
+
+from shared import NumberQuestion, Inventory
 from view_objects import Slider, SliderMarker
 
 class CoreSelfQuestion(NumberQuestion):
 
     minimum = 1
     maximum = 5
-    
+
     choice_labels = (
         'DS', 'D', 'N', 'A', 'AS'
     )
-    
-    
+
+
 class CoreSelf(Inventory):
 
     name = 'Core Self Evaluation Scale'
@@ -33,24 +35,22 @@ class CoreSelf(Inventory):
 
     def __init__(self):
         self.questions = []
-        
+
         for qid in range(1, len(self.question_text)+1):
             text = self.question_text[qid]
             self.questions.append(CoreSelfQuestion(qid, text))
-           
+
     def compute_metrics(self):
         score = 0
-        
+
         for qid, value in self.answers.items():
             if qid % 2 == 0:
                 score += 6 - int(value)
             else:
                 score += int(value)
-        
-        self.metrics = {'score': score / 12.}    
-            
+
+        self.metrics = {'score': score / 12.}
+
     def review_process_metrics(self, data, metrics):
-        marker = SliderMarker('you', 'You', metrics[0].value)         
+        marker = SliderMarker('you', 'You', metrics[0].value)
         data['slider'] = Slider(1, 5, (marker,))
-    
-        
