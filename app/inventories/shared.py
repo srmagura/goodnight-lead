@@ -9,6 +9,9 @@ import app.models as models
 # Handles submission of an inventory to save as part
 # of the database using the django model framework.
 class Inventory:
+    # Class values
+    n_pages = 1
+
     # Init Inventory. Set default fields used by
     # sublcasses to remove linter warnings.
     def __init__(self):
@@ -17,9 +20,6 @@ class Inventory:
         self.inventory_id = None
         self.answers = None
         self.metrics = None
-
-        # Default value
-        self.n_pages = 1
 
     # Sets the current submission
     def set_submission(self, submission):
