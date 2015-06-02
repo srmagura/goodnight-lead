@@ -1,4 +1,4 @@
-from app.inventories.test.tests import InventoryScoringTest
+from tests import InventoryScoringTest
 from app.inventories.firo_b import FiroB
 
 # pylint:disable=no-member, E1002, no-init
