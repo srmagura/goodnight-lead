@@ -1,18 +1,38 @@
+# Import test case
 from django.test import TestCase
 
+# Import inventories
 from app.inventories.big_five import BigFive
 from app.inventories.core_self import CoreSelf
 from app.inventories.career_commitment import CareerCommitment
 from app.inventories.ambiguity import Ambiguity
 
+# Test case to verify an inventory scores
+# as expected.
 class InventoryScoringTest(TestCase):
 
+    # Test scoring by setting inventory answers, computing
+    # metrics, and comparing actual to expected.
+    #
+    # Inputs:
+    #   inv              - Instance of Inventory to be tested. Used to compute
+    #                      metrics in comparison against expected.
+    #   answers          - Pre-defined answers to the inventory questions.
+    #                      Answers should correspond to expected metrics.
+    #   expected_metrics - Metrics expected when the enventory scores itself.
     def generic_test(self, inv, answers, expected_metrics):
         self.set_answers(inv, answers)
 
         inv.compute_metrics()
         self.assertEqual(expected_metrics, inv.metrics)
 
+    # Imports provided answers into an inventory's
+    # answers dictionary.
+    #
+    # Inputs:
+    #   inv     - Instance of Inventory which the answers will be
+    #             imported to.
+    #   answers - Set of pre-defined answers for an inventory.
     def set_answers(self, inv, answers):
         if type(answers) is dict:
             inv.answers = answers
@@ -23,7 +43,10 @@ class InventoryScoringTest(TestCase):
                 inv.answers[i] = answer
                 i += 1
 
-
+# Simple test case. Tests an inventory by defining a set
+# of answers and corresponding expected metrics. Verifies
+# that the expected metrics match the actual metrics as
+# calculated by the inventory.
 class SimpleTest(InventoryScoringTest):
 
     def test_big_five(self):
