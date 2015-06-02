@@ -1,4 +1,4 @@
-from tests import InventoryScoringTest
+from test_inventories import InventoryScoringTest
 from app.inventories.via import Via
 
 # pylint:disable=no-member, E1002, no-init
