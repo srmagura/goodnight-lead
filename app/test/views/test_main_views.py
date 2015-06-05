@@ -550,3 +550,10 @@ class testMainViews_Register(TestCase):
 
         # Verify the user is redirected to the index page
         self.assertRedirects(response, '/')
+
+class testMainViews_ResetPasswordPage(TestCase):
+    """
+    Test Case to verify the reset password page
+    works as expected. View is not currently used.
+    """
+    pass
