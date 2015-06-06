@@ -556,4 +556,119 @@ class testMainViews_ResetPasswordPage(TestCase):
     Test Case to verify the reset password page
     works as expected. View is not currently used.
     """
-    pass
+
+    def setUp(self):
+        """
+        Set up user account for testing
+        """
+
+        # Create the user
+        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
+
+    def testLogoutRequired(self):
+        """
+        Verify a user must be logged out
+        before navigating to the page
+        """
+
+        # Login
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the GET request
+        response = self.client.get('/reset_password', follow = True)
+
+        # Verify redirected to index
+        self.assertRedirects(response, '/')
+
+    def testGET(self):
+        """
+        Verify the correct response is returned on a GET request
+        """
+
+        # Make the GET request
+        response = self.client.get('/reset_password', follow = True)
+
+        # Verify the correct template was used
+        self.assertTemplateUsed(response, 'user_templates/reset_password_page.html')
+
+        # Verify the form and success are passed to the response
+        self.assertTrue('form' in response.context)
+        self.assertTrue('success' in response.context)
+
+        self.assertFalse(response.context['success'])
+
+    def testPOST(self):
+        """
+        Verify the correct response is returned on a POST request
+        """
+
+        # Make the GET request
+        response = self.client.post('/reset_password', {'email': 'test@gmail.com'}, follow = True)
+
+        # Verify the correct template was used
+        self.assertTemplateUsed(response, 'user_templates/reset_password_page.html')
+
+        # Verify the form and success are passed to the response
+        self.assertTrue('form' in response.context)
+        self.assertTrue('success' in response.context)
+
+        self.assertTrue(response.context['success'])
+
+class testMainViews_Logout(TestCase):
+    """
+    Test case for the logout view
+    """
+
+    def testLoginRequired(self):
+        """
+        Verify the view does not load if logged out
+        """
+
+        # Make the get reqeust
+        response = self.client.get('/logout', follow = True)
+
+        # Verify redirect
+        self.assertRedirects(response, '/login')
+
+    def testLogout(self):
+        # Create an account and log in
+        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the get reqeust
+        response = self.client.get('/logout', follow = True)
+
+        # Verify redirect
+        self.assertRedirects(response, '/login')
+
+class testMainViews_PageNotFound(TestCase):
+    """
+    Verify the page not found error page
+    displays correctly
+    """
+
+    def testLoginRequired(self):
+        """
+        Navigation to an unknown page while not logged in
+        redirects to the login page
+        """
+
+        # Make the response and verify redirect
+        response = self.client.get('/unsupportedpage', follow = True)
+        self.assertRedirects(response, '/login')
+
+    def testPageNotFound(self):
+        """
+        Verify the correct templage is rendered
+        when logged in
+        """
+
+        # Create an account and log in
+        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the GET request
+        response = self.client.get('/unsupportedpage', follow = True)
+
+        # Verify template
+        self.assertTemplateUsed(response, 'page_not_found.html')
