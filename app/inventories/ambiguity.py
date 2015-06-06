@@ -1,17 +1,17 @@
-from shared import *
-from view_objects import *
+from shared import Inventory, NumberQuestion
+from view_objects import Slider, SliderContainer, SliderMarker
 
 class AmbiguityQuestion(NumberQuestion):
 
     minimum = 1
     maximum = 7
-    
+
     choice_labels = (
         'DS', 'DM', 'DL', 'N',
         'AL', 'AM', 'AS'
     )
-    
-    
+
+
 class Ambiguity(Inventory):
 
     name = 'Ambiguity'
@@ -38,23 +38,23 @@ class Ambiguity(Inventory):
 
     def __init__(self):
         self.questions = []
-        
+
         for qid in range(1, len(self.question_text)+1):
             text = self.question_text[qid]
             self.questions.append(AmbiguityQuestion(qid, text))
-           
+
     def compute_metrics(self):
         score = 0
-        
+
         for qid, answer in self.answers.items():
             if qid % 2 == 0:
                 score += 8 - int(answer)
             else:
                 score += int(answer)
-    
+
         self.metrics = {'score': score}
-            
-    def review_process_metrics(self, data, metrics):           
+
+    def review_process_metrics(self, data, metrics):
         score = int(metrics[0].value)
         marker = SliderMarker('you', 'You', score)
         slider = Slider(16, 112, (marker,))

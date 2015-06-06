@@ -1,3 +1,5 @@
 *.swp
 *.pyc
+*~
+.DS_Store
 export_stats.txt

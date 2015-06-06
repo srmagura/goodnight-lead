@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from app.inventories import inventory_by_id
-from app.inventories.shared import *
+
+from app.inventories.shared import InventoryForm
 
 import app.models as models
 import app.views
@@ -42,7 +43,6 @@ def take_inventory(request, inventory_id):
     form_cls = InventoryForm
     form_kwargs = {'inventory': inventory}
 
-    valid_submission = False
     if request.method == 'POST':
         form = form_cls(request.POST, **form_kwargs)
         if form.is_valid():

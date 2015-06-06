@@ -8,10 +8,10 @@ from app.models import LeadUserInfo
 
 #Custom validators
 def validate_email(value):
-        if(User.objects.filter(email=value).exists()):
-            raise ValidationError(
-                "Email already in use"
-            )
+    if(User.objects.filter(email=value).exists()):
+        raise ValidationError(
+            "Email already in use"
+        )
 #Need to pass the old email to the validator, best way to do this seems to be
 #to write a function which returns a function.
 #Set the validator to the outer function and pass it the old email

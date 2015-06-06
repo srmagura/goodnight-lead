@@ -1,33 +1,39 @@
-from test import InventoryScoringTest
+from test_inventories import InventoryScoringTest
 from app.inventories.firo_b import FiroB
 
+# pylint:disable=no-member, E1002, no-init
+# Disable no member and super on old style class
+# warnings because pylint was having trouble finding
+# members existing in superclasses imported from
+# separate modules.
+
 class FiroBTest(InventoryScoringTest):
-        
+
     # Check that all question ID's appear in the table exactly once
     def test_scoring_table(self):
         qid_list = []
         for items in FiroB.scoring_table.values():
             for qid, a, b in items:
                 qid_list.append(qid)
-                
+
         qid_list.sort()
         self.assertEqual(tuple(qid_list), tuple(range(1, 55)))
-        
+
     def test0(self):
         answers = {
             1: 2, 2: 2, 3: 4, 4: 3, 5: 4,
             6: 5, 7: 3, 8: 3, 9: 3, 10: 6,
-            11: 2, 12: 4, 13: 3, 14: 2, 15: 3, 
+            11: 2, 12: 4, 13: 3, 14: 2, 15: 3,
             16: 3, 17: 1, 18: 3, 19: 2, 20: 3,
             21: 4, 22: 5, 23: 4, 24: 6, 25: 4,
             26: 3, 27: 4, 28: 3, 29: 2, 30: 5,
             31: 3, 32: 3, 33: 3, 34: 3, 35: 4,
-            36: 2, 37: 2, 38: 1, 39: 3, 40: 5, 
+            36: 2, 37: 2, 38: 1, 39: 3, 40: 5,
             41: 5, 42: 3, 43: 3, 44: 3, 45: 2,
             46: 5, 47: 5, 48: 2, 49: 3, 50: 4,
             51: 2, 52: 4, 53: 2, 54: 3
         }
-        
+
         expected_metrics = {
             'expressed_inclusion': 5,
             'wanted_inclusion': 3,
@@ -40,11 +46,11 @@ class FiroBTest(InventoryScoringTest):
             'total_inclusion': 8,
             'total_control': 9,
             'total_affection': 6,
-            'social_interaction_index': 23          
+            'social_interaction_index': 23
         }
-        
+
         self.generic_test(FiroB(), answers, expected_metrics)
-        
+
     def test1(self):
         answers = {
             1: 2, 2: 2, 3: 1, 4: 1, 5: 3,
@@ -72,8 +78,7 @@ class FiroBTest(InventoryScoringTest):
             'total_inclusion': 15,
             'total_control': 14,
             'total_affection': 15,
-            'social_interaction_index': 44       
+            'social_interaction_index': 44
         }
-        
+
         self.generic_test(FiroB(), answers, expected_metrics)
-        
