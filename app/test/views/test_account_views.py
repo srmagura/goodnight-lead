@@ -512,3 +512,121 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info.major, 'Tester')
         self.assertEqual(info.year, 1)
         self.assertEqual(info.organization, 'gsp')
+
+class testAccountViews_Password(TestCase):
+    """
+    Test class for the change password view
+    """
+
+    def setUp(self):
+        """
+        Set up a user account for testing
+        """
+
+        user = User.objects.create_user(username = 'test', email='test@gmail.com',
+            password='pass', first_name = 'test', last_name = 'user')
+
+        LeadUserInfo.objects.create(user = user, gender = 'M',
+            major = 'Tester', year = 1, organization = 'gsp')
+
+    def testLoginRequired(self):
+        """
+        Verify a user must be logged in to get to the page
+        """
+
+        # Make the GET request
+        response = self.client.get('/account-settings/password', follow = True)
+
+        # Verify redirects to the login page
+        self.assertRedirects(response, '/login')
+
+    def testGETRequest(self):
+        """
+        Verify the view loads the correct form
+        on a GET request
+        """
+
+        # Login
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the GET request
+        response = self.client.get('/account-settings/password', follow = True)
+
+        # Verify the correct template was rendered
+        self.assertTemplateUsed(response, 'user_templates/password.html')
+
+        # Verify the form exists in the response context
+        self.assertTrue('form' in response.context)
+
+        # Verify form fields
+        form = response.context['form']
+
+        self.assertTrue('password1' in form.fields)
+        self.assertTrue('password2' in form.fields)
+
+        self.assertEqual(form['password1'].value(), None)
+        self.assertEqual(form['password2'].value(), None)
+
+        self.assertEqual(form['password1'].errors.as_text(), '')
+        self.assertEqual(form['password2'].errors.as_text(), '')
+
+    def testMismatchedPasswords(self):
+        """
+        Verify mismatched passwords throws an error
+        """
+
+        # Login
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the POST request
+        response = self.client.post('/account-settings/password', {
+                'password1': 'password',
+                'password2': 'wrong'
+            }, follow = True)
+
+        # Verify the correct template was rendered
+        self.assertTemplateUsed(response, 'user_templates/password.html')
+
+        # Verify the form exists in the response context
+        self.assertTrue('form' in response.context)
+
+        # Verify form fields
+        form = response.context['form']
+
+        self.assertTrue('password1' in form.fields)
+        self.assertTrue('password2' in form.fields)
+
+        self.assertEqual(form['password1'].value(), 'password')
+        self.assertEqual(form['password2'].value(), 'wrong')
+
+        self.assertEqual(form['password1'].errors.as_text(), '')
+        self.assertEqual(form['password2'].errors.as_text(), '')
+
+        # Verify form errors
+        self.assertEqual(form.errors['__all__'][0], "Passwords did not match")
+
+    def testValidInput(self):
+        """
+        Test submitting matching, valid, passwords
+        """
+        print('pretest\n')
+        # Log in
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the POST request
+        response = self.client.post('/account-settings/password', {
+                'password1': 'password',
+                'password2': 'password'
+            }, follow = True)
+
+        # Verify redirected to the account-settings page
+        self.assertRedirects(response, '/account-settings')
+
+        # Verify messages
+        self.assertEqual(len(response.context['messages']), 1)
+        for message in response.context['messages']:
+            self.assertEqual(message.message, "Password set successfully")
+
+        # Verify user password changed
+        self.client.logout()
+        self.assertTrue(self.client.login(username = 'test', password = 'password'))
