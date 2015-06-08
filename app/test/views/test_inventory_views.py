@@ -16,7 +16,7 @@ class testInventoryViews_TakeInventory(TestCase):
     def setUp(self):
         """
         Set up for testing by creating a user account
-        and loggin in
+        and loggin in.
         """
 
         # Create a user account and login
