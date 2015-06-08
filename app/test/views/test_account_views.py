@@ -609,7 +609,7 @@ class testAccountViews_Password(TestCase):
         """
         Test submitting matching, valid, passwords
         """
-        print('pretest\n')
+
         # Log in
         self.client.login(username = 'test', password = 'pass')
 
