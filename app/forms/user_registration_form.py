@@ -82,7 +82,6 @@ class UserSettingsForm(UserChangeForm):
         #get rid of the password field we dont want
         del self.fields['password']
 
-        print(self.instance.email)
         #set validators
         self.fields['email'].validators = [validate_email_uniqueOrUnchanged(self.instance.email)]
 
