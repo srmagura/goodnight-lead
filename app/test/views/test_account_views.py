@@ -134,7 +134,7 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), 'test02')
         self.assertEqual(re.sub(r'\* ', '', userform['username'].errors.as_text()),
-            'User with this Username already exists.')
+            'A user with that username already exists.')
 
         self.assertTrue('email' in userform.fields)
         self.assertEquals(userform['email'].value(), 'test@gmail.com')

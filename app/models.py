@@ -26,7 +26,7 @@ class LeadUserInfo(models.Model):
         (3, 'Junior'),
         (4, 'Senior'),
     )
-    year = models.IntegerField(max_length=2, choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
+    year = models.IntegerField(choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
 
     #shortname -> fullname
     organization_choices = (
