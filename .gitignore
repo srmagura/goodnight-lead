@@ -3,3 +3,5 @@
 *~
 .DS_Store
 export_stats.txt
+.coverage
+htmlcov/

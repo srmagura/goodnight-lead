@@ -3,20 +3,27 @@
 Authors: Eric Horton, Sam Magura
 
 Adding LeadLabDemo to git:
-heroku git:remote -a leadlabdemo -r leadlabdemo
+$ heroku git:remote -a leadlabdemo -r leadlabdemo
 
 Specifying which app to use with heroku commands:
-Add --app goodnight_lead or --app leadlabdemo
+$ Add --app goodnight_lead or --app leadlabdemo
 
 Pushing a specific branch to demo:
-git push -f leadlabdemo branchName:master
+$ git push -f leadlabdemo branchName:master
 
 To run unit tests:
-$ python manage.py test
+$ coverage run --source='.' manage.py test app
 
-Migrating with Django 1.8:
-python manage.py makemigrations app -n migrationName
-python manage.py migrate app xxxx_migrationName
+Generating test coverage reports:
+$ coverage report
+
+or
+
+$ coverage html && open htmlcov/index.html
+
+Migrating Databases with Django 1.8:
+$ python manage.py makemigrations app -n migrationName
+$ python manage.py migrate app xxxx_migrationName
 
 Running migrations through Heroku:
-heroku run python manage.py migrate app xxxx_migrationName --app goodnight_lead
+$ heroku run python manage.py migrate app xxxx_migrationName --app goodnight_lead
