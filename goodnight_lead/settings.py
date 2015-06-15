@@ -10,9 +10,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'q(1n%=3@_7q-1fsqfvgbyjou_wsnm6t_@xahz3=i0fnnl&*hs='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Debug is set through environment variables for development.
+# The default value is false if the env does not exist.
+# Prod and test do not run in debug mode.
+DEBUG = os.getenv('GOODNIGHT_LEAD_DEBUG', False)
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = ('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False)
 
 ALLOWED_HOSTS = []
 
