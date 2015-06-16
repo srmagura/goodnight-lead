@@ -39,6 +39,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware'
 )
 
 ROOT_URLCONF = 'goodnight_lead.urls'
@@ -72,6 +73,9 @@ DATABASES['default'] = dj_database_url.config(default='postgres://sam:pw@localho
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Always redirect to use https when not in DEBUG
+SECURE_SSL_REDIRECT = not DEBUG
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
