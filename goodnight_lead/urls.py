@@ -1,5 +1,5 @@
 # Import patterns ant url for registering urls
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 # Import separate view files for linking urls
 # to the correct views
@@ -7,8 +7,8 @@ from app import views
 from app.inventories import views as inventory_views
 from app.accounts import views as account_views
 
-#from django.contrib import admin
-#admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', inventory_views.review_inventory,
         name='review_inventory'),
 
+    url(r'^admin', include(admin.site.urls)),
     url(r'^.*$', views.page_not_found, name='page_not_found'),
-    #url(r'^admin/', include(admin.site.urls)),
+
 )
