@@ -15,7 +15,7 @@ SECRET_KEY = 'q(1n%=3@_7q-1fsqfvgbyjou_wsnm6t_@xahz3=i0fnnl&*hs='
 # Prod and test do not run in debug mode.
 DEBUG = os.getenv('GOODNIGHT_LEAD_DEBUG', False)
 
-TEMPLATE_DEBUG = ('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False)
+TEMPLATE_DEBUG = os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False)
 
 ALLOWED_HOSTS = []
 
