@@ -1,5 +1,5 @@
 *.swp
-*.pyc
+**/__pycache__
 *~
 .DS_Store
 export_stats.txt
