@@ -1,6 +1,39 @@
-# LEAD project
+# goodnight-lead project
 
 Authors: Eric Horton, Sam Magura
+
+## Development environment setup
+
+goodnight-lead uses Postgres for its database. For development, your Postgres
+instance needs to have a role named "lead_dev" with password "pw" and a
+database named "goodnight_lead". 
+
+To create the database tables:
+$ python3 manage.py syncdb
+
+To run in debug mode for development,add the following to ~/.bash_profile:
+    export GOODNIGHT_LEAD_DEBUG=1
+    export GOODNIGHT_LEAD_TEMPLATE_DEBUG=1
+
+To run the development server:
+$ python3 manage.py runserver
+
+Collecting staticfiles (automatically done in prod, i.e. debug = False):
+$ python3 manage.py collectstatic --noinput
+
+
+## Testing
+
+To run unit tests:
+$ coverage run --source='.' manage.py test app
+
+Generating test coverage reports:
+$ coverage report
+or
+$ coverage html && open htmlcov/index.html
+
+
+## Heroku and git
 
 Adding LeadLabDemo to git:
 $ heroku git:remote -a leadlabdemo -r leadlabdemo
@@ -11,27 +44,15 @@ $ Add --app goodnight_lead or --app leadlabdemo
 Pushing a specific branch to demo:
 $ git push -f leadlabdemo branchName:master
 
-To run unit tests:
-$ coverage run --source='.' manage.py test app
 
-Generating test coverage reports:
-$ coverage report
-
-or
-
-$ coverage html && open htmlcov/index.html
+## Database migrations
 
 Migrating Databases with Django 1.8:
-$ python manage.py makemigrations app -n migrationName
-$ python manage.py migrate app xxxx_migrationName
+$ python3 manage.py makemigrations app -n migrationName
+$ python3 manage.py migrate app xxxx_migrationName
 
 Running migrations through Heroku:
+// TODO: Does this need to say python3 instead of python?
 $ heroku run python manage.py migrate app xxxx_migrationName --app goodnight_lead
 
-Collecting staticfiles (automatically done in prod - debug = False):
-$ python manage.py collectstatic --noinput
 
-Running in debug mode for development:
-
-Add to ~/.bash_profile
-export GOODNIGHT_LEAD_DEBUG=TRUE
