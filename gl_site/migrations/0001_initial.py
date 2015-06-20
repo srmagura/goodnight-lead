@@ -52,11 +52,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='metric',
             name='submission',
-            field=models.ForeignKey(to='app.Submission'),
+            field=models.ForeignKey(to='gl_site.Submission'),
         ),
         migrations.AddField(
             model_name='answer',
             name='submission',
-            field=models.ForeignKey(to='app.Submission'),
+            field=models.ForeignKey(to='gl_site.Submission'),
         ),
     ]

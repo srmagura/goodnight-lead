@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from app.inventories import inventory_by_id
+from gl_site.inventories import inventory_by_id
 
-from app.inventories.shared import InventoryForm
+from gl_site.inventories.shared import InventoryForm
 
-import app.models as models
-import app.views
+import gl_site.models as models
+import gl_site.views
 
 def validate_inventory_id(inventory_id):
     try:

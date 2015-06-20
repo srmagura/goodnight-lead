@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 #Form imports
-from app.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
+from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
 
 #Messages
 from django.contrib import messages

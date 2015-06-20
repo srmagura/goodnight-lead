@@ -1,7 +1,7 @@
 import sys
 from collections import OrderedDict
 
-from shared import *
+from .shared import *
 
 class ViaQuestion(NumberQuestion):
 

@@ -1,5 +1,5 @@
-from shared import Inventory, NumberQuestion
-from view_objects import Slider, SliderContainer, SliderMarker
+from .shared import Inventory, NumberQuestion
+from .view_objects import Slider, SliderContainer, SliderMarker
 
 class AmbiguityQuestion(NumberQuestion):
 

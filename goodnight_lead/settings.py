@@ -29,7 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'gl_site'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -69,7 +69,7 @@ STATIC_URL = '/static/'
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config(default='postgres://lead_dev:pw@localhost/goodnight_lead')
+DATABASES['default'] = dj_database_url.config(default='postgres://gl_dev:pw@localhost/goodnight_lead')
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

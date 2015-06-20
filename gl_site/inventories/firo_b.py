@@ -4,7 +4,7 @@
 from collections import OrderedDict
 
 
-from shared import Inventory, NumberQuestion
+from .shared import Inventory, NumberQuestion
 
 class FiroBQuestion(NumberQuestion):
 

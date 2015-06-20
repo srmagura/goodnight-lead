@@ -5,7 +5,7 @@ Authors: Eric Horton, Sam Magura
 ## Development environment setup
 
 goodnight-lead uses Postgres for its database. For development, your Postgres
-instance needs to have a role named "lead_dev" with password "pw" and a
+instance needs to have a role named "gl_dev" with password "pw" and a
 database named "goodnight_lead". 
 
 To create the database tables:

@@ -3,9 +3,9 @@ from django.conf.urls import patterns, url, include
 
 # Import separate view files for linking urls
 # to the correct views
-from app import views
-from app.inventories import views as inventory_views
-from app.accounts import views as account_views
+from gl_site import views
+from gl_site.inventories import views as inventory_views
+from gl_site.accounts import views as account_views
 
 from django.contrib import admin
 admin.autodiscover()

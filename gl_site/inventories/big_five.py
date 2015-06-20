@@ -1,8 +1,7 @@
 # pylint: disable=no-init, no-member
 
-from __future__ import division
-from shared import Inventory, NumberQuestion
-from view_objects import Slider, SliderMarker, SliderContainer
+from .shared import Inventory, NumberQuestion
+from .view_objects import Slider, SliderMarker, SliderContainer
 
 class BigFiveQuestion(NumberQuestion):
 

@@ -3,7 +3,7 @@ from django import forms
 
 # Import models for saving inventory results
 # to the database
-import app.models as models
+import gl_site.models as models
 
 # Inventory represents an inventory taken by a user.
 # Handles submission of an inventory to save as part

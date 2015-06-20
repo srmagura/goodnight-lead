@@ -8,16 +8,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 #forms
-from forms.user_registration_form import UserForm, InfoForm
-import forms.reset_password_form
+from gl_site.forms.user_registration_form import UserForm, InfoForm
+import gl_site.forms.reset_password_form as reset_password_form
 
 #Inventory inports
-import inventories
-from inventories.views import get_submission, submission_is_complete
+from gl_site.inventories import inventory_by_id
+from gl_site.inventories.views import get_submission, submission_is_complete
 
 #Other imports
 from django.contrib import messages
-from app.quotes.indexQuotes import quoteList as indexQuotes
+from gl_site.quotes.indexQuotes import quoteList as indexQuotes
 
 #We don't want logged in users to access certain pages (like the login page, so they can log in again)
 #If they're already logged in, redirect to the home page
@@ -44,7 +44,7 @@ def logout_required(function):
 @login_required(redirect_field_name = None)
 def index(request):
     entries = []
-    for inventory_id, cls in inventories.inventory_by_id.items():
+    for inventory_id, cls in inventory_by_id.items():
         submission = get_submission(request.user, inventory_id)
         is_complete = submission_is_complete(submission)
 
@@ -120,7 +120,7 @@ def register(request):
 
 @logout_required
 def reset_password_page(request):
-    form_cls = forms.reset_password_form.SendEmailForm
+    form_cls = reset_password_form.SendEmailForm
     success = False
 
     if request.method == 'POST':

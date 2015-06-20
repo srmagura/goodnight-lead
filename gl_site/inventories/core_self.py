@@ -1,7 +1,7 @@
 # pylint: disable=no-init, no-member
 
-from shared import NumberQuestion, Inventory
-from view_objects import Slider, SliderMarker
+from .shared import NumberQuestion, Inventory
+from .view_objects import Slider, SliderMarker
 
 class CoreSelfQuestion(NumberQuestion):
 
