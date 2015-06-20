@@ -1,5 +1,7 @@
-# Run a SQL script against one of our heroku databases. 
-# Put the name of the SQL file you want to run after -f.
+# Access one of our Heroku databases.
+#
+# Put the name of the SQL file you want to run after -f,
+# or leave out the -f option to get to the prompt.
 #
 # Explanation:
 # http://stackoverflow.com/a/15266851/752601
@@ -13,4 +15,4 @@
 # goodnight-lead.herokuapp.com
 # Password: 33hq86Yck8WI9bgy0CY9TvtgnF
 
-psql -f db_app_name.sql -h ec2-54-83-14-68.compute-1.amazonaws.com -p 5432 -d d1is7f4le695fo -U bmjucqcekvlqrm
+psql -h ec2-54-83-14-68.compute-1.amazonaws.com -p 5432 -d d1is7f4le695fo -U bmjucqcekvlqrm
