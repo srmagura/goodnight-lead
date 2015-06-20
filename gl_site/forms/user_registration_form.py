@@ -39,7 +39,7 @@ class UserForm(UserCreationForm):
         #Set custom class on all widgets
         for name, field in self.fields.items():
             field.required = True
-            if field.widget.attrs.has_key('class'):
+            if 'class' in field.widget.attrs:
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
@@ -65,7 +65,7 @@ class InfoForm(ModelForm):
 
         #Set custom class on all widgets
         for name, field in self.fields.items():
-            if field.widget.attrs.has_key('class'):
+            if 'class' in field.widget.attrs:
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
@@ -87,7 +87,7 @@ class UserSettingsForm(UserChangeForm):
 
         #Set custom class on all widgets
         for name, field in self.fields.items():
-            if field.widget.attrs.has_key('class'):
+            if 'class' in field.widget.attrs:
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
@@ -104,7 +104,7 @@ class PasswordChangeForm(forms.Form):
 
         #Set custom class on all widgets
         for name, field in self.fields.items():
-            if field.widget.attrs.has_key('class'):
+            if 'class' in field.widget.attrs:
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})

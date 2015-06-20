@@ -34,7 +34,7 @@ def take_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):
         inventory = inventory_by_id[int(inventory_id)]()
     else:
-        return app.views.page_not_found(request)
+        return gl_site.views.page_not_found(request)
 
     submission = get_submission(request.user, inventory_id)
     is_complete = submission_is_complete(submission)
@@ -70,7 +70,7 @@ def review_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):
         inventory = inventory_by_id[int(inventory_id)]()
     else:
-        return app.views.page_not_found(request)
+        return gl_site.views.page_not_found(request)
 
     submission = get_submission(request.user, inventory_id)
     is_complete = submission_is_complete(submission)

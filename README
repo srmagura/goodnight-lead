@@ -6,12 +6,15 @@ Authors: Eric Horton, Sam Magura
 
 goodnight-lead uses Postgres for its database. For development, your Postgres
 instance needs to have a role named "gl_dev" with password "pw" and a
-database named "goodnight_lead". 
+database named "goodnight_lead". gl_dev needs to have CREATEDB permission for testing to work.
+
+To install necessary Python packages:
+$ sudo pip3 install -r requirements.txt
 
 To create the database tables:
 $ python3 manage.py syncdb
 
-To run in debug mode for development,add the following to ~/.bash_profile:
+To run in debug mode for development, add the following to ~/.bash_profile:
     export GOODNIGHT_LEAD_DEBUG=1
     export GOODNIGHT_LEAD_TEMPLATE_DEBUG=1
 
@@ -25,7 +28,7 @@ $ python3 manage.py collectstatic --noinput
 ## Testing
 
 To run unit tests:
-$ coverage run --source='.' manage.py test app
+$ coverage run --source='.' manage.py test gl_site
 
 Generating test coverage reports:
 $ coverage report

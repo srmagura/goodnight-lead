@@ -25,7 +25,7 @@ class Via(Inventory):
     n_signature = 3
 
     def __init__(self):
-        format_str = '{}/app/inventories/via_items.dat'
+        format_str = '{}/gl_site/inventories/via_items.dat'
         infile = open(format_str.format(sys.path[0]))
         
         self.question_text = []

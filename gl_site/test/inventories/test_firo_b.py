@@ -1,5 +1,5 @@
-from test_inventories import InventoryScoringTest
-from app.inventories.firo_b import FiroB
+from .test_inventories import InventoryScoringTest
+from gl_site.inventories.firo_b import FiroB
 
 # pylint:disable=no-member, E1002, no-init
 # Disable no member and super on old style class

@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 # Import user info
-from app.models import LeadUserInfo
+from gl_site.models import LeadUserInfo
 
 # Regex parser
 import re

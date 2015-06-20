@@ -5,8 +5,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 # Import Submission
-from app.models import Submission
-from app.models import Metric
+from gl_site.models import Submission
+from gl_site.models import Metric
 
 class testInventoryViews_TakeInventory(TestCase):
     """

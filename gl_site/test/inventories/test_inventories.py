@@ -2,10 +2,10 @@
 from django.test import TestCase
 
 # Import inventories
-from app.inventories.big_five import BigFive
-from app.inventories.core_self import CoreSelf
-from app.inventories.career_commitment import CareerCommitment
-from app.inventories.ambiguity import Ambiguity
+from gl_site.inventories.big_five import BigFive
+from gl_site.inventories.core_self import CoreSelf
+from gl_site.inventories.career_commitment import CareerCommitment
+from gl_site.inventories.ambiguity import Ambiguity
 
 # Test case to verify an inventory scores
 # as expected.

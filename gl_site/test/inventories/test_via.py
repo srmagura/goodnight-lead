@@ -1,5 +1,5 @@
-from test_inventories import InventoryScoringTest
-from app.inventories.via import Via
+from .test_inventories import InventoryScoringTest
+from gl_site.inventories.via import Via
 
 # pylint:disable=no-member, E1002, no-init
 # Disable no member and super on old style class
