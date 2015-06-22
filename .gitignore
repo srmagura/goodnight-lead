@@ -6,3 +6,4 @@ export_stats.txt
 .coverage
 htmlcov/
 staticfiles/
+*.pyc
