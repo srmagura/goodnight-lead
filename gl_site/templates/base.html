@@ -12,12 +12,12 @@
 
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="{% static 'app/css/base.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/base.css' %}" />
 
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-        <script src="{% static 'app/js/base.js' %}"></script>
+        <script src="{% static 'gl_site/js/base.js' %}"></script>
 
         {% block script %}{% endblock %}
 
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <!-- Navbar Brand -->
-                    <a class="navbar-brand" href="{% url 'index' %}"><span><img height="40px" width="30px" class="navbar-logo pull-left" src="{% static 'app/images/logo.png' %}"/><p class="navbar-text">Home</p></span></a>
+                    <a class="navbar-brand" href="{% url 'index' %}"><span><img height="40px" width="30px" class="navbar-logo pull-left" src="{% static 'gl_site/images/logo.png' %}"/><p class="navbar-text">Home</p></span></a>
                 </div>
                 <!-- Inner Navbar -->
                 <nav class="navbar-inverse navbar-slide" role="navigation">
