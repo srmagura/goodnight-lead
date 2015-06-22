@@ -6,4 +6,5 @@ from gl_site.models import Organization
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    pass
+    # Which fields to display on the main list
+    list_display = ('name', 'creation_date')

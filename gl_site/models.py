@@ -2,6 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+class Organization(models.Model):
+    """ Organization affiliated with each user.
+    Each user shares a many to one relationship
+    with an organization for purposes of
+    demographics and statistics.
+    """
+
+    # Organization name
+    name = models.CharField(max_length=120, unique=True)
+
+    # Entry code for selective approval
+    code = models.CharField(max_length=120)
+
+    # Date of organization creation for record keeping
+    creation_date = models.DateField(auto_now_add=True)
+
 #Additional user info which extends the django User class using a one-to-one relationship.
 #Saved in the app_leaduserinfo table
 #Access through user.leaduserinfo
@@ -51,16 +67,3 @@ class Metric(models.Model):
     submission = models.ForeignKey(Submission)
     key = models.CharField(max_length=50)
     value = models.FloatField()
-
-class Organization(models.Model):
-    """ Organization affiliated with each user.
-    Each user shares a many to one relationship
-    with an organization for purposes of
-    demographics and statistics.
-    """
-
-    # Organization name
-    name = models.CharField(max_length=120, unique=True)
-
-    # Date of organization creation for record keeping
-    creation_date = models.DateField(auto_now_add=True)
