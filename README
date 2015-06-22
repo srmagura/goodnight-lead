@@ -11,6 +11,17 @@ goodnight-lead uses Postgres for its database. For development, your Postgres
 instance needs to have a role named "gl_dev" with password "pw" and a
 database named "goodnight_lead". gl_dev needs to have CREATEDB permission for testing to work.
 
+To run in debug mode for development, add the following to ~/.bash_profile:
+    export GOODNIGHT_LEAD_DEBUG=1
+    export GOODNIGHT_LEAD_TEMPLATE_DEBUG=1
+
+To run the development server:
+$ python3 manage.py runserver
+
+Collecting staticfiles (automatically done in prod, i.e. debug = False):
+$ python3 manage.py collectstatic --noinput
+
+
 ## Database migrations
 
 Database backups:
@@ -22,17 +33,6 @@ $ python3 manage.py migrate gl_site xxxx_migrationName
 
 Running migrations through Heroku:
 $ heroku run python3 manage.py migrate gl_site xxxx_migrationName --app appName
-
-To run in debug mode for development, add the following to ~/.bash_profile:
-    export GOODNIGHT_LEAD_DEBUG=1
-    export GOODNIGHT_LEAD_TEMPLATE_DEBUG=1
-
-To run the development server:
-$ python3 manage.py runserver
-
-Collecting staticfiles (automatically done in prod, i.e. debug = False):
-$ python3 manage.py collectstatic --noinput
-
 
 ## Testing
 
