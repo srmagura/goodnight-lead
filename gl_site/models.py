@@ -51,3 +51,16 @@ class Metric(models.Model):
     submission = models.ForeignKey(Submission)
     key = models.CharField(max_length=50)
     value = models.FloatField()
+
+class Organization(models.Model):
+    """ Organization affiliated with each user.
+    Each user shares a many to one relationship
+    with an organization for purposes of
+    demographics and statistics.
+    """
+
+    # Organization name
+    name = models.CharField(max_length=120, unique=True)
+
+    # Date of organization creation for record keeping
+    creation_date = models.DateField(auto_now_add=True)
