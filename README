@@ -38,24 +38,24 @@ $ coverage html && open htmlcov/index.html
 
 ## Heroku and git
 
-Adding LeadLabDemo to git:
+Adding a Heroku app as a git remote:
 $ heroku git:remote -a leadlabdemo -r leadlabdemo
 
 Specifying which app to use with heroku commands:
 $ Add --app goodnight_lead or --app leadlabdemo
 
-Pushing a specific branch to demo:
+Pushing a specific branch to heroku:
 $ git push -f leadlabdemo branchName:master
 
 
 ## Database migrations
 
+Database backups: 
+https://devcenter.heroku.com/articles/heroku-postgres-backups
+
 Migrating Databases with Django 1.8:
-$ python3 manage.py makemigrations app -n migrationName
-$ python3 manage.py migrate app xxxx_migrationName
+$ python3 manage.py makemigrations gl_site -n migrationName
+$ python3 manage.py migrate gl_site xxxx_migrationName
 
 Running migrations through Heroku:
-// TODO: Does this need to say python3 instead of python?
-$ heroku run python manage.py migrate app xxxx_migrationName --app goodnight_lead
-
-
+$ heroku run python3 manage.py migrate gl_site xxxx_migrationName --app goodnight-lead
