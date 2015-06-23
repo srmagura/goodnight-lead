@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from django.forms import ModelForm
-from gl_site.models import LeadUserInfo
+from gl_site.models import LeadUserInfo, Organization
 
 #Custom validators
 def validate_email(value):
@@ -59,7 +59,14 @@ class UserForm(UserCreationForm):
 class InfoForm(ModelForm):
     class Meta:
         model = LeadUserInfo
-        exclude = ('user',)
+        exclude = ('user', 'organization')
+
+    # The name of the organization a user would like to sign up for
+    organization_name = forms.CharField(max_length=120)
+
+    # The entry code for the specified organization
+    organization_code = forms.CharField(max_length=120)
+
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
 
@@ -69,6 +76,25 @@ class InfoForm(ModelForm):
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
+
+    def clean(self):
+        """ Override the default clean (validation) method """
+
+        # Call clean on super
+        super(InfoForm, self).clean()
+
+        # If an organization name and code were entered, verify
+        # that both exist
+        if ('organization_name' in self.cleaned_data and 'organization_code' in self.cleaned_data):
+            try:
+                org = Organization.objects.get(name=self.cleaned_data['organization_name'])
+            except Organization.DoesNotExist:
+                org = None
+
+            if org is None or org.code != self.cleaned_data['organization_code']:
+                raise ValidationError("Organization name or code not recognized")
+
+        return self.cleaned_data
 
 #Used for changing all user info except passwords.
 class UserSettingsForm(UserChangeForm):

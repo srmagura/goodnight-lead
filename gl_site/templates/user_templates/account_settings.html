@@ -40,6 +40,13 @@
                     <fieldset class="lead-panel">
                         <legend class="legend">Demographics</legend>
                         <div>
+                            {% if infoForm.non_field_errors %}
+                                {% for error in infoForm.non_field_errors %}
+                                    <div class="alert alert-danger">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             {% for field in infoform %}
                                 <div class="form-group {% if field.errors %} has-error {% endif %}">
                                     <label class = "control-label"> {{ field.label }} </label>

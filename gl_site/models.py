@@ -48,7 +48,10 @@ class LeadUserInfo(models.Model):
     organization_choices = (
         ('gsp', 'Goodnight Scholars Program'),
     )
-    organization = models.CharField(max_length=100, choices=organization_choices)
+    org = models.CharField(max_length=100, choices=organization_choices)
+
+    # Foreign key linking to an organization
+    organization = models.ForeignKey(Organization)
 
 class Submission(models.Model):
     user = models.ForeignKey(User)
