@@ -10,6 +10,9 @@ from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, Pas
 #Messages
 from django.contrib import messages
 
+# Models
+from gl_site.models import Organization
+
 #Account information/settings view
 @login_required(redirect_field_name = None)
 def account_settings(request):
@@ -29,6 +32,12 @@ def account_settings(request):
     else:
         usersettingsform = UserSettingsForm(instance=request.user)
         infoform = InfoForm(instance=request.user.leaduserinfo)
+
+        # Get the organization and populate non model form fields
+        org = request.user.leaduserinfo.organization
+
+        infoform.fields['organization_name'].initial = org.name
+        infoform.fields['organization_code'].initial = org.code
 
     return render(
         request,

@@ -65,7 +65,7 @@ class InfoForm(ModelForm):
     organization_name = forms.CharField(max_length=120)
 
     # The entry code for the specified organization
-    organization_code = forms.CharField(max_length=120)
+    organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
 
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
