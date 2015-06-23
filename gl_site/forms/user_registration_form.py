@@ -96,6 +96,21 @@ class InfoForm(ModelForm):
 
         return self.cleaned_data
 
+    def save(self, commit=False):
+        """ Override the default save to set Organization.
+        Info isn't saved at the end of this because the view
+        will set the user and save manually later.
+        """
+
+        # Call save on super without committing to db
+        info = super(InfoForm, self).save(commit=False)
+
+        # Set the Organization
+        if ('organization_name' in self.cleaned_data and 'organization_code' in self.cleaned_data):
+            info.organization = Organization.objects.get(name=self.cleaned_data['organization_name'])
+
+        return info
+
 #Used for changing all user info except passwords.
 class UserSettingsForm(UserChangeForm):
     class Meta:

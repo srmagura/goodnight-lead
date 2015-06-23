@@ -44,12 +44,6 @@ class LeadUserInfo(models.Model):
     )
     year = models.IntegerField(choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
 
-    #shortname -> fullname
-    organization_choices = (
-        ('gsp', 'Goodnight Scholars Program'),
-    )
-    org = models.CharField(max_length=100, choices=organization_choices)
-
     # Foreign key linking to an organization
     organization = models.ForeignKey(Organization)
 
