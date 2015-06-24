@@ -5,31 +5,32 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 # Import user info
-from gl_site.models import LeadUserInfo
+from gl_site.models import LeadUserInfo, Organization
 
 # Regex parser
 import re
 
 class testAccountViews_AccountSettings(TestCase):
-    """
-    Test class for verifying the account settings view
-    """
+    """ Test class for verifying the account settings view """
+
 
     def setUp(self):
+        """ Set Up
+            Create a user account and user info
+            to be used for testing
         """
-        Set up by creating a user account and user info
-        to be used for testing
-        """
-        user = User.objects.create_user(username = 'test', email='test@gmail.com',
+        self.user = User.objects.create_user(username = 'test', email='test@gmail.com',
             password='pass', first_name = 'test', last_name = 'user')
 
-        LeadUserInfo.objects.create(user = user, gender = 'M',
-            major = 'Tester', year = 1, organization = 'gsp')
+        self.organization = Organization.objects.create(name = "Testers", code = "secret")
+
+        self.info = LeadUserInfo.objects.create(user = self.user, gender = 'M',
+            major = 'Tester', year = 1, organization = self.organization)
 
     def testLoginRequired(self):
-        """
-        Verify that the user cannot navigate to this page
-        if not logged in
+        """ Account Settings - Log in required.
+            Verify that the user cannot navigate to this page
+            if not logged in.
         """
         # Make a GET request of the view
         response = self.client.get('/account-settings', follow = True)
@@ -38,10 +39,10 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertRedirects(response, '/login')
 
     def testViewLoadsWithLogin(self):
-        """
-        Verify that the view loads when logged in
-        and that all the provided information is
-        present and correct
+        """ Account Settings - View loads with login.
+            Verify that the view loads when logged in
+            and that all the provided information is
+            present and correct.
         """
 
         # Log in
@@ -86,14 +87,19 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('year' in infoform.fields)
         self.assertEqual(infoform['year'].value(), 1)
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'gsp')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testUsernameNotUnique(self):
-        """
-        Verify that attempting to change to a username
-        already in use rerenders the page with a form
-        error
+        """ Account Settings - Username not unique.
+            Verify that attempting to change to a username
+            already in use rerenders the page with a form
+            error.
         """
 
         # Create a second user
@@ -101,7 +107,7 @@ class testAccountViews_AccountSettings(TestCase):
             password='pass', first_name = 'test', last_name = 'user')
 
         LeadUserInfo.objects.create(user = user, gender = 'F',
-            major = 'Tester', year = 2, organization = 'gsp')
+            major = 'Tester', year = 2, organization = self.organization)
 
         # Log in as the first user
         self.client.login(username = 'test', password = 'pass')
@@ -118,7 +124,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'M',
                 'major': 'Tester',
                 'year': 1,
-                'organization': 'gsp'
+                'organization_name': 'Testers',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify the correct template was used
@@ -165,23 +172,26 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(infoform['year'].value(), '1')
         self.assertEqual(infoform['year'].errors.as_text(), '')
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'gsp')
-        self.assertEqual(infoform['organization'].errors.as_text(), '')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testEmailNotUnique(self):
-        """
-        Verify that attempting to change to an email
-        already in use rerenders the page with a form
-        error
+        """ Account Settings - Email already taken.
+            Verify that attempting to change to an email
+            already in use rerenders the page with a form
+            error.
         """
 
         # Create a second user
         user = User.objects.create_user(username = 'test02', email='test02@gmail.com',
             password='pass', first_name = 'test', last_name = 'user')
 
-        LeadUserInfo.objects.create(user = user, gender = 'F',
-            major = 'Tester', year = 2, organization = 'gsp')
+        LeadUserInfo.objects.create(user = user, gender = 'F', major = 'Tester', year = 2, organization = self.organization)
 
         # Log in as the first user
         self.client.login(username = 'test', password = 'pass')
@@ -198,7 +208,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'M',
                 'major': 'Tester',
                 'year': 1,
-                'organization': 'gsp'
+                'organization_name': 'Testers',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify the correct template was used
@@ -212,20 +223,21 @@ class testAccountViews_AccountSettings(TestCase):
         userform = response.context['usersettingsform']
 
         self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), 'test')
+        self.assertEquals(userform['username'].value(), self.user.username)
         self.assertEqual(userform['username'].errors.as_text(), '')
 
         self.assertTrue('email' in userform.fields)
+        self.assertNotEquals(userform['email'].value(), self.user.email)
         self.assertEquals(userform['email'].value(), 'test02@gmail.com')
         self.assertEqual(re.sub(r'\* ', '', userform['email'].errors.as_text()),
             'Email already in use')
 
         self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), 'test')
+        self.assertEquals(userform['first_name'].value(), self.user.first_name)
         self.assertEqual(userform['first_name'].errors.as_text(), '')
 
         self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), 'user')
+        self.assertEquals(userform['last_name'].value(), self.user.last_name)
         self.assertEqual(userform['last_name'].errors.as_text(), '')
 
         # Validate field values in infoform
@@ -234,26 +246,30 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('user' not in infoform.fields)
 
         self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), 'M')
+        self.assertEqual(infoform['gender'].value(), self.info.gender)
         self.assertEqual(infoform['gender'].errors.as_text(), '')
 
         self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), 'Tester')
+        self.assertEqual(infoform['major'].value(), self.info.major)
         self.assertEqual(infoform['major'].errors.as_text(), '')
 
         self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), '1')
+        self.assertEqual(infoform['year'].value(), str(self.info.year))
         self.assertEqual(infoform['year'].errors.as_text(), '')
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'gsp')
-        self.assertEqual(infoform['organization'].errors.as_text(), '')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testGenderNotValid(self):
-        """
-        Verify that submitting a POST request with an
-        invalid gender choice rerenders the page with
-        a form error
+        """ Account Settings - Gender not valid.
+            Verify that submitting a POST request with an
+            invalid gender choice rerenders the page with
+            a form error.
         """
 
         # Log in
@@ -271,7 +287,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'NA',
                 'major': 'Tester',
                 'year': 1,
-                'organization': 'gsp'
+                'organization_name': 'Testers',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify the correct template was used
@@ -318,14 +335,18 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(infoform['year'].value(), '1')
         self.assertEqual(infoform['year'].errors.as_text(), '')
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'gsp')
-        self.assertEqual(infoform['organization'].errors.as_text(), '')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testYearNotValid(self):
-        """
-        Verify that submitting an invalid year
-        kicks back an error
+        """ Account Settings - Year not valid.
+            Verify that submitting an invalid year
+            kicks back an error
         """
 
         # Log in
@@ -343,7 +364,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'M',
                 'major': 'Tester',
                 'year': 0,
-                'organization': 'gsp'
+                'organization_name': 'Testers',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify the correct template was used
@@ -390,15 +412,20 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(re.sub(r'\* ', '', infoform['year'].errors.as_text()),
             'Select a valid choice. 0 is not one of the available choices.')
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'gsp')
-        self.assertEqual(infoform['organization'].errors.as_text(), '')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
 
-    def testOrganizationNotValid(self):
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+
+    def testOrganizationNameNotValid(self):
+        """ Account Settings - Organization name not vaild.
+            Verify an error is shown if the selected
+            organization does not exist.
         """
-        Verify an error is shown if the selected
-        organization is not in the list of choices
-        """
+        # TODO split into organization_name and organization_code
 
         # Log in
         self.client.login(username = 'test', password = 'pass')
@@ -415,7 +442,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'M',
                 'major': 'Tester',
                 'year': 1,
-                'organization': 'NA'
+                'organization_name': 'Not Valid',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify the correct template was used
@@ -461,16 +489,102 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(infoform['year'].value(), '1')
         self.assertEqual(infoform['year'].errors.as_text(), '')
 
-        self.assertTrue('organization' in infoform.fields)
-        self.assertEqual(infoform['organization'].value(), 'NA')
-        self.assertEqual(re.sub(r'\* ', '', infoform['organization'].errors.as_text()),
-            'Select a valid choice. NA is not one of the available choices.')
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), 'Not Valid')
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+
+        self.assertEqual(re.sub(r'\* ', '', infoform.non_field_errors()[0]),
+            'Organization name or code not recognized')
+
+    def testOrganizationCodeNotValid(self):
+        """ Account Settings - Organization code not vaild.
+            Verify an error is shown if the selected
+            organization code does not match the actual.
+        """
+        # TODO split into organization_name and organization_code
+
+        # Log in
+        self.client.login(username = 'test', password = 'pass')
+
+        # Make the POST request
+        response = self.client.post('/account-settings', {
+                # User fields
+                'username': 'test',
+                'email': 'test@gmail.com',
+                'first_name': 'test',
+                'last_name': 'user',
+
+                # Info fields
+                'gender': 'M',
+                'major': 'Tester',
+                'year': 1,
+                'organization_name': 'Testers',
+                'organization_code': 'notvalid'
+            }, follow = True)
+
+        # Verify the correct template was used
+        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+
+        # Verify both the epxected forms were passed to the template
+        self.assertTrue('usersettingsform' in response.context)
+        self.assertTrue('infoform' in response.context)
+
+        # Validate field values in usersettingsform
+        userform = response.context['usersettingsform']
+
+        self.assertTrue('username' in userform.fields)
+        self.assertEquals(userform['username'].value(), 'test')
+        self.assertEqual(userform['username'].errors.as_text(), '')
+
+        self.assertTrue('email' in userform.fields)
+        self.assertEquals(userform['email'].value(), 'test@gmail.com')
+        self.assertEqual(userform['email'].errors.as_text(), '')
+
+        self.assertTrue('first_name' in userform.fields)
+        self.assertEquals(userform['first_name'].value(), 'test')
+        self.assertEqual(userform['first_name'].errors.as_text(), '')
+
+        self.assertTrue('last_name' in userform.fields)
+        self.assertEquals(userform['last_name'].value(), 'user')
+        self.assertEqual(userform['last_name'].errors.as_text(), '')
+
+        # Validate field values in infoform
+        infoform = response.context['infoform']
+
+        self.assertTrue('user' not in infoform.fields)
+
+        self.assertTrue('gender' in infoform.fields)
+        self.assertEqual(infoform['gender'].value(), 'M')
+        self.assertEqual(infoform['gender'].errors.as_text(), '')
+
+        self.assertTrue('major' in infoform.fields)
+        self.assertEqual(infoform['major'].value(), 'Tester')
+        self.assertEqual(infoform['major'].errors.as_text(), '')
+
+        self.assertTrue('year' in infoform.fields)
+        self.assertEqual(infoform['year'].value(), '1')
+        self.assertEqual(infoform['year'].errors.as_text(), '')
+
+        self.assertTrue('organization_name' in infoform.fields)
+        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
+        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
+
+        self.assertTrue('organization_code' in infoform.fields)
+        self.assertEqual(infoform['organization_code'].value(), 'notvalid')
+        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+
+        self.assertEqual(re.sub(r'\* ', '', infoform.non_field_errors()[0]),
+            'Organization name or code not recognized')
 
     def testValidSubmission(self):
-        """
-        Verify that a valid submission updates the
-        user and info, sets a success message,
-        and redirects to the index page
+        """ Account Settings - Valid submission.
+            Verify that a valid submission updates the
+            user and info, sets a success message,
+            and redirects to the index page.
         """
 
         # Log in
@@ -488,7 +602,8 @@ class testAccountViews_AccountSettings(TestCase):
                 'gender': 'F',
                 'major': 'Tester',
                 'year': 1,
-                'organization': 'gsp'
+                'organization_name': 'Testers',
+                'organization_code': 'secret'
             }, follow = True)
 
         # Verify redirected to index
@@ -511,27 +626,27 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info.gender, 'F')
         self.assertEqual(info.major, 'Tester')
         self.assertEqual(info.year, 1)
-        self.assertEqual(info.organization, 'gsp')
+        self.assertEqual(info.organization, self.organization)
 
 class testAccountViews_Password(TestCase):
-    """
-    Test class for the change password view
-    """
+    """ Test class for the change password view """
 
     def setUp(self):
-        """
-        Set up a user account for testing
+        """ Password - Set up.
+            Set up a user account for testing.
         """
 
-        user = User.objects.create_user(username = 'test', email='test@gmail.com',
+        self.user = User.objects.create_user(username = 'test', email='test@gmail.com',
             password='pass', first_name = 'test', last_name = 'user')
 
-        LeadUserInfo.objects.create(user = user, gender = 'M',
-            major = 'Tester', year = 1, organization = 'gsp')
+        self.organization = Organization.objects.create(name = "Testers", code = "secret")
+
+        self.info = LeadUserInfo.objects.create(user = self.user, gender = 'M',
+            major = 'Tester', year = 1, organization = self.organization)
 
     def testLoginRequired(self):
-        """
-        Verify a user must be logged in to get to the page
+        """ Password - Log in required.
+            Verify a user must be logged in to get to the page.
         """
 
         # Make the GET request
@@ -541,9 +656,9 @@ class testAccountViews_Password(TestCase):
         self.assertRedirects(response, '/login')
 
     def testGETRequest(self):
-        """
-        Verify the view loads the correct form
-        on a GET request
+        """ Password - GET request
+            Verify the view loads the correct form
+            on a GET request.
         """
 
         # Login
@@ -571,8 +686,8 @@ class testAccountViews_Password(TestCase):
         self.assertEqual(form['password2'].errors.as_text(), '')
 
     def testMismatchedPasswords(self):
-        """
-        Verify mismatched passwords throws an error
+        """ Password - Mismatched passwords.
+            Verify mismatched passwords throws an error.
         """
 
         # Login
@@ -606,8 +721,8 @@ class testAccountViews_Password(TestCase):
         self.assertEqual(form.errors['__all__'][0], "Passwords did not match")
 
     def testValidInput(self):
-        """
-        Test submitting matching, valid, passwords
+        """ Password - Valid input.
+            Test submitting matching, valid, passwords.
         """
 
         # Log in

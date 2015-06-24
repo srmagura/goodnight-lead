@@ -96,7 +96,7 @@ class InfoForm(ModelForm):
 
         return self.cleaned_data
 
-    def save(self, commit=False):
+    def save(self, commit=True):
         """ Override the default save to set Organization.
         Info isn't saved at the end of this because the view
         will set the user and save manually later.
@@ -108,6 +108,10 @@ class InfoForm(ModelForm):
         # Set the Organization
         if ('organization_name' in self.cleaned_data and 'organization_code' in self.cleaned_data):
             info.organization = Organization.objects.get(name=self.cleaned_data['organization_name'])
+
+        # Save if commit is not specified false
+        if commit:
+            info.save()
 
         return info
 
