@@ -73,7 +73,7 @@ class InfoForm(ModelForm):
 
 class InfoRegistrationForm(InfoForm):
     """ LeadUserInfo registration form """
-    
+
     # The entry code for the specified organization
     organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
 

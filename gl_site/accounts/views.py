@@ -10,9 +10,6 @@ from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, Pas
 #Messages
 from django.contrib import messages
 
-# Models
-from gl_site.models import Organization
-
 #Account information/settings view
 @login_required(redirect_field_name = None)
 def account_settings(request):
@@ -39,6 +36,8 @@ def account_settings(request):
         {
             'usersettingsform': usersettingsform,
             'infoform': infoform,
+            'organization': request.user.leaduserinfo.organization,
+            'session': request.user.leaduserinfo.session
         }
     )
 
