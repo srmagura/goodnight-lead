@@ -2,11 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+# Import for providing sessions uuids
+from uuid import uuid1
+
 class Organization(models.Model):
     """ Organization affiliated with each user.
-    Each user shares a many to one relationship
-    with an organization for purposes of
-    demographics and statistics.
+        Each user shares a many to one relationship
+        with an organization for purposes of
+        demographics and statistics.
     """
 
     # Organization name
@@ -17,6 +20,42 @@ class Organization(models.Model):
 
     # Date of organization creation for record keeping
     creation_date = models.DateField(auto_now_add=True)
+
+    # Creating user
+    created_by = models.ForeignKey(User)
+
+class Session(models.Model):
+    """ Organization session affiliated with each user.
+        Each organization may have multiple sessions,
+        allowing them to hold separate Lead Labs and
+        compare groups in a meaningful way.
+    """
+
+    # Session name
+    name = models.CharField(max_length=120, unique=True)
+
+    # The creating user of a session
+    created_by = models.ForeignKey(User)
+
+    # Date of creation for record keeping
+    creation_date = models.DateField(auto_now_add=True)
+
+    # Organization associated with this session
+    organization = models.ForeignKey(Organization)
+
+    # Universally unique identifier, stored as hex.
+    # Used for generating session registration urls.
+    uuid = models.CharField(max_length=32, unique = True)
+
+    def save(self, *args, **kwargs):
+        """ Override the default save to set uuid """
+
+        # Set uuid in hex if the session has not yet been saved
+        if self.id is None:
+            self.uuid = uuid1().hex
+
+        # Call super save method
+        super(Session, self).save(*args, **kwargs)
 
 #Additional user info which extends the django User class using a one-to-one relationship.
 #Saved in the app_leaduserinfo table

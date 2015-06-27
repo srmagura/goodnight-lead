@@ -5,3 +5,4 @@ static==1.0.2
 numpy
 coverage==3.7.1
 whitenoise==1.0.6
+uuid
