@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
 
     url(r'^login$', views.login_page, name='login'),
-    url(r'^register$', views.register, name='register'),
+    url(r'^register/(?P<session_uuid>[0-9a-f]{32})$', views.register, name='register'),
     url(r'^reset_password$', views.reset_password_page,
         name='reset_password_page'),
     url(r'^logout$', views.logout_user, name='logout'),

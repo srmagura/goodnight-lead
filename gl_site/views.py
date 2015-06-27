@@ -8,12 +8,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 #forms
-from gl_site.forms.user_registration_form import UserForm, InfoForm
+from gl_site.forms.user_registration_form import UserForm, InfoRegistrationForm
 import gl_site.forms.reset_password_form as reset_password_form
 
-#Inventory inports
+#Inventory imports
 from gl_site.inventories import inventory_by_id
 from gl_site.inventories.views import get_submission, submission_is_complete
+
+# Model imports
+from gl_site.models import Session
 
 #Other imports
 from django.contrib import messages
@@ -78,13 +81,20 @@ def login_page(request):
 
 #Loads the page for registering a new user with proper form validation
 @logout_required
-def register(request):
+def register(request, session_uuid):
+    # Redirect away from the registration page if the uuid
+    # is incorrect
+    try:
+        session = Session.objects.get(uuid=session_uuid)
+    except Session.DoesNotExist:
+        return HttpResponseRedirect(reverse('login'))
+
     #Process the form if it has been submitted through post
     if request.method == 'POST':
 
         #Get the form corresponding to the post data
         userForm = UserForm(request.POST)
-        infoForm = InfoForm(request.POST)
+        infoForm = InfoRegistrationForm(request.POST)
         userForms = [userForm, infoForm]
 
         #All validation rules pass - generate a new user account
@@ -93,6 +103,10 @@ def register(request):
 
             info = infoForm.save(commit=False)
             info.user = user
+
+            info.session = session
+            info.organization = session.organization
+
             info.save()
 
             #log the user in
@@ -106,7 +120,7 @@ def register(request):
     #Get a blank form if loaded from link (initial load)
     else:
         userForm = UserForm()
-        infoForm = InfoForm()
+        infoForm = InfoRegistrationForm()
 
     #Render the page using whichever form was loaded.
     return render(
@@ -115,6 +129,7 @@ def register(request):
         {
             'userForm': userForm,
             'infoForm': infoForm,
+            'session_uuid': session_uuid
         }
     )
 

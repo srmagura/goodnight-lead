@@ -33,12 +33,6 @@ def account_settings(request):
         usersettingsform = UserSettingsForm(instance=request.user)
         infoform = InfoForm(instance=request.user.leaduserinfo)
 
-        # Get the organization and populate non model form fields
-        org = request.user.leaduserinfo.organization
-
-        infoform.fields['organization_name'].initial = org.name
-        infoform.fields['organization_code'].initial = org.code
-
     return render(
         request,
         'user_templates/account_settings.html',

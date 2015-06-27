@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from django.forms import ModelForm
-from gl_site.models import LeadUserInfo, Organization
+from gl_site.models import LeadUserInfo, Organization, Session
 
 #Custom validators
 def validate_email(value):
@@ -55,17 +55,11 @@ class UserForm(UserCreationForm):
 
         return user
 
-#The part of the form which deals with the LeadUserInfo object
 class InfoForm(ModelForm):
+    """ LeadUserInfo model form """
     class Meta:
         model = LeadUserInfo
-        exclude = ('user', 'organization')
-
-    # The name of the organization a user would like to sign up for
-    organization_name = forms.CharField(max_length=120)
-
-    # The entry code for the specified organization
-    organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
+        exclude = ('user', 'organization', 'session')
 
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
@@ -77,43 +71,11 @@ class InfoForm(ModelForm):
             else:
                 field.widget.attrs.update({'class':'form-control'})
 
-    def clean(self):
-        """ Override the default clean (validation) method """
-
-        # Call clean on super
-        super(InfoForm, self).clean()
-
-        # If an organization name and code were entered, verify
-        # that both exist
-        if ('organization_name' in self.cleaned_data and 'organization_code' in self.cleaned_data):
-            try:
-                org = Organization.objects.get(name=self.cleaned_data['organization_name'])
-            except Organization.DoesNotExist:
-                org = None
-
-            if org is None or org.code != self.cleaned_data['organization_code']:
-                raise ValidationError("Organization name or code not recognized")
-
-        return self.cleaned_data
-
-    def save(self, commit=True):
-        """ Override the default save to set Organization.
-        Info isn't saved at the end of this because the view
-        will set the user and save manually later.
-        """
-
-        # Call save on super without committing to db
-        info = super(InfoForm, self).save(commit=False)
-
-        # Set the Organization
-        if ('organization_name' in self.cleaned_data and 'organization_code' in self.cleaned_data):
-            info.organization = Organization.objects.get(name=self.cleaned_data['organization_name'])
-
-        # Save if commit is not specified false
-        if commit:
-            info.save()
-
-        return info
+class InfoRegistrationForm(InfoForm):
+    """ LeadUserInfo registration form """
+    
+    # The entry code for the specified organization
+    organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
 
 #Used for changing all user info except passwords.
 class UserSettingsForm(UserChangeForm):

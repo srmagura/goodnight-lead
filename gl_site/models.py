@@ -86,6 +86,9 @@ class LeadUserInfo(models.Model):
     # Foreign key linking to an organization
     organization = models.ForeignKey(Organization)
 
+    # Foreign key linking to a session
+    session = models.ForeignKey(Session)
+
 class Submission(models.Model):
     user = models.ForeignKey(User)
     inventory_id = models.IntegerField()
