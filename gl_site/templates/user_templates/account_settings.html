@@ -57,7 +57,12 @@
                         </div>
                         <div class="bottom-popover-container-wrapper">
                             <div class="bottom-popover-container">
-                                <a class="popover-toggle" data-placement="top" data-title="Why we collect demographics" data-content="Demographic information is requested to enable you to see comparisons by gender, major, etc.">Why Demographics? <span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a class="popover-toggle" data-placement="top" data-title="Why we collect demographics"
+                                    data-content="We collect demographic information for data analysis purposes only.
+                                    This enables us to make comparisons based on gender, major, .etc.
+                                    We won't share your data with anyone outside of your organization. When creating informational
+                                    reports from your organization's data, we'll do our best to keep everything anonymous.">
+                                    Why Demographics?<span class="glyphicon glyphicon-eye-open"></span></a>
                             </div>
                         </div>
                     </fieldset>
@@ -85,7 +90,7 @@
                     <div class="lead-panel text-center panel-no-horizontal-padding">
                         <div class="btn-group">
                             <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"/>
-                            <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Password"/>
+                            <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Change password"/>
                             <input class="btn btn-default" type="submit" value="Save"/>
                         </div>
                     </div>
