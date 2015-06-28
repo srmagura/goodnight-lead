@@ -3,6 +3,18 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 
+def createDefaultOrganization(apps, schema_editor):
+    """ Custom migration command to create a default organization """
+
+    # Get the historical version of the Organization model
+    # that existed at this migration.
+    Organization = apps.get_model("gl_site", "Organization")
+
+    # Create a default organization
+    Organization.objects.create(
+        name="Default",
+        code="public",
+    )
 
 class Migration(migrations.Migration):
 
@@ -19,5 +31,9 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=120)),
                 ('creation_date', models.DateField(auto_now_add=True)),
             ],
+        ),
+
+        migrations.RunPython(
+            createDefaultOrganization
         ),
     ]

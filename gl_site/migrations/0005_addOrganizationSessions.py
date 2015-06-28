@@ -5,6 +5,27 @@ from django.db import models, migrations
 from django.conf import settings
 import django.core.validators
 
+from uuid import uuid1
+
+def createDefaultSession(apps, schema_editor):
+    """ Create the default organization session """
+    
+    org = apps.get_model("gl_site", "Organization").objects.get(name='Default')
+    User = apps.get_model("auth", "User")
+
+    user = User.objects.create(
+        username='DefaultAdmin',
+        password='default'
+    )
+
+    Session = apps.get_model("gl_site", "Session")
+
+    Session.objects.create(
+        name = 'Default Session',
+        uuid = uuid1().hex,
+        created_by = user ,
+        organization = org
+    )
 
 class Migration(migrations.Migration):
 
@@ -24,6 +45,9 @@ class Migration(migrations.Migration):
                 ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
                 ('organization', models.ForeignKey(to='gl_site.Organization')),
             ],
+        ),
+        migrations.RunPython(
+            createDefaultSession
         ),
         migrations.AlterField(
             model_name='leaduserinfo',
