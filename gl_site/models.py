@@ -24,6 +24,9 @@ class Organization(models.Model):
     # Creating user
     created_by = models.ForeignKey(User)
 
+    def __str__(self):
+        return self.name
+
 class Session(models.Model):
     """ Organization session affiliated with each user.
         Each organization may have multiple sessions,
@@ -48,14 +51,19 @@ class Session(models.Model):
     uuid = models.CharField(max_length=32, unique = True)
 
     def save(self, *args, **kwargs):
-        """ Override the default save to set uuid """
-
+        """
+        Override the default save to set uuid. There's no chance of a uuid
+        collision under the uuid1 standard.
+        """
         # Set uuid in hex if the session has not yet been saved
         if self.id is None:
             self.uuid = uuid1().hex
 
         # Call super save method
         super(Session, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 #Additional user info which extends the django User class using a one-to-one relationship.
 #Saved in the app_leaduserinfo table
