@@ -9,13 +9,12 @@ from uuid import uuid1
 
 def createDefaultSession(apps, schema_editor):
     """ Create the default organization session """
-    
+
     org = apps.get_model("gl_site", "Organization").objects.get(name='Default')
     User = apps.get_model("auth", "User")
 
     user = User.objects.create(
         username='DefaultAdmin',
-        password='default'
     )
 
     Session = apps.get_model("gl_site", "Session")
