@@ -1,12 +1,6 @@
 # Import test case
 from django.test import TestCase
 
-# Import user for authentication
-from django.contrib.auth.models import User
-
-# Import user info
-from gl_site.models import LeadUserInfo, Organization
-
 # Object factory for testing
 from gl_site.test.Factory import Factory
 
@@ -105,8 +99,7 @@ class testAccountViews_AccountSettings(TestCase):
 
         # Create a second user
         user2 = Factory.createUser()
-
-        info2 = Factory.createDemographics(user2, self.organization, self.session)
+        Factory.createDemographics(user2, self.organization, self.session)
 
         # Log in as the first user
         self.client.login(username = self.user, password = Factory.defaultPassword)
@@ -427,13 +420,13 @@ class testAccountViews_Password(TestCase):
             Set up a user account for testing.
         """
 
-        self.user = User.objects.create_user(username = 'test', email='test@gmail.com',
-            password='pass', first_name = 'test', last_name = 'user')
+        self.user = Factory.createUser()
 
-        self.organization = Organization.objects.create(name = "Testers", code = "secret")
+        self.organization = Factory.createOrganization(self.user)
 
-        self.info = LeadUserInfo.objects.create(user = self.user, gender = 'M',
-            major = 'Tester', year = 1, organization = self.organization)
+        self.session = Factory.createSession(self.organization, self.user)
+
+        self.info = Factory.createDemographics(self.user, self.organization, self.session)
 
     def testLoginRequired(self):
         """ Password - Log in required.
@@ -453,7 +446,7 @@ class testAccountViews_Password(TestCase):
         """
 
         # Login
-        self.client.login(username = 'test', password = 'pass')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the GET request
         response = self.client.get('/account-settings/password', follow = True)
@@ -482,11 +475,11 @@ class testAccountViews_Password(TestCase):
         """
 
         # Login
-        self.client.login(username = 'test', password = 'pass')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the POST request
         response = self.client.post('/account-settings/password', {
-                'password1': 'password',
+                'password1': Factory.defaultPassword,
                 'password2': 'wrong'
             }, follow = True)
 
@@ -502,7 +495,7 @@ class testAccountViews_Password(TestCase):
         self.assertTrue('password1' in form.fields)
         self.assertTrue('password2' in form.fields)
 
-        self.assertEqual(form['password1'].value(), 'password')
+        self.assertEqual(form['password1'].value(), Factory.defaultPassword)
         self.assertEqual(form['password2'].value(), 'wrong')
 
         self.assertEqual(form['password1'].errors.as_text(), '')
@@ -517,12 +510,12 @@ class testAccountViews_Password(TestCase):
         """
 
         # Log in
-        self.client.login(username = 'test', password = 'pass')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the POST request
         response = self.client.post('/account-settings/password', {
-                'password1': 'password',
-                'password2': 'password'
+                'password1': 'new',
+                'password2': 'new'
             }, follow = True)
 
         # Verify redirected to the account-settings page
@@ -535,4 +528,4 @@ class testAccountViews_Password(TestCase):
 
         # Verify user password changed
         self.client.logout()
-        self.assertTrue(self.client.login(username = 'test', password = 'password'))
+        self.assertTrue(self.client.login(username = self.user.username, password = 'new'))
