@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 #Form imports
 from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
 
-#Messages
 from django.contrib import messages
 
 #Account information/settings view
@@ -32,7 +31,7 @@ def account_settings(request):
 
     return render(
         request,
-        'user_templates/account_settings.html',
+        'user/account_settings.html',
         {
             'usersettingsform': usersettingsform,
             'infoform': infoform,
@@ -61,6 +60,6 @@ def password(request):
 
     return render(
         request,
-        'user_templates/password.html',
+        'user/password.html',
         {'form': passwordform }
     )

@@ -77,11 +77,13 @@ def login_page(request):
         else:
             messages.warning(request, "Incorrect username or password")
 
-    return render(request, 'user_templates/login.html')
+    return render(request, 'user/login.html')
 
-#Loads the page for registering a new user with proper form validation
 @logout_required
 def register(request, session_uuid):
+    """
+    Loads the page for registering a new user with proper form validation
+    """
     # Redirect away from the registration page if the uuid
     # is incorrect
     try:
@@ -93,15 +95,15 @@ def register(request, session_uuid):
     if request.method == 'POST':
 
         #Get the form corresponding to the post data
-        userForm = UserForm(request.POST)
-        infoForm = InfoRegistrationForm(request.POST)
-        userForms = [userForm, infoForm]
+        user_form = UserForm(request.POST)
+        info_form = InfoRegistrationForm(request.POST)
+        user_forms = [user_form, info_form]
 
         #All validation rules pass - generate a new user account
-        if all(form.is_valid() for form in userForms):
-            user = userForm.save()
+        if all(form.is_valid() for form in user_forms):
+            user = user_form.save()
 
-            info = infoForm.save(commit=False)
+            info = info_form.save(commit=False)
             info.user = user
 
             info.session = session
@@ -119,16 +121,16 @@ def register(request, session_uuid):
 
     #Get a blank form if loaded from link (initial load)
     else:
-        userForm = UserForm()
-        infoForm = InfoRegistrationForm()
+        user_form = UserForm()
+        info_form = InfoRegistrationForm()
 
     #Render the page using whichever form was loaded.
     return render(
         request,
-        'user_templates/register.html',
+        'user/register.html',
         {
-            'userForm': userForm,
-            'infoForm': infoForm,
+            'user_form': user_form,
+            'info_form': info_form,
             'session_uuid': session_uuid
         }
     )
@@ -147,7 +149,7 @@ def reset_password_page(request):
         form = form_cls()
 
     return render(request,
-        'user_templates/reset_password_page.html',
+        'user/reset_password_page.html',
         {'form': form, 'success': success}
     )
 

@@ -73,6 +73,7 @@ a.navbar-brand .navbar-text {
 .bottom-popover-container {
     position:absolute;
     bottom:15px;
+    width: 65%;
 }
 .bottom-popover-container-wrapper {
     margin-top:30px;
