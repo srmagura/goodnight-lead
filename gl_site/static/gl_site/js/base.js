@@ -7,7 +7,7 @@ $mdBreakpoint = 992; //Breakpoint between tablet and full
 $animationTime = 300; //Time taken to animate extensions
 $extendedWidth = 150; //The width of the extended navbar
 
-$(window).load(
+$(document).ready(
     function() {
         $('.popover-toggle').popover({
             trigger: 'click',

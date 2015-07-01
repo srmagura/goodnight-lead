@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block head %}
-    <!--<script type="text/javascript" src="{% static 'gl_site/js/equal-cols.js' %}"></script>-->
+    <script src="{% static 'gl_site/js/equalHeight.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -24,8 +24,8 @@
         <form method="post" action="{{ action_url }}">
             {% csrf_token %}
             <div class="row">
-                <div class="col-md-offset-2 col-md-4 col-equal-height">
-                    <fieldset class="lead-panel">
+                <div class="col-md-offset-2 col-md-4">
+                    <fieldset class="lead-panel equal-height">
                         <legend class="legend">User Information</legend>
                         <div>
                             {% for field in user_form %}
@@ -38,8 +38,8 @@
                         </div>
                     </fieldset>
                 </div>
-                <div class="col-md-4 col-equal-height">
-                    <fieldset class="lead-panel">
+                <div class="col-md-4">
+                    <fieldset class="lead-panel equal-height">
                         <legend class="legend">Demographics</legend>
                         <div>
                             {% if info_form.non_field_errors %}
