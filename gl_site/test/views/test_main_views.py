@@ -197,15 +197,15 @@ class testMainViews_Register(TestCase):
         self.assertEqual(len(response.context['messages']), 0)
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify both forms are blank and have no errors
-        for field in response.context['userForm']:
+        for field in response.context['user_form']:
             self.assertEqual(field.errors, [])
             self.assertEqual(field.value(), None)
 
-        for field in response.context['infoForm']:
+        for field in response.context['info_form']:
             self.assertEqual(field.errors, [])
             self.assertEqual(field.value(), None)
 
@@ -229,37 +229,37 @@ class testMainViews_Register(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify form fields retain their set values
-        userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), registrationform['username'])
-        self.assertEqual(userform['email'].value(), registrationform['email'])
-        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
-        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
-        self.assertEqual(userform['password1'].value(), registrationform['password1'])
-        self.assertEqual(userform['password2'].value(), registrationform['password2'])
+        user_form = response.context['user_form']
+        self.assertEqual(user_form['username'].value(), registrationform['username'])
+        self.assertEqual(user_form['email'].value(), registrationform['email'])
+        self.assertEqual(user_form['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(user_form['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(user_form['password1'].value(), registrationform['password1'])
+        self.assertEqual(user_form['password2'].value(), registrationform['password2'])
 
         # lead stuff
-        infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
-        self.assertEqual(infoform['major'].value(), registrationform['major'])
-        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
-        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
+        info_form = response.context['info_form']
+        self.assertEqual(info_form['gender'].value(), registrationform['gender'])
+        self.assertEqual(info_form['major'].value(), registrationform['major'])
+        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
-        self.assertEqual(re.sub(r'\* ', '', userform['username'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['username'].errors.as_text()),
             'A user with that username already exists.')
-        self.assertEqual(userform['email'].errors.as_text(), '')
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
-        self.assertEqual(userform['password1'].errors.as_text(), '')
-        self.assertEqual(userform['password2'].errors.as_text(), '')
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
-        self.assertEqual(infoform['major'].errors.as_text(), '')
-        self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+        self.assertEqual(user_form['email'].errors.as_text(), '')
+        self.assertEqual(user_form['first_name'].errors.as_text(), '')
+        self.assertEqual(user_form['last_name'].errors.as_text(), '')
+        self.assertEqual(user_form['password1'].errors.as_text(), '')
+        self.assertEqual(user_form['password2'].errors.as_text(), '')
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
+        self.assertEqual(info_form['major'].errors.as_text(), '')
+        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_EmailNotUnique(self):
         """
@@ -281,38 +281,38 @@ class testMainViews_Register(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify form fields retain their set values
-        userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), registrationform['username'])
-        self.assertEqual(userform['email'].value(), registrationform['email'])
-        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
-        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
-        self.assertEqual(userform['password1'].value(), registrationform['password1'])
-        self.assertEqual(userform['password2'].value(), registrationform['password2'])
+        user_form = response.context['user_form']
+        self.assertEqual(user_form['username'].value(), registrationform['username'])
+        self.assertEqual(user_form['email'].value(), registrationform['email'])
+        self.assertEqual(user_form['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(user_form['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(user_form['password1'].value(), registrationform['password1'])
+        self.assertEqual(user_form['password2'].value(), registrationform['password2'])
 
         # lead stuff
-        infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
-        self.assertEqual(infoform['major'].value(), registrationform['major'])
-        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
-        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
+        info_form = response.context['info_form']
+        self.assertEqual(info_form['gender'].value(), registrationform['gender'])
+        self.assertEqual(info_form['major'].value(), registrationform['major'])
+        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
 
         # Correct error messages gets set
-        self.assertEqual(userform['username'].errors.as_text(), '')
-        self.assertEqual(re.sub(r'\* ', '', userform['email'].errors.as_text()),
+        self.assertEqual(user_form['username'].errors.as_text(), '')
+        self.assertEqual(re.sub(r'\* ', '', user_form['email'].errors.as_text()),
             'Email already in use')
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
-        self.assertEqual(userform['password1'].errors.as_text(), '')
-        self.assertEqual(userform['password2'].errors.as_text(), '')
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
-        self.assertEqual(infoform['major'].errors.as_text(), '')
-        self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+        self.assertEqual(user_form['first_name'].errors.as_text(), '')
+        self.assertEqual(user_form['last_name'].errors.as_text(), '')
+        self.assertEqual(user_form['password1'].errors.as_text(), '')
+        self.assertEqual(user_form['password2'].errors.as_text(), '')
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
+        self.assertEqual(info_form['major'].errors.as_text(), '')
+        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_PasswordConfirmationFailed(self):
         """
@@ -334,37 +334,37 @@ class testMainViews_Register(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify form fields retain their set values
-        userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), registrationform['username'])
-        self.assertEqual(userform['email'].value(), registrationform['email'])
-        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
-        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
-        self.assertEqual(userform['password1'].value(), registrationform['password1'])
-        self.assertEqual(userform['password2'].value(), registrationform['password2'])
+        user_form = response.context['user_form']
+        self.assertEqual(user_form['username'].value(), registrationform['username'])
+        self.assertEqual(user_form['email'].value(), registrationform['email'])
+        self.assertEqual(user_form['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(user_form['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(user_form['password1'].value(), registrationform['password1'])
+        self.assertEqual(user_form['password2'].value(), registrationform['password2'])
 
         # lead stuff
-        infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
-        self.assertEqual(infoform['major'].value(), registrationform['major'])
-        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
-        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
+        info_form = response.context['info_form']
+        self.assertEqual(info_form['gender'].value(), registrationform['gender'])
+        self.assertEqual(info_form['major'].value(), registrationform['major'])
+        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
-        self.assertEqual(userform['username'].errors.as_text(), '')
-        self.assertEqual(userform['email'].errors.as_text(), '')
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
-        self.assertEqual(userform['password1'].errors.as_text(), '')
-        self.assertEqual(re.sub(r'\* ', '', userform['password2'].errors.as_text()),
+        self.assertEqual(user_form['username'].errors.as_text(), '')
+        self.assertEqual(user_form['email'].errors.as_text(), '')
+        self.assertEqual(user_form['first_name'].errors.as_text(), '')
+        self.assertEqual(user_form['last_name'].errors.as_text(), '')
+        self.assertEqual(user_form['password1'].errors.as_text(), '')
+        self.assertEqual(re.sub(r'\* ', '', user_form['password2'].errors.as_text()),
             'The two password fields didn\'t match.')
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
-        self.assertEqual(infoform['major'].errors.as_text(), '')
-        self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
+        self.assertEqual(info_form['major'].errors.as_text(), '')
+        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_FieldsLeftBlank(self):
         """
@@ -387,42 +387,42 @@ class testMainViews_Register(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify form fields retain their set values
-        userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), None)
-        self.assertEqual(userform['email'].value(), None)
-        self.assertEqual(userform['first_name'].value(), None)
-        self.assertEqual(userform['last_name'].value(), None)
-        self.assertEqual(userform['password1'].value(), None)
-        self.assertEqual(userform['password2'].value(), None)
+        user_form = response.context['user_form']
+        self.assertEqual(user_form['username'].value(), None)
+        self.assertEqual(user_form['email'].value(), None)
+        self.assertEqual(user_form['first_name'].value(), None)
+        self.assertEqual(user_form['last_name'].value(), None)
+        self.assertEqual(user_form['password1'].value(), None)
+        self.assertEqual(user_form['password2'].value(), None)
 
         # lead stuff
-        infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), 'M')
-        self.assertEqual(infoform['major'].value(), 'tester')
-        self.assertEqual(infoform['year'].value(), '1')
-        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        info_form = response.context['info_form']
+        self.assertEqual(info_form['gender'].value(), 'M')
+        self.assertEqual(info_form['major'].value(), 'tester')
+        self.assertEqual(info_form['year'].value(), '1')
+        self.assertEqual(info_form['organization_code'].value(), self.organization.code)
 
         # Correct error messages gets set
-        self.assertEqual(re.sub(r'\* ', '', userform['username'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['username'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', userform['email'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['email'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', userform['first_name'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['first_name'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', userform['last_name'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['last_name'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', userform['password1'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['password1'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', userform['password2'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', user_form['password2'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
-        self.assertEqual(infoform['major'].errors.as_text(), '')
-        self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_code'].errors.as_text(), '')
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
+        self.assertEqual(info_form['major'].errors.as_text(), '')
+        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testLEADInfoNotValid_FieldsLeftBlank(self):
         """
@@ -447,39 +447,39 @@ class testMainViews_Register(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
-        self.assertTrue('userForm' in response.context)
-        self.assertTrue('infoForm' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
         # Verify form fields retain their set values
-        userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), 'testuser')
-        self.assertEqual(userform['email'].value(), 'testuser@gmail.com')
-        self.assertEqual(userform['first_name'].value(), 'test')
-        self.assertEqual(userform['last_name'].value(), 'user')
-        self.assertEqual(userform['password1'].value(), 'testpass')
-        self.assertEqual(userform['password2'].value(), 'testpass')
+        user_form = response.context['user_form']
+        self.assertEqual(user_form['username'].value(), 'testuser')
+        self.assertEqual(user_form['email'].value(), 'testuser@gmail.com')
+        self.assertEqual(user_form['first_name'].value(), 'test')
+        self.assertEqual(user_form['last_name'].value(), 'user')
+        self.assertEqual(user_form['password1'].value(), 'testpass')
+        self.assertEqual(user_form['password2'].value(), 'testpass')
 
         # lead stuff
-        infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), None)
-        self.assertEqual(infoform['major'].value(), None)
-        self.assertEqual(infoform['year'].value(), None)
-        self.assertEqual(infoform['organization_code'].value(), None)
+        info_form = response.context['info_form']
+        self.assertEqual(info_form['gender'].value(), None)
+        self.assertEqual(info_form['major'].value(), None)
+        self.assertEqual(info_form['year'].value(), None)
+        self.assertEqual(info_form['organization_code'].value(), None)
 
         # Correct error messages gets set
-        self.assertEqual(userform['username'].errors.as_text(), '')
-        self.assertEqual(userform['email'].errors.as_text(), '')
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
-        self.assertEqual(userform['password1'].errors.as_text(), '')
-        self.assertEqual(userform['password2'].errors.as_text(), '')
-        self.assertEqual(re.sub(r'\* ', '', infoform['gender'].errors.as_text()),
+        self.assertEqual(user_form['username'].errors.as_text(), '')
+        self.assertEqual(user_form['email'].errors.as_text(), '')
+        self.assertEqual(user_form['first_name'].errors.as_text(), '')
+        self.assertEqual(user_form['last_name'].errors.as_text(), '')
+        self.assertEqual(user_form['password1'].errors.as_text(), '')
+        self.assertEqual(user_form['password2'].errors.as_text(), '')
+        self.assertEqual(re.sub(r'\* ', '', info_form['gender'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', infoform['major'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', info_form['major'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', infoform['year'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', info_form['year'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', infoform['organization_code'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', info_form['organization_code'].errors.as_text()),
             'This field is required.')
 
     def testValidInfo(self):

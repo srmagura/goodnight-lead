@@ -49,14 +49,14 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.get('/account-settings', follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user/account_settings.html')
+        self.assertTemplateUsed(response, 'user/settings.html')
 
         # Verify both the epxected forms were passed to the template
-        self.assertTrue('usersettingsform' in response.context)
-        self.assertTrue('infoform' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
-        # Validate field values in usersettingsform
-        userform = response.context['usersettingsform']
+        # Validate field values in user_form
+        userform = response.context['user_form']
 
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), self.user.username)
@@ -70,19 +70,19 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('last_name' in userform.fields)
         self.assertEquals(userform['last_name'].value(), self.user.last_name)
 
-        # Validate field values in infoform
-        infoform = response.context['infoform']
+        # Validate field values in info_form
+        info_form = response.context['info_form']
 
-        self.assertTrue('user' not in infoform.fields)
+        self.assertTrue('user' not in info_form.fields)
 
-        self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), self.info.gender)
+        self.assertTrue('gender' in info_form.fields)
+        self.assertEqual(info_form['gender'].value(), self.info.gender)
 
-        self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), self.info.major)
+        self.assertTrue('major' in info_form.fields)
+        self.assertEqual(info_form['major'].value(), self.info.major)
 
-        self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), self.info.year)
+        self.assertTrue('year' in info_form.fields)
+        self.assertEqual(info_form['year'].value(), self.info.year)
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -112,14 +112,14 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user/account_settings.html')
+        self.assertTemplateUsed(response, 'user/settings.html')
 
         # Verify both the epxected forms were passed to the template
-        self.assertTrue('usersettingsform' in response.context)
-        self.assertTrue('infoform' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
-        # Validate field values in usersettingsform
-        userform = response.context['usersettingsform']
+        # Validate field values in user_form
+        userform = response.context['user_form']
 
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), user2.username)
@@ -138,22 +138,22 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEquals(userform['last_name'].value(), self.user.last_name)
         self.assertEqual(userform['last_name'].errors.as_text(), '')
 
-        # Validate field values in infoform
-        infoform = response.context['infoform']
+        # Validate field values in info_form
+        info_form = response.context['info_form']
 
-        self.assertTrue('user' not in infoform.fields)
+        self.assertTrue('user' not in info_form.fields)
 
-        self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), self.info.gender)
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
+        self.assertTrue('gender' in info_form.fields)
+        self.assertEqual(info_form['gender'].value(), self.info.gender)
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
 
-        self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), self.info.major)
-        self.assertEqual(infoform['major'].errors.as_text(), '')
+        self.assertTrue('major' in info_form.fields)
+        self.assertEqual(info_form['major'].value(), self.info.major)
+        self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), str(self.info.year))
-        self.assertEqual(infoform['year'].errors.as_text(), '')
+        self.assertTrue('year' in info_form.fields)
+        self.assertEqual(info_form['year'].value(), str(self.info.year))
+        self.assertEqual(info_form['year'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -183,14 +183,14 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user/account_settings.html')
+        self.assertTemplateUsed(response, 'user/settings.html')
 
         # Verify both the epxected forms were passed to the template
-        self.assertTrue('usersettingsform' in response.context)
-        self.assertTrue('infoform' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
-        # Validate field values in usersettingsform
-        userform = response.context['usersettingsform']
+        # Validate field values in user_form
+        userform = response.context['user_form']
 
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), self.user.username)
@@ -210,22 +210,22 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEquals(userform['last_name'].value(), self.user.last_name)
         self.assertEqual(userform['last_name'].errors.as_text(), '')
 
-        # Validate field values in infoform
-        infoform = response.context['infoform']
+        # Validate field values in info_form
+        info_form = response.context['info_form']
 
-        self.assertTrue('user' not in infoform.fields)
+        self.assertTrue('user' not in info_form.fields)
 
-        self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), self.info.gender)
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
+        self.assertTrue('gender' in info_form.fields)
+        self.assertEqual(info_form['gender'].value(), self.info.gender)
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
 
-        self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), self.info.major)
-        self.assertEqual(infoform['major'].errors.as_text(), '')
+        self.assertTrue('major' in info_form.fields)
+        self.assertEqual(info_form['major'].value(), self.info.major)
+        self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), str(self.info.year))
-        self.assertEqual(infoform['year'].errors.as_text(), '')
+        self.assertTrue('year' in info_form.fields)
+        self.assertEqual(info_form['year'].value(), str(self.info.year))
+        self.assertEqual(info_form['year'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -251,14 +251,14 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user/account_settings.html')
+        self.assertTemplateUsed(response, 'user/settings.html')
 
         # Verify both the epxected forms were passed to the template
-        self.assertTrue('usersettingsform' in response.context)
-        self.assertTrue('infoform' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
-        # Validate field values in usersettingsform
-        userform = response.context['usersettingsform']
+        # Validate field values in user_form
+        userform = response.context['user_form']
 
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), self.user.username)
@@ -276,23 +276,23 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEquals(userform['last_name'].value(), self.user.last_name)
         self.assertEqual(userform['last_name'].errors.as_text(), '')
 
-        # Validate field values in infoform
-        infoform = response.context['infoform']
+        # Validate field values in info_form
+        info_form = response.context['info_form']
 
-        self.assertTrue('user' not in infoform.fields)
+        self.assertTrue('user' not in info_form.fields)
 
-        self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), 'i')
-        self.assertEqual(re.sub(r'\* ', '', infoform['gender'].errors.as_text()),
+        self.assertTrue('gender' in info_form.fields)
+        self.assertEqual(info_form['gender'].value(), 'i')
+        self.assertEqual(re.sub(r'\* ', '', info_form['gender'].errors.as_text()),
             'Select a valid choice. i is not one of the available choices.')
 
-        self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), self.info.major)
-        self.assertEqual(infoform['major'].errors.as_text(), '')
+        self.assertTrue('major' in info_form.fields)
+        self.assertEqual(info_form['major'].value(), self.info.major)
+        self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), str(self.info.year))
-        self.assertEqual(infoform['year'].errors.as_text(), '')
+        self.assertTrue('year' in info_form.fields)
+        self.assertEqual(info_form['year'].value(), str(self.info.year))
+        self.assertEqual(info_form['year'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -317,14 +317,14 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user/account_settings.html')
+        self.assertTemplateUsed(response, 'user/settings.html')
 
         # Verify both the epxected forms were passed to the template
-        self.assertTrue('usersettingsform' in response.context)
-        self.assertTrue('infoform' in response.context)
+        self.assertTrue('user_form' in response.context)
+        self.assertTrue('info_form' in response.context)
 
-        # Validate field values in usersettingsform
-        userform = response.context['usersettingsform']
+        # Validate field values in user_form
+        userform = response.context['user_form']
 
         self.assertTrue('username' in userform.fields)
         self.assertEquals(userform['username'].value(), self.user.username)
@@ -342,22 +342,22 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEquals(userform['last_name'].value(), self.user.last_name)
         self.assertEqual(userform['last_name'].errors.as_text(), '')
 
-        # Validate field values in infoform
-        infoform = response.context['infoform']
+        # Validate field values in info_form
+        info_form = response.context['info_form']
 
-        self.assertTrue('user' not in infoform.fields)
+        self.assertTrue('user' not in info_form.fields)
 
-        self.assertTrue('gender' in infoform.fields)
-        self.assertEqual(infoform['gender'].value(), self.info.gender)
-        self.assertEqual(infoform['gender'].errors.as_text(), '')
+        self.assertTrue('gender' in info_form.fields)
+        self.assertEqual(info_form['gender'].value(), self.info.gender)
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
 
-        self.assertTrue('major' in infoform.fields)
-        self.assertEqual(infoform['major'].value(), self.info.major)
-        self.assertEqual(infoform['major'].errors.as_text(), '')
+        self.assertTrue('major' in info_form.fields)
+        self.assertEqual(info_form['major'].value(), self.info.major)
+        self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in infoform.fields)
-        self.assertEqual(infoform['year'].value(), '-1')
-        self.assertEqual(re.sub(r'\* ', '', infoform['year'].errors.as_text()),
+        self.assertTrue('year' in info_form.fields)
+        self.assertEqual(info_form['year'].value(), '-1')
+        self.assertEqual(re.sub(r'\* ', '', info_form['year'].errors.as_text()),
             'Select a valid choice. -1 is not one of the available choices.')
 
         self.assertTrue('organization' in response.context)
