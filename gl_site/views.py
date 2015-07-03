@@ -131,7 +131,8 @@ def register(request, session_uuid):
         {
             'user_form': user_form,
             'info_form': info_form,
-            'session_uuid': session_uuid
+            'session_uuid': session_uuid,
+            'action_url': request.build_absolute_uri(),
         }
     )
 

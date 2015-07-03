@@ -8,19 +8,6 @@
 {% block content %}
     <div class="container">
 
-        {% if messages %}
-            <div class="row">
-                <div class="col-md-offset-2 col-md-8">
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
         <form method="post" action="{{ action_url }}">
             {% csrf_token %}
             <div class="row">
@@ -63,7 +50,7 @@
                                     data-content="We collect demographic information for data analysis purposes only.
                                     This enables us to make comparisons based on gender, major, .etc.
                                     We won't share your data with anyone outside of your organization. When creating informational
-                                    reports from your organization's data, we'll do our best to keep everything anonymous.">
+                                    reports from your organization's data, we'll do our best to keep you anonymous.">
                                     Why demographics? <span class="glyphicon glyphicon-eye-open"></span></a>
                             </div>
                         </div>
@@ -79,7 +66,7 @@
                     <div class="lead-panel text-center panel-no-horizontal-padding">
                         <div class="btn-group">
                             <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"/>
-                            <input class="btn btn-default" type="submit" value="Save"/>
+                            <input class="btn btn-default" type="submit" value="{% block submit_button %}{% endblock %}"/>
                         </div>
 
                         {% block more_buttons %}
