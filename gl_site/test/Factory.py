@@ -4,24 +4,21 @@ from gl_site.models import Organization, Session, LeadUserInfo
 # Django User
 from django.contrib.auth.models import User
 
-class Callable:
-    """ Callable object, similar to static method """
-    def __init__(self, anycallable):
-        self.__call__ = anycallable
-
 class Factory:
     """ Factory class for creating commonly used objects in testing """
 
     index = 0
     defaultPassword = 'password'
 
+    @staticmethod
     def incrementIndex():
         """ Increment the factory index. Guarantees uniqueness. """
         Factory.index = Factory.index + 1
-    incrementIndex = Callable(incrementIndex)
 
+    @staticmethod
     def createOrganization(created_by):
         """ Create an organization and set the creating user """
+
         org = Organization.objects.create(
             name = "Test Organization {}".format(Factory.index),
             code = "Secret {}".format(Factory.index),
@@ -29,8 +26,8 @@ class Factory:
         )
         Factory.incrementIndex()
         return org
-    createOrganization = Callable(createOrganization)
 
+    @staticmethod
     def createSession(organization, created_by):
         """ Create a session and set the organization and creating user """
 
@@ -41,8 +38,8 @@ class Factory:
         )
         Factory.incrementIndex()
         return session
-    createSession = Callable(createSession)
 
+    @staticmethod
     def createDemographics(user, organization, session):
         """ Create user demographics and link to user, org, and session """
 
@@ -56,8 +53,8 @@ class Factory:
         )
         Factory.incrementIndex()
         return info
-    createDemographics = Callable(createDemographics)
 
+    @staticmethod
     def createUser():
         """ Create a default user """
 
@@ -70,8 +67,8 @@ class Factory:
         )
         Factory.incrementIndex()
         return user
-    createUser = Callable(createUser)
 
+    @staticmethod
     def createUserSettingsPostDict(user, leaduserinfo):
         """ Create the dictionary sent through post for account settings """
 
@@ -88,4 +85,28 @@ class Factory:
             'major': leaduserinfo.major,
             'year': leaduserinfo.year,
         }
-    createUserSettingsPostDict = Callable(createUserSettingsPostDict)
+
+    @staticmethod
+    def createUserRegistrationPostDict(organization):
+        """ Create a registration dict
+            Returns a registration dictionary with unique
+            user information where applicable.
+        """
+
+        form =  {
+            # User fields
+            'username' : "testuser{}".format(Factory.index),
+            'email' : "testuser{}@gmail.com".format(Factory.index),
+            'password1' : Factory.defaultPassword,
+            'password2' : Factory.defaultPassword,
+            'first_name' : "test{}".format(Factory.index),
+            'last_name' : "user{}".format(Factory.index),
+
+            # Info fields
+            'gender': 'M',
+            'major': 'Tester',
+            'year' : 1,
+            'organization_code' : organization.code
+        }
+        Factory.incrementIndex()
+        return form

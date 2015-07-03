@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 # Import use info for testing account creation
 from gl_site.models import LeadUserInfo, Organization
 
+# Object factory
+from gl_site.test.Factory import Factory
+
 # Regex parser
 import re
 
@@ -155,19 +158,22 @@ class testMainViews_Register(TestCase):
 
     def setUp(self):
         """ Create user account for testing """
-        self.user = User.objects.create_user(username = 'test', email='test@gmail.com', password = 'test')
+        self.user = Factory.createUser()
 
-        self.organization = Organization.objects.create(name = 'Testers', code = 'secret')
+        self.organization = Factory.createOrganization(self.user)
 
-        self.info = LeadUserInfo.objects.create(user = self.user, gender = 'M',
-            major = 'Tester', year = 1, organization = self.organization)
+        self.session = Factory.createSession(self.organization, self.user)
+
+        self.info = Factory.createDemographics(self.user, self.organization, self.session)
 
     def testLogoutRequired(self):
+        """ A logged in user cannot access this page """
+
         # Log in
-        self.client.login(username = 'test', password = 'test')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the response
-        response = self.client.get('/register', follow = True)
+        response = self.client.get('/register/{}'.format(self.info.session.uuid), follow = True)
 
         # Sanity check
         self.assertTrue(response.context['user'].is_authenticated())
@@ -176,13 +182,13 @@ class testMainViews_Register(TestCase):
         self.assertRedirects(response, '/')
 
     def testRequestMethodGET(self):
-        """
-        Verify that making a request via GET
-        renders the register page with blank
-        forms
+        """ GET request for registration
+            Verify that making a request via GET
+            renders the register page with blank
+            forms
         """
         # Make the request
-        response = self.client.get('/register', follow = True)
+        response = self.client.get('/register/{}'.format(self.info.session.uuid), follow = True)
 
         # Verify the register page was rendered
         self.assertTemplateUsed(response, 'user_templates/register.html')
@@ -204,31 +210,20 @@ class testMainViews_Register(TestCase):
             self.assertEqual(field.value(), None)
 
     def testUserInfoNotValid_UsernameNotUnique(self):
+        """ Attempt to register with a taken username.
+            Verify that submission via POST with a
+            username that is already in use rerenders
+            the template and shows an error without
+            creating the user account
         """
-        Verify that submission via POST with a
-        username that is already in use rerenders
-        the template and shows an error without
-        creating the user account
-        """
-        # Make the post request
-        response = self.client.post('/register',
-            {
-                # User info
-                'username': 'test', # Non unique user name
-                'email': 'unique@gmail.com',
-                'password1': 'testpass',
-                'password2': 'testpass',
-                'first_name': 'test',
-                'last_name': 'user',
 
-                # Lead info
-                'gender': 'M',
-                'major': 'tester',
-                'year': '1',
-                'organization_name': 'Testers',
-                'organization_code': 'secret'
-            },
-            follow = True)
+        # Get the POST dict
+        registrationform = Factory.createUserRegistrationPostDict(self.organization)
+        registrationform['username'] = self.user.username
+
+        # Make the post request
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
+            registrationform, follow = True)
 
         # Verify that the register page was rendered
         self.assertTemplateUsed(response, 'user_templates/register.html')
@@ -239,20 +234,19 @@ class testMainViews_Register(TestCase):
 
         # Verify form fields retain their set values
         userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), 'test')
-        self.assertEqual(userform['email'].value(), 'unique@gmail.com')
-        self.assertEqual(userform['first_name'].value(), 'test')
-        self.assertEqual(userform['last_name'].value(), 'user')
-        self.assertEqual(userform['password1'].value(), 'testpass')
-        self.assertEqual(userform['password2'].value(), 'testpass')
+        self.assertEqual(userform['username'].value(), registrationform['username'])
+        self.assertEqual(userform['email'].value(), registrationform['email'])
+        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(userform['password1'].value(), registrationform['password1'])
+        self.assertEqual(userform['password2'].value(), registrationform['password2'])
 
         # lead stuff
         infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), 'M')
-        self.assertEqual(infoform['major'].value(), 'tester')
-        self.assertEqual(infoform['year'].value(), '1')
-        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
-        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
+        self.assertEqual(infoform['major'].value(), registrationform['major'])
+        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
+        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
         self.assertEqual(re.sub(r'\* ', '', userform['username'].errors.as_text()),
@@ -265,7 +259,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].errors.as_text(), '')
         self.assertEqual(infoform['major'].errors.as_text(), '')
         self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
         self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_EmailNotUnique(self):
@@ -275,25 +268,14 @@ class testMainViews_Register(TestCase):
         the template and shows an error without
         creating the user account
         """
-        # Make the post request
-        response = self.client.post('/register',
-            {
-                # User info
-                'username': 'testuser',
-                'email': 'test@gmail.com', # Non uniuqe email
-                'password1': 'testpass',
-                'password2': 'testpass',
-                'first_name': 'test',
-                'last_name': 'user',
 
-                # Lead info
-                'gender': 'M',
-                'major': 'tester',
-                'year': '1',
-                'organization_name': 'Testers',
-                'organization_code': 'secret'
-            },
-            follow = True)
+        # Get the POST dict
+        registrationform = Factory.createUserRegistrationPostDict(self.organization)
+        registrationform['email'] = self.user.email
+
+        # Make the post request
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
+            registrationform, follow = True)
 
         # Verify that the register page was rendered
         self.assertTemplateUsed(response, 'user_templates/register.html')
@@ -304,20 +286,19 @@ class testMainViews_Register(TestCase):
 
         # Verify form fields retain their set values
         userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), 'testuser')
-        self.assertEqual(userform['email'].value(), 'test@gmail.com')
-        self.assertEqual(userform['first_name'].value(), 'test')
-        self.assertEqual(userform['last_name'].value(), 'user')
-        self.assertEqual(userform['password1'].value(), 'testpass')
-        self.assertEqual(userform['password2'].value(), 'testpass')
+        self.assertEqual(userform['username'].value(), registrationform['username'])
+        self.assertEqual(userform['email'].value(), registrationform['email'])
+        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(userform['password1'].value(), registrationform['password1'])
+        self.assertEqual(userform['password2'].value(), registrationform['password2'])
 
         # lead stuff
         infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), 'M')
-        self.assertEqual(infoform['major'].value(), 'tester')
-        self.assertEqual(infoform['year'].value(), '1')
-        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
-        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
+        self.assertEqual(infoform['major'].value(), registrationform['major'])
+        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
+        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
 
 
         # Correct error messages gets set
@@ -331,7 +312,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].errors.as_text(), '')
         self.assertEqual(infoform['major'].errors.as_text(), '')
         self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
         self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_PasswordConfirmationFailed(self):
@@ -341,25 +321,14 @@ class testMainViews_Register(TestCase):
         the template and shows an error without
         creating the user account
         """
-        # Make the post request
-        response = self.client.post('/register',
-            {
-                # User info
-                'username': 'testuser',
-                'email': 'testuser@gmail.com',
-                'password1': 'testpass',
-                'password2': 'testpass2',
-                'first_name': 'test',
-                'last_name': 'user',
 
-                # Lead info
-                'gender': 'M',
-                'major': 'tester',
-                'year': '1',
-                'organization_name': 'Testers',
-                'organization_code': 'secret'
-            },
-            follow = True)
+        # Get the POST dict
+        registrationform = Factory.createUserRegistrationPostDict(self.organization)
+        registrationform['password2'] = 'incorrect'
+
+        # Make the post request
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
+            registrationform, follow = True)
 
         # Verify that the register page was rendered
         self.assertTemplateUsed(response, 'user_templates/register.html')
@@ -370,20 +339,19 @@ class testMainViews_Register(TestCase):
 
         # Verify form fields retain their set values
         userform = response.context['userForm']
-        self.assertEqual(userform['username'].value(), 'testuser')
-        self.assertEqual(userform['email'].value(), 'testuser@gmail.com')
-        self.assertEqual(userform['first_name'].value(), 'test')
-        self.assertEqual(userform['last_name'].value(), 'user')
-        self.assertEqual(userform['password1'].value(), 'testpass')
-        self.assertEqual(userform['password2'].value(), 'testpass2')
+        self.assertEqual(userform['username'].value(), registrationform['username'])
+        self.assertEqual(userform['email'].value(), registrationform['email'])
+        self.assertEqual(userform['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(userform['last_name'].value(), registrationform['last_name'])
+        self.assertEqual(userform['password1'].value(), registrationform['password1'])
+        self.assertEqual(userform['password2'].value(), registrationform['password2'])
 
         # lead stuff
         infoform = response.context['infoForm']
-        self.assertEqual(infoform['gender'].value(), 'M')
-        self.assertEqual(infoform['major'].value(), 'tester')
-        self.assertEqual(infoform['year'].value(), '1')
-        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
-        self.assertEqual(infoform['organization_code'].value(), self.organization.code)
+        self.assertEqual(infoform['gender'].value(), registrationform['gender'])
+        self.assertEqual(infoform['major'].value(), registrationform['major'])
+        self.assertEqual(infoform['year'].value(), str(registrationform['year']))
+        self.assertEqual(infoform['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
         self.assertEqual(userform['username'].errors.as_text(), '')
@@ -396,7 +364,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].errors.as_text(), '')
         self.assertEqual(infoform['major'].errors.as_text(), '')
         self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
         self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_FieldsLeftBlank(self):
@@ -406,14 +373,13 @@ class testMainViews_Register(TestCase):
         without creating the user account
         """
         # Make the post request
-        response = self.client.post('/register',
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
             {
                 # Lead info
                 'gender': 'M',
                 'major': 'tester',
                 'year': '1',
-                'organization_name': 'Testers',
-                'organization_code': 'secret'
+                'organization_code': self.organization.code
             },
             follow = True)
 
@@ -438,7 +404,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].value(), 'M')
         self.assertEqual(infoform['major'].value(), 'tester')
         self.assertEqual(infoform['year'].value(), '1')
-        self.assertEqual(infoform['organization_name'].value(), self.organization.name)
         self.assertEqual(infoform['organization_code'].value(), self.organization.code)
 
         # Correct error messages gets set
@@ -457,7 +422,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].errors.as_text(), '')
         self.assertEqual(infoform['major'].errors.as_text(), '')
         self.assertEqual(infoform['year'].errors.as_text(), '')
-        self.assertEqual(infoform['organization_name'].errors.as_text(), '')
         self.assertEqual(infoform['organization_code'].errors.as_text(), '')
 
     def testLEADInfoNotValid_FieldsLeftBlank(self):
@@ -467,7 +431,7 @@ class testMainViews_Register(TestCase):
         without creating the user account
         """
         # Make the post request
-        response = self.client.post('/register',
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
             {
                 # User info
                 'username': 'testuser',
@@ -500,7 +464,6 @@ class testMainViews_Register(TestCase):
         self.assertEqual(infoform['gender'].value(), None)
         self.assertEqual(infoform['major'].value(), None)
         self.assertEqual(infoform['year'].value(), None)
-        self.assertEqual(infoform['organization_name'].value(), None)
         self.assertEqual(infoform['organization_code'].value(), None)
 
         # Correct error messages gets set
@@ -516,8 +479,6 @@ class testMainViews_Register(TestCase):
             'This field is required.')
         self.assertEqual(re.sub(r'\* ', '', infoform['year'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', infoform['organization_name'].errors.as_text()),
-            'This field is required.')
         self.assertEqual(re.sub(r'\* ', '', infoform['organization_code'].errors.as_text()),
             'This field is required.')
 
@@ -528,41 +489,29 @@ class testMainViews_Register(TestCase):
         logs the user in, sets a success message,
         and redirects to the index view
         """
-        # Make the post request
-        response = self.client.post('/register',
-            {
-                # User info
-                'username': 'testuser',
-                'email': 'testuser@gmail.com',
-                'password1': 'testpass',
-                'password2': 'testpass',
-                'first_name': 'test',
-                'last_name': 'user',
 
-                # Lead info
-                'gender': 'M',
-                'major': 'tester',
-                'year': '1',
-                'organization_name': 'Testers',
-                'organization_code': 'secret'
-            },
-            follow = True)
+        # Get the POST dict
+        registrationform = Factory.createUserRegistrationPostDict(self.organization)
+
+        # Make the post request
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
+            registrationform, follow = True)
 
         # Verify the user account is created with correct attributes
-        user = User.objects.get(username = 'testuser')
+        user = User.objects.get(username = registrationform['username'])
         info = LeadUserInfo.objects.get(user = user)
 
         self.assertTrue(user is not None)
-        self.assertEqual(user.username, 'testuser')
-        self.assertEqual(user.email, 'testuser@gmail.com')
-        self.assertNotEqual(user.password, 'testuser') # Password should be hashed
-        self.assertEqual(user.first_name, 'test')
-        self.assertEqual(user.last_name, 'user')
+        self.assertEqual(user.username, registrationform['username'])
+        self.assertEqual(user.email, registrationform['email'])
+        self.assertNotEqual(user.password, registrationform['password1']) # Password should be hashed
+        self.assertEqual(user.first_name, registrationform['first_name'])
+        self.assertEqual(user.last_name, registrationform['last_name'])
 
         self.assertTrue(info is not None)
         self.assertEqual(info.user, user)
-        self.assertEqual(info.gender, 'M')
-        self.assertEqual(info.major, 'tester')
+        self.assertEqual(info.gender, registrationform['gender'])
+        self.assertEqual(info.major, registrationform['major'])
         self.assertEqual(info.organization, self.organization)
 
         # Verify success message set
