@@ -77,6 +77,36 @@ class InfoRegistrationForm(InfoForm):
     # The entry code for the specified organization
     organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
 
+    def __init__(self, *args, **kwargs):
+        """ Override the init method in order to pass session uuid.
+            UUID is needed to perform validation in clean.
+        """
+        self.session_uuid = kwargs.pop('session_uuid', None)
+
+        super(InfoRegistrationForm, self).__init__(*args, **kwargs);
+
+    def clean(self):
+        """ Override the default clean (validation) method """
+
+        # Call clean on super
+        super(InfoRegistrationForm, self).clean()
+
+        # If an organization name and code were entered, verify
+        # that both exist
+        try:
+            # Get the organization
+            org = Session.objects.get(uuid=self.session_uuid).organization
+
+            # Validate the code
+            if ('organization_code' in self.cleaned_data and
+                self.cleaned_data['organization_code'] != org.code):
+
+                raise ValidationError({'organization_code': 'Invalid organization code.'})
+        except Session.DoesNotExist:
+            raise ValidationError('Session not found')
+
+        return self.cleaned_data
+
 #Used for changing all user info except passwords.
 class UserSettingsForm(UserChangeForm):
     class Meta:

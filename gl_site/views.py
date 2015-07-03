@@ -96,7 +96,7 @@ def register(request, session_uuid):
 
         #Get the form corresponding to the post data
         user_form = UserForm(request.POST)
-        info_form = InfoRegistrationForm(request.POST)
+        info_form = InfoRegistrationForm(request.POST, session_uuid=session.uuid)
         user_forms = [user_form, info_form]
 
         #All validation rules pass - generate a new user account

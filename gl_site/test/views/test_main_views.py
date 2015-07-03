@@ -482,6 +482,46 @@ class testMainViews_Register(TestCase):
         self.assertEqual(re.sub(r'\* ', '', info_form['organization_code'].errors.as_text()),
             'This field is required.')
 
+    def testOrganizationCodeInvalid(self):
+        """ Verify an invalid organization sends an error """
+
+        # Get the POST dict
+        registrationform = Factory.createUserRegistrationPostDict(self.organization)
+        registrationform['organization_code'] = 'invalid'
+
+        # Make the post request
+        response = self.client.post('/register/{}'.format(self.info.session.uuid),
+            registrationform, follow = True)
+
+        # Get the forms
+        user_form = response.context['user_form']
+        info_form = response.context['info_form']
+
+        self.assertEqual(user_form['username'].value(), registrationform['username'])
+        self.assertEqual(user_form['email'].value(), registrationform['email'])
+        self.assertEqual(user_form['password1'].value(), registrationform['password1']) # Password should be hashed
+        self.assertEqual(user_form['first_name'].value(), registrationform['first_name'])
+        self.assertEqual(user_form['last_name'].value(), registrationform['last_name'])
+
+        self.assertEqual(info_form['gender'].value(), registrationform['gender'])
+        self.assertEqual(info_form['major'].value(), registrationform['major'])
+        self.assertEqual(info_form['organization_code'].value(), 'invalid')
+
+        # Correct error messages gets set
+
+        self.assertEqual(user_form['username'].errors.as_text(), '')
+        self.assertEqual(user_form['email'].errors.as_text(), '')
+        self.assertEqual(user_form['first_name'].errors.as_text(), '')
+        self.assertEqual(user_form['last_name'].errors.as_text(), '')
+        self.assertEqual(user_form['password1'].errors.as_text(), '')
+        self.assertEqual(user_form['password2'].errors.as_text(), '')
+
+        self.assertEqual(info_form['gender'].errors.as_text(), '')
+        self.assertEqual(info_form['major'].errors.as_text(), '')
+        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(re.sub(r'\* ', '', info_form['organization_code'].errors.as_text()),
+            'Invalid organization code.')
+
     def testValidInfo(self):
         """
         Verify that submission of valid information
