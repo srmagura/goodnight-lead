@@ -84,7 +84,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user_templates/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/login.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -106,7 +106,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user_templates/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/login.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -128,7 +128,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user_templates/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/login.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -191,7 +191,7 @@ class testMainViews_Register(TestCase):
         response = self.client.get('/register/{}'.format(self.info.session.uuid), follow = True)
 
         # Verify the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify no messages were sent
         self.assertEqual(len(response.context['messages']), 0)
@@ -226,7 +226,7 @@ class testMainViews_Register(TestCase):
             registrationform, follow = True)
 
         # Verify that the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
         self.assertTrue('userForm' in response.context)
@@ -278,7 +278,7 @@ class testMainViews_Register(TestCase):
             registrationform, follow = True)
 
         # Verify that the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
         self.assertTrue('userForm' in response.context)
@@ -331,7 +331,7 @@ class testMainViews_Register(TestCase):
             registrationform, follow = True)
 
         # Verify that the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
         self.assertTrue('userForm' in response.context)
@@ -384,7 +384,7 @@ class testMainViews_Register(TestCase):
             follow = True)
 
         # Verify that the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
         self.assertTrue('userForm' in response.context)
@@ -444,7 +444,7 @@ class testMainViews_Register(TestCase):
             follow = True)
 
         # Verify that the register page was rendered
-        self.assertTemplateUsed(response, 'user_templates/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         # Verify both forms are included in the response
         self.assertTrue('userForm' in response.context)
@@ -561,7 +561,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         response = self.client.get('/reset_password', follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/reset_password_page.html')
+        self.assertTemplateUsed(response, 'user/reset_password_page.html')
 
         # Verify the form and success are passed to the response
         self.assertTrue('form' in response.context)
@@ -578,7 +578,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         response = self.client.post('/reset_password', {'email': 'test@gmail.com'}, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/reset_password_page.html')
+        self.assertTemplateUsed(response, 'user/reset_password_page.html')
 
         # Verify the form and success are passed to the response
         self.assertTrue('form' in response.context)

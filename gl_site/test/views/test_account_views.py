@@ -49,7 +49,7 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.get('/account-settings', follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+        self.assertTemplateUsed(response, 'user/account_settings.html')
 
         # Verify both the epxected forms were passed to the template
         self.assertTrue('usersettingsform' in response.context)
@@ -112,7 +112,7 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+        self.assertTemplateUsed(response, 'user/account_settings.html')
 
         # Verify both the epxected forms were passed to the template
         self.assertTrue('usersettingsform' in response.context)
@@ -183,7 +183,7 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+        self.assertTemplateUsed(response, 'user/account_settings.html')
 
         # Verify both the epxected forms were passed to the template
         self.assertTrue('usersettingsform' in response.context)
@@ -251,7 +251,7 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+        self.assertTemplateUsed(response, 'user/account_settings.html')
 
         # Verify both the epxected forms were passed to the template
         self.assertTrue('usersettingsform' in response.context)
@@ -317,7 +317,7 @@ class testAccountViews_AccountSettings(TestCase):
         response = self.client.post('/account-settings', settingsform, follow = True)
 
         # Verify the correct template was used
-        self.assertTemplateUsed(response, 'user_templates/account_settings.html')
+        self.assertTemplateUsed(response, 'user/account_settings.html')
 
         # Verify both the epxected forms were passed to the template
         self.assertTrue('usersettingsform' in response.context)
@@ -452,7 +452,7 @@ class testAccountViews_Password(TestCase):
         response = self.client.get('/account-settings/password', follow = True)
 
         # Verify the correct template was rendered
-        self.assertTemplateUsed(response, 'user_templates/password.html')
+        self.assertTemplateUsed(response, 'user/password.html')
 
         # Verify the form exists in the response context
         self.assertTrue('form' in response.context)
@@ -484,7 +484,7 @@ class testAccountViews_Password(TestCase):
             }, follow = True)
 
         # Verify the correct template was rendered
-        self.assertTemplateUsed(response, 'user_templates/password.html')
+        self.assertTemplateUsed(response, 'user/password.html')
 
         # Verify the form exists in the response context
         self.assertTrue('form' in response.context)

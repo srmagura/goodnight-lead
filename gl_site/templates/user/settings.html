@@ -1,0 +1,47 @@
+{% extends "user/info.html" %}
+{% load staticfiles %}
+
+{% block title %} Account Settings {% endblock %}
+
+{% block before_form %}
+    {% if messages %}
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block after_form %}
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <fieldset class="lead-panel">
+                <legend class="legend">Organization</legend>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4 class="list-group-item-heading">Name</h4>
+                        <p class="list-group-item-text">{{ organization.name }}</p>
+                    </div>
+                    <div class="list-group-item">
+                        <h4 class="list-group-item-heading">Session</h4>
+                        <p class="list-group-item-text">{{ session.name }}</p>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+{% endblock %}
+
+{% block submit_button %}
+Save
+{% endblock %}
+
+{% block more_buttons %}
+<input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Change password"/>
+{% endblock %}

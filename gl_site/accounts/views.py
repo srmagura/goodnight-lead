@@ -7,37 +7,39 @@ from django.contrib.auth.decorators import login_required
 #Form imports
 from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
 
-#Messages
 from django.contrib import messages
 
-#Account information/settings view
 @login_required(redirect_field_name = None)
 def account_settings(request):
+    """
+    Account information/settings view
+    """
     if(request.method == 'POST'):
-        usersettingsform = UserSettingsForm(request.POST, instance=request.user)
-        infoform = InfoForm(request.POST, instance=request.user.leaduserinfo)
-        forms = [usersettingsform, infoform]
+        user_settings_form = UserSettingsForm(request.POST, instance=request.user)
+        info_form = InfoForm(request.POST, instance=request.user.leaduserinfo)
+        forms = [user_settings_form, info_form]
 
         if all(form.is_valid() for form in forms):
             #Save the updated info
-            usersettingsform.save()
-            infoform.save()
+            user_settings_form.save()
+            info_form.save()
 
             messages.success(request, 'Account Settings updated successfully')
             return HttpResponseRedirect('/')
 
     else:
-        usersettingsform = UserSettingsForm(instance=request.user)
-        infoform = InfoForm(instance=request.user.leaduserinfo)
+        user_settings_form = UserSettingsForm(instance=request.user)
+        info_form = InfoForm(instance=request.user.leaduserinfo)
 
     return render(
         request,
-        'user_templates/account_settings.html',
+        'user/settings.html',
         {
-            'usersettingsform': usersettingsform,
-            'infoform': infoform,
+            'user_form': user_settings_form,
+            'info_form': info_form,
+            'action_url': request.build_absolute_uri(),
             'organization': request.user.leaduserinfo.organization,
-            'session': request.user.leaduserinfo.session
+            'session': request.user.leaduserinfo.session,
         }
     )
 
@@ -61,6 +63,6 @@ def password(request):
 
     return render(
         request,
-        'user_templates/password.html',
+        'user/password.html',
         {'form': passwordform }
     )
