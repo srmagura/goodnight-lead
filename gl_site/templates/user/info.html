@@ -3,10 +3,13 @@
 
 {% block head %}
     <script src="{% static 'gl_site/js/equalHeight.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/user_info.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="container">
+        {% block before_form %}
+        {% endblock %}
 
         <form method="post" action="{{ action_url }}">
             {% csrf_token %}
@@ -58,12 +61,12 @@
                 </div>
             </div>
 
-            {% block uneditable_info %}
+            {% block after_form %}
             {% endblock %}
 
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    <div class="lead-panel text-center panel-no-horizontal-padding">
+                    <div class="lead-panel text-center panel-no-horizontal-padding button-panel">
                         <div class="btn-group">
                             <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"/>
                             <input class="btn btn-default" type="submit" value="{% block submit_button %}{% endblock %}"/>
