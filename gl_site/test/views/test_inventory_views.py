@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from gl_site.models import Submission
 from gl_site.models import Metric
 
+# Factory
+from gl_site.test.Factory import Factory
+
 class testInventoryViews_TakeInventory(TestCase):
     """
     Test Case for the Take Inventory view.
@@ -20,8 +23,8 @@ class testInventoryViews_TakeInventory(TestCase):
         """
 
         # Create a user account and login
-        User.objects.create_user(username = 'test', password = 'pass')
-        self.client.login(username = 'test', password = 'pass')
+        self.user = Factory.createUser()
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
     def testLoginRequired(self):
         """
@@ -58,7 +61,7 @@ class testInventoryViews_TakeInventory(TestCase):
 
         # Create a Big5 submission with metrics
         submission = Submission.objects.create(
-            user = User.objects.get(username = 'test'), inventory_id = 0)
+            user = self.user, inventory_id = 0)
         Metric.objects.create(submission = submission, key = 'openness', value = 4)
         Metric.objects.create(submission = submission, key = 'extraversion', value = 4)
         Metric.objects.create(submission = submission, key = 'emotional_stability', value = 4)
@@ -116,8 +119,8 @@ class testInventoryViews_ReviewInventory(TestCase):
     """
     def setUp(self):
         # Create a user account and login
-        User.objects.create_user(username = 'test', password = 'pass')
-        self.client.login(username = 'test', password = 'pass')
+        self.user = Factory.createUser()
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Create an inventory
         self.client.post('/inventory/take/0', {

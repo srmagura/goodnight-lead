@@ -18,7 +18,7 @@ class TestMainViews_Index(TestCase):
 
     def setUp(self):
         """ Set Up """
-        User.objects.create_user(username = 'test', password = 'pass')
+        self.user = Factory.createUser()
 
     def testLoginRequiredNoRedirectField(self):
         """
@@ -35,7 +35,7 @@ class TestMainViews_Index(TestCase):
         """ Test that a user who is logged in is sent to the index page """
 
         # login
-        self.client.login(username = 'test', password = 'pass')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the request
         response = self.client.get('/', follow = True)
@@ -55,13 +55,13 @@ class TestMainViews_Login(TestCase):
 
     def setUp(self):
         """ Set Up """
-        User.objects.create_user(username = 'test', email='test@gmail', password='test')
+        self.user = Factory.createUser()
 
     def testLogoutRequired(self):
         """ Verify that a logged in user cannot make it to the login page """
 
         # login
-        self.client.login(username = 'test', password = 'test')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the request
         response = self.client.post('/login', follow = True)
@@ -75,7 +75,8 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login', {'username': 'testuser', 'password': 'test'}, follow = True)
+        response = self.client.post('/login',
+            {'username': 'invalid', 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
         messages = response.context['messages']
@@ -97,7 +98,8 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login', {'username': 'test', 'password': 'testpass'}, follow = True)
+        response = self.client.post('/login',
+            {'username': self.user.username, 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
         messages = response.context['messages']
@@ -119,7 +121,8 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login', {'username': 'testuser', 'password': 'testpass'}, follow = True)
+        response = self.client.post('/login',
+            {'username': 'invalid', 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
         messages = response.context['messages']
@@ -140,7 +143,8 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login', {'username': 'test', 'password': 'test'}, follow = True)
+        response = self.client.post('/login',
+            {'username': self.user.username, 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
         messages = response.context['messages']
@@ -575,7 +579,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         """
 
         # Create the user
-        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
+        self.user = Factory.createUser()
 
     def testLogoutRequired(self):
         """
@@ -584,7 +588,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         """
 
         # Login
-        self.client.login(username = 'test', password = 'pass')
+        self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the GET request
         response = self.client.get('/reset_password', follow = True)
@@ -615,7 +619,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         """
 
         # Make the GET request
-        response = self.client.post('/reset_password', {'email': 'test@gmail.com'}, follow = True)
+        response = self.client.post('/reset_password', {'email': self.user.email}, follow = True)
 
         # Verify the correct template was used
         self.assertTemplateUsed(response, 'user/reset_password_page.html')
@@ -644,8 +648,8 @@ class testMainViews_Logout(TestCase):
 
     def testLogout(self):
         # Create an account and log in
-        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
-        self.client.login(username = 'test', password = 'pass')
+        user = Factory.createUser()
+        self.client.login(username = user.username, password = Factory.defaultPassword)
 
         # Make the get reqeust
         response = self.client.get('/logout', follow = True)
@@ -676,8 +680,8 @@ class testMainViews_PageNotFound(TestCase):
         """
 
         # Create an account and log in
-        User.objects.create_user(username = 'test', password='pass', email = 'test@gmail.com')
-        self.client.login(username = 'test', password = 'pass')
+        user = Factory.createUser()
+        self.client.login(username = user.username, password = Factory.defaultPassword)
 
         # Make the GET request
         response = self.client.get('/unsupportedpage', follow = True)
