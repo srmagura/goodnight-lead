@@ -1,17 +1,24 @@
 # goodnight-lead project
 
 Authors: Eric Horton, Sam Magura
+License: GPL
+
+The public-facing name of this project is LEAD Lab. Its a web application
+that lets users answer psychological questionnaires to learn more about
+themselves.
 
 ## Development environment setup
 
 To install necessary Python packages:
 $ sudo pip3 install -r requirements.txt
 
-goodnight-lead uses Postgres for its database. For development, your Postgres
-instance needs to have a role named "gl_dev" with password "pw" and a
-database named "goodnight_lead". gl_dev needs to have CREATEDB permission for testing to work.
+goodnight-lead uses Postgres for its database, though any backend supported
+by Django should work. For development, your Postgres instance needs to have
+a role named "gl_dev" with password "pw" and a database named
+"goodnight_lead". gl_dev needs to have CREATEDB permission for testing to work.
 
-To run in debug mode for development, add the following to ~/.bash_profile:
+To run in debug mode for development, you need to define two environment
+variables. You can do this by Adding the following to ~/.bash_profile:
     export GOODNIGHT_LEAD_DEBUG=1
     export GOODNIGHT_LEAD_TEMPLATE_DEBUG=1
 
@@ -21,18 +28,11 @@ $ python3 manage.py runserver
 Collecting staticfiles (automatically done in prod, i.e. debug = False):
 $ python3 manage.py collectstatic --noinput
 
-
 ## Database migrations
 
-Database backups:
-https://devcenter.heroku.com/articles/heroku-postgres-backups
-
-Migrating Databases with Django 1.8:
+Migrating databases with Django 1.8:
 $ python3 manage.py makemigrations gl_site -n migrationName
 $ python3 manage.py migrate gl_site xxxx_migrationName
-
-Running migrations through Heroku:
-$ heroku run python3 manage.py migrate gl_site xxxx_migrationName --app appName
 
 ## Testing
 
@@ -47,8 +47,15 @@ $ coverage report
 or
 $ coverage html && open htmlcov/index.html
 
+## Style
+
+Please follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) when writing
+Python code. For example, use lowercase_with_spaces for variable and function
+names. We prefer 'single-quoted strings'.
 
 ## Heroku and git
+
+We currently deploy this project on Heroku, though
 
 Adding a Heroku app as a git remote:
 $ heroku git:remote -a appName -r remoteName
@@ -58,3 +65,9 @@ $ Add --app goodnight_lead or --app leadlabdemo
 
 Pushing a specific branch to heroku:
 $ git push -f appName branchName:master
+
+Running migrations through Heroku:
+$ heroku run python3 manage.py migrate gl_site xxxx_migrationName --app appName
+
+Database backups:
+https://devcenter.heroku.com/articles/heroku-postgres-backups
