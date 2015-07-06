@@ -8,6 +8,12 @@
 
 {% block content %}
     <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4 page-heading">
+                {% block page_heading %}
+                {% endblock %}
+            </div>
+        </div>
         {% block before_form %}
         {% endblock %}
 
@@ -66,7 +72,7 @@
 
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    <div class="lead-panel text-center panel-no-horizontal-padding button-panel">
+                    <div class="lead-panel text-center button-panel">
                         <div class="btn-group">
                             <input type="button" class="btn btn-default" onclick="location.href='/'" value="Cancel"/>
                             <input class="btn btn-default" type="submit" value="{% block submit_button %}{% endblock %}"/>

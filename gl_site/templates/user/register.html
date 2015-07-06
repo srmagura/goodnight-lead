@@ -8,6 +8,26 @@ Register
 {% block head %}
 {{ block.super }}
 <meta name="robots" content="noindex">
+
+<style>
+.login-link
+{
+    padding: 17.5px 0 7.5px;
+}
+</style>
+{% endblock %}
+
+{% block page_heading %}
+Register
+{% endblock %}
+
+{% block before_form %}
+<div class="row login-link">
+    <div class="col-md-offset-2 col-md-8">
+        Already have an account? Login here:
+        <a href="{% url 'login' %}">https://goodnight-lead.herokuapp.com{% url 'login' %}</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block submit_button %}

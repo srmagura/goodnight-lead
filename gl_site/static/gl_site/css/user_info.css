@@ -1,4 +1,9 @@
-.button-panel .btn-group
+.lead-panel.button-panel
 {
-    margin: 15px;
+    padding: 10px;
+}
+
+.button-panel .btn-group, .button-panel .more-buttons
+{
+    margin: 10px;
 }

@@ -3,6 +3,10 @@
 
 {% block title %} Account Settings {% endblock %}
 
+{% block page_heading %}
+Account Settings
+{% endblock %}
+
 {% block before_form %}
     {% if messages %}
         <div class="row">
@@ -43,5 +47,7 @@ Save
 {% endblock %}
 
 {% block more_buttons %}
-<input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Change password"/>
+    <div class="more-buttons">
+        <input type="button" class="btn btn-default" onclick="location.href='{% url 'password' %}'" value="Change password"/>
+    </div>
 {% endblock %}

@@ -148,19 +148,27 @@ a.navbar-brand .navbar-text {
 }
 /**************************/
 
-.page-login .title
+.page-heading
+{
+    font-size: 26pt;
+    color: #666;
+    text-align: center;
+}
+
+/* TODO see #30 */
+.page-login .page-heading
 {
     font-size: 36pt;
     color: #F33;
     text-align: center;
 }
 
-.page-login .title div, .page-login .title img
+.page-login .page-heading div, .page-login .page-heading img
 {
     display: inline-block;
 }
 
-.page-login .title img
+.page-login .page-heading img
 {
     height: 36pt;
     margin-bottom: 10px;
