@@ -39,6 +39,9 @@ $ heroku run python3 manage.py migrate gl_site xxxx_migrationName --app appName
 To run unit tests:
 $ coverage run --source='.' manage.py test gl_site
 
+If tests fail because static files (e.g. css, JS) can't be found, run
+`manage.py collectstatic` and try again.
+
 Generating test coverage reports:
 $ coverage report
 or
