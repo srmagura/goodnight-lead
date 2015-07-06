@@ -13,8 +13,8 @@ from gl_site.test.Factory import Factory
 # Regex parser
 import re
 
-class TestMainViews_Index(TestCase):
-    """ Test class for the index view """
+class TestMainViews_Dashboard(TestCase):
+    """ Test class for the dashboard view """
 
     def setUp(self):
         """ Set Up """
@@ -22,17 +22,17 @@ class TestMainViews_Index(TestCase):
 
     def testLoginRequiredNoRedirectField(self):
         """
-        Verify that the view redirects to the index page
+        Verify that the view redirects to the homepage
         if the user is not logged in.
         """
         response = self.client.get('/', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
         response = self.client.post('/', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testViewLoadsWithLogin(self):
-        """ Test that a user who is logged in is sent to the index page """
+        """ Test that a user who is logged in is sent to the dashboard """
 
         # login
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
@@ -40,9 +40,9 @@ class TestMainViews_Index(TestCase):
         # Make the request
         response = self.client.get('/', follow = True)
 
-        # Verify the user was sent to the index page
+        # Verify the user was sent to the dashboard
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name = 'index.html')
+        self.assertTemplateUsed(response, template_name = 'dashboard.html')
 
         # Verify the expected amount of data is passed
         self.assertTrue(len(response.context) == 2)
@@ -50,21 +50,21 @@ class TestMainViews_Index(TestCase):
         self.assertTrue(len(response.context['inventories']) == 6)
         self.assertTrue('quotes' in response.context)
 
-class TestMainViews_Login(TestCase):
-    """ Test Case for the login_page view """
+class TestMainViews_Home(TestCase):
+    """ Test Case for the home view """
 
     def setUp(self):
         """ Set Up """
         self.user = Factory.createUser()
 
     def testLogoutRequired(self):
-        """ Verify that a logged in user cannot make it to the login page """
+        """ Verify that a logged in user cannot make it to the homepage """
 
         # login
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the request
-        response = self.client.post('/login', follow = True)
+        response = self.client.post('/home', follow = True)
         self.assertRedirects(response, '/')
 
     def testInvalidLogin_Username(self):
@@ -75,7 +75,7 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': 'invalid', 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
@@ -85,7 +85,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -98,7 +98,7 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': self.user.username, 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
@@ -108,7 +108,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -121,7 +121,7 @@ class TestMainViews_Login(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': 'invalid', 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
@@ -131,7 +131,7 @@ class TestMainViews_Login(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -139,11 +139,11 @@ class TestMainViews_Login(TestCase):
     def testValidLogin(self):
         """
         Verify that a valid username and password let a user in.
-        Will redirect to the index page.
+        Will redirect to the dashboard.
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': self.user.username, 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
@@ -152,7 +152,7 @@ class TestMainViews_Login(TestCase):
 
         # Redirect and correct template used
         self.assertRedirects(response, '/')
-        self.assertTemplateUsed(response, template_name = 'index.html')
+        self.assertTemplateUsed(response, template_name = 'dashboard.html')
 
         # User authenticated
         self.assertTrue(response.context['user'].is_authenticated())
@@ -182,8 +182,8 @@ class testMainViews_Register(TestCase):
         # Sanity check
         self.assertTrue(response.context['user'].is_authenticated())
 
-        # Verify redirect to index
-        self.assertRedirects(response, '/')
+        # Verify redirect to dashboard
+        self.assertTemplateUsed(response, 'dashboard.html')
 
     def testRequestMethodGET(self):
         """ GET request for registration
@@ -531,7 +531,7 @@ class testMainViews_Register(TestCase):
         Verify that submission of valid information
         creates the user account, the lead info,
         logs the user in, sets a success message,
-        and redirects to the index view
+        and redirects to the dashboard view
         """
 
         # Get the POST dict
@@ -564,8 +564,8 @@ class testMainViews_Register(TestCase):
         for message in messages:
             self.assertEqual(message.message, "User account created successfully.")
 
-        # Verify the user is redirected to the index page
-        self.assertRedirects(response, '/')
+        # Verify the user is redirected to the dashboard
+        self.assertTemplateUsed(response, 'dashboard.html')
 
 class testMainViews_ResetPasswordPage(TestCase):
     """
@@ -644,7 +644,7 @@ class testMainViews_Logout(TestCase):
         response = self.client.get('/logout', follow = True)
 
         # Verify redirect
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testLogout(self):
         # Create an account and log in
@@ -655,7 +655,7 @@ class testMainViews_Logout(TestCase):
         response = self.client.get('/logout', follow = True)
 
         # Verify redirect
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
 class testMainViews_PageNotFound(TestCase):
     """
@@ -671,7 +671,7 @@ class testMainViews_PageNotFound(TestCase):
 
         # Make the response and verify redirect
         response = self.client.get('/unsupportedpage', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testPageNotFound(self):
         """

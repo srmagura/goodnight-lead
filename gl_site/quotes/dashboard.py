@@ -1,4 +1,6 @@
-quoteList = (
+import random
+
+quotes = [
     "The unexamined life is not worth living. ~ Socrates",
     "It is absurd that a man should rule others, who cannot rule himself. ~ Latin Proverb",
     "He who knows others is wise; he who knows himself is enlightened. ~ Lao Tzu",
@@ -11,4 +13,6 @@ quoteList = (
     "I suppose leadership at one time meant muscles; but today it means getting along with people. ~ Mahatma Gandhi",
     "As we look ahead into the next century, leaders will be those who empower others. ~ Bill Gates",
     "Don't necessarily avoid sharp edges. Occasionally they are necessary to leadership. ~ Donald Rumsfeld"
-)
+]
+
+random.shuffle(quotes)

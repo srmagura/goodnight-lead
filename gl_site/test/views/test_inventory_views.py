@@ -38,8 +38,8 @@ class testInventoryViews_TakeInventory(TestCase):
         # Send the GET request
         response = self.client.get('/inventory/take/0', follow = True)
 
-        # Verify redirect to login page
-        self.assertRedirects(response, '/login')
+        # Verify redirect to homepage
+        self.assertRedirects(response, '/home')
 
     def testInvalidInventoryId(self):
         """
@@ -149,7 +149,7 @@ class testInventoryViews_ReviewInventory(TestCase):
         response = self.client.get('/inventory/review/0', follow = True)
 
         # Verify redirect
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testInvalidInventoryId(self):
         """

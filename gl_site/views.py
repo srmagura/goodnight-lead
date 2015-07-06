@@ -20,11 +20,14 @@ from gl_site.models import Session
 
 #Other imports
 from django.contrib import messages
-from gl_site.quotes.indexQuotes import quoteList as indexQuotes
+from gl_site.quotes.dashboard import quotes as dashboard_quotes
 
-#We don't want logged in users to access certain pages (like the login page, so they can log in again)
-#If they're already logged in, redirect to the home page
+
 def logout_required(function):
+    """
+    We don't want logged in users to access certain pages (like the login
+    page.) If they're already logged in, redirect to the dashboard.
+    """
     def _dec(view_func):
         def _view(request, *args, **kwargs):
             if request.user.is_authenticated():
@@ -45,7 +48,10 @@ def logout_required(function):
 
 
 @login_required(redirect_field_name = None)
-def index(request):
+def dashboard(request):
+    """
+    The dashboard view, i.e. the homepage that logged-in users see.
+    """
     entries = []
     for inventory_id, cls in inventory_by_id.items():
         submission = get_submission(request.user, inventory_id)
@@ -57,12 +63,17 @@ def index(request):
             'is_started': submission is not None}
         entries.append(entry)
 
-    data = {'inventories': entries, 'quotes': indexQuotes}
-    return render(request, 'index.html', data)
+    data = {'inventories': entries, 'quotes': dashboard_quotes}
+    return render(request, 'dashboard.html', data)
 
-#Loads the login page.
 @logout_required
-def login_page(request):
+def home(request):
+    """
+    The homepage view, i.e. the first page that a new or unauthenticated user
+    sees upon visiting our site.
+
+    Logged-in users are not allowed to view this page.
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -77,7 +88,7 @@ def login_page(request):
         else:
             messages.warning(request, "Incorrect username or password")
 
-    return render(request, 'user/login.html')
+    return render(request, 'user/home.html')
 
 @logout_required
 def register(request, session_uuid):
@@ -89,7 +100,7 @@ def register(request, session_uuid):
     try:
         session = Session.objects.get(uuid=session_uuid)
     except Session.DoesNotExist:
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('home'))
 
     #Process the form if it has been submitted through post
     if request.method == 'POST':
@@ -117,7 +128,7 @@ def register(request, session_uuid):
 
             #Redirect back to the login page, sending a success message
             messages.success(request, 'User account created successfully.')
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('dashboard'))
 
     #Get a blank form if loaded from link (initial load)
     else:
