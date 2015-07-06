@@ -1,0 +1,5 @@
+# static_src
+
+Put files that are used to create static files in this directory, e.g. 
+CoffeeScript source files and GIMP .xcf files. Only files that will never
+be served should be in here.

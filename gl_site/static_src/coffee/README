@@ -1,0 +1,7 @@
+Run compile.sh while in the this directory to compile all of the
+CoffeeScript source files. The compiled .js files will be placed in
+gl_site/static/gl_site/js. If you aren't in gl_site/static_src/coffee when
+you run compile.sh, it will put the compiled files in the wrong place since it
+uses a relative path.
+
+Both .coffee and the compiled .js files should be tracked with git.
