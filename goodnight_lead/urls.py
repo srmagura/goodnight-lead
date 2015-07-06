@@ -13,7 +13,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', views.dashboard, name='dashboard'),
 
-    url(r'^login$', views.login_page, name='login'),
+    url(r'^home$', views.home, name='home'),
     url(r'^register/(?P<session_uuid>[0-9a-f]{32})$', views.register, name='register'),
     url(r'^reset_password$', views.reset_password_page,
         name='reset_password_page'),

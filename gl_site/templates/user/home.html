@@ -16,7 +16,7 @@ Login
     <div class="row">
         <div class="col-md-offset-3 col-md-3">
             <div class="login lead-panel">
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'home' %}" method="post">
                     {% csrf_token %}
                     {% if messages %}
                         {% for message in messages %}

@@ -26,10 +26,10 @@ class TestMainViews_Dashboard(TestCase):
         if the user is not logged in.
         """
         response = self.client.get('/', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
         response = self.client.post('/', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testViewLoadsWithLogin(self):
         """ Test that a user who is logged in is sent to the dashboard """
@@ -58,13 +58,13 @@ class TestMainViews_Home(TestCase):
         self.user = Factory.createUser()
 
     def testLogoutRequired(self):
-        """ Verify that a logged in user cannot make it to the login page """
+        """ Verify that a logged in user cannot make it to the homepage """
 
         # login
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Make the request
-        response = self.client.post('/login', follow = True)
+        response = self.client.post('/home', follow = True)
         self.assertRedirects(response, '/')
 
     def testInvalidLogin_Username(self):
@@ -75,7 +75,7 @@ class TestMainViews_Home(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': 'invalid', 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
@@ -85,7 +85,7 @@ class TestMainViews_Home(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -98,7 +98,7 @@ class TestMainViews_Home(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': self.user.username, 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
@@ -108,7 +108,7 @@ class TestMainViews_Home(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -121,7 +121,7 @@ class TestMainViews_Home(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': 'invalid', 'password': 'invalid'}, follow = True)
 
         # Get messages and verify
@@ -131,7 +131,7 @@ class TestMainViews_Home(TestCase):
             self.assertEqual(message.message, "Incorrect username or password")
 
         # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
+        self.assertTemplateUsed(response, template_name = 'user/home.html')
 
         # Not authenticated
         self.assertFalse(response.context['user'].is_authenticated())
@@ -143,7 +143,7 @@ class TestMainViews_Home(TestCase):
         """
 
         # Make the request with username and password set
-        response = self.client.post('/login',
+        response = self.client.post('/home',
             {'username': self.user.username, 'password': Factory.defaultPassword}, follow = True)
 
         # Get messages and verify
@@ -644,7 +644,7 @@ class testMainViews_Logout(TestCase):
         response = self.client.get('/logout', follow = True)
 
         # Verify redirect
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testLogout(self):
         # Create an account and log in
@@ -655,7 +655,7 @@ class testMainViews_Logout(TestCase):
         response = self.client.get('/logout', follow = True)
 
         # Verify redirect
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
 class testMainViews_PageNotFound(TestCase):
     """
@@ -671,7 +671,7 @@ class testMainViews_PageNotFound(TestCase):
 
         # Make the response and verify redirect
         response = self.client.get('/unsupportedpage', follow = True)
-        self.assertRedirects(response, '/login')
+        self.assertRedirects(response, '/home')
 
     def testPageNotFound(self):
         """

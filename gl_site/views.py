@@ -66,9 +66,14 @@ def dashboard(request):
     data = {'inventories': entries, 'quotes': dashboard_quotes}
     return render(request, 'dashboard.html', data)
 
-#Loads the login page.
 @logout_required
-def login_page(request):
+def home(request):
+    """
+    The homepage view, i.e. the first page that a new or unauthenticated user
+    sees upon visiting our site.
+
+    Logged-in users are not allowed to view this page.
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -83,7 +88,7 @@ def login_page(request):
         else:
             messages.warning(request, "Incorrect username or password")
 
-    return render(request, 'user/login.html')
+    return render(request, 'user/home.html')
 
 @logout_required
 def register(request, session_uuid):
@@ -95,7 +100,7 @@ def register(request, session_uuid):
     try:
         session = Session.objects.get(uuid=session_uuid)
     except Session.DoesNotExist:
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('home'))
 
     #Process the form if it has been submitted through post
     if request.method == 'POST':
