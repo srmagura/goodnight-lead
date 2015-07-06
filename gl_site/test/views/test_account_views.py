@@ -32,8 +32,8 @@ class testAccountViews_AccountSettings(TestCase):
         # Make a GET request of the view
         response = self.client.get('/account-settings', follow = True)
 
-        # Verify view redirects to the homepage
-        self.assertRedirects(response, '/home')
+        # Verify view redirects to the login page
+        self.assertRedirects(response, '/login')
 
     def testViewLoadsWithLogin(self):
         """ Account Settings - View loads with login.
@@ -436,8 +436,8 @@ class testAccountViews_Password(TestCase):
         # Make the GET request
         response = self.client.get('/account-settings/password', follow = True)
 
-        # Verify redirects to the homepage
-        self.assertRedirects(response, '/home')
+        # Verify redirects to the login page
+        self.assertRedirects(response, '/login')
 
     def testGETRequest(self):
         """ Password - GET request

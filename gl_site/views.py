@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 
 #User imports
-from django.contrib.auth import authenticate, login, logout
+import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 
 #forms
@@ -67,9 +67,9 @@ def dashboard(request):
     return render(request, 'dashboard.html', data)
 
 @logout_required
-def home(request):
+def login(request):
     """
-    The homepage view, i.e. the first page that a new or unauthenticated user
+    The login view, i.e. the first page that a new or unauthenticated user
     sees upon visiting our site.
 
     Logged-in users are not allowed to view this page.
@@ -77,10 +77,10 @@ def home(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
+        user = auth.authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                login(request, user)
+                auth.login(request, user)
                 return HttpResponseRedirect('/')
             else:
                 # Return a 'disabled account' error message
@@ -88,7 +88,7 @@ def home(request):
         else:
             messages.warning(request, "Incorrect username or password")
 
-    return render(request, 'user/home.html')
+    return render(request, 'user/login.html')
 
 @logout_required
 def register(request, session_uuid):
@@ -100,7 +100,7 @@ def register(request, session_uuid):
     try:
         session = Session.objects.get(uuid=session_uuid)
     except Session.DoesNotExist:
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('login'))
 
     #Process the form if it has been submitted through post
     if request.method == 'POST':
@@ -123,8 +123,8 @@ def register(request, session_uuid):
             info.save()
 
             #log the user in
-            user = authenticate(username=request.POST['username'], password=request.POST['password1'])
-            login(request, user)
+            user = auth.authenticate(username=request.POST['username'], password=request.POST['password1'])
+            auth.login(request, user)
 
             #Redirect back to the login page, sending a success message
             messages.success(request, 'User account created successfully.')
@@ -166,9 +166,9 @@ def reset_password_page(request):
     )
 
 @login_required(redirect_field_name = None)
-#Logs out a user and redirects to the home page
+#Logs out a user and redirects to the login page
 def logout_user(request):
-    logout(request)
+    auth.logout(request)
     return HttpResponseRedirect("/")
 
 #If the user types in an incorrect url or somehow follows a bad link
