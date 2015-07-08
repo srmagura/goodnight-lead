@@ -156,28 +156,28 @@ a.navbar-brand .navbar-text {
 }
 
 /* TODO see #30 */
-.page-login .page-heading
+.logo-heading
 {
     font-size: 36pt;
     color: #F33;
     text-align: center;
 }
 
-.page-login .page-heading div, .page-login .page-heading img
+.logo-heading div, .logo-heading img
 {
     display: inline-block;
 }
 
-.page-login .page-heading img
+.logo-heading img
 {
     height: 36pt;
     margin-bottom: 10px;
 }
 
-.page-login .reset-password
+/*.page-login .reset-password
 {
     margin-top: 20px;
-}
+}*/
 
 .lead-panel
 {
