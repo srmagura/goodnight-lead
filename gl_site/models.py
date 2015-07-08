@@ -65,10 +65,13 @@ class Session(models.Model):
     def __str__(self):
         return self.name
 
-#Additional user info which extends the django User class using a one-to-one relationship.
-#Saved in the app_leaduserinfo table
-#Access through user.leaduserinfo
 class LeadUserInfo(models.Model):
+    """ Additional user info which extends the django User
+        class using a one-to-one relationship.
+        Saved in the app_leaduserinfo table
+        Access through user.leaduserinfo
+    """
+
     #Linked User
     user = models.OneToOneField(User)
 
@@ -90,6 +93,8 @@ class LeadUserInfo(models.Model):
         (4, 'Senior'),
     )
     year = models.IntegerField(choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
+
+    graduation_year = models.DateField()
 
     # Foreign key linking to an organization
     organization = models.ForeignKey(Organization)

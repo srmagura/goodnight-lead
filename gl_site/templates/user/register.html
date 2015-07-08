@@ -2,34 +2,39 @@
 {% load staticfiles %}
 
 {% block title %}
-Register
+    Register
 {% endblock %}
 
 {% block head %}
-{{ block.super }}
-<meta name="robots" content="noindex">
+    {{ block.super }}
+    <meta name="robots" content="noindex">
 
-<style>
-.login-link
-{
-    padding: 17.5px 0 7.5px;
-}
-</style>
+    <!-- Date Picker dependencies -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="{% static 'gl_site/js/datePicker.js' %}"></script>
+
+    <style>
+    .login-link
+    {
+        padding: 17.5px 0 7.5px;
+    }
+    </style>
 {% endblock %}
 
 {% block page_heading %}
-Register
+    Register
 {% endblock %}
 
 {% block before_form %}
-<div class="row login-link">
-    <div class="col-md-offset-2 col-md-8">
-        Already have an account? Login here:
-        <a href="{% url 'login' %}">https://goodnight-lead.herokuapp.com{% url 'login' %}</a>
+    <div class="row login-link">
+        <div class="col-md-offset-2 col-md-8">
+            Already have an account? Login
+            <a href="{% url 'login' %}">here.</a>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block submit_button %}
-Register
+    Register
 {% endblock %}

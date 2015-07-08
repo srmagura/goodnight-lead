@@ -4,7 +4,9 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from django.forms import ModelForm
-from gl_site.models import LeadUserInfo, Organization, Session
+from gl_site.models import LeadUserInfo, Session
+
+from django.contrib.admin.widgets import AdminDateWidget
 
 #Custom validators
 def validate_email(value):
@@ -64,10 +66,12 @@ class InfoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
 
+        self.fields['graduation_year'].widget.attrs.update({'class': 'date-picker'})
+
         #Set custom class on all widgets
         for name, field in self.fields.items():
             if 'class' in field.widget.attrs:
-                field.widget.attrs['class'] += 'form-control'
+                field.widget.attrs['class'] += ' form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
 
@@ -83,7 +87,7 @@ class InfoRegistrationForm(InfoForm):
         """
         self.session_uuid = kwargs.pop('session_uuid', None)
 
-        super(InfoRegistrationForm, self).__init__(*args, **kwargs);
+        super(InfoRegistrationForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         """ Override the default clean (validation) method """
