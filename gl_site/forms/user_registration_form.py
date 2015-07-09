@@ -66,7 +66,8 @@ class InfoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
 
-        self.fields['graduation_year'].widget.attrs.update({'class': 'date-picker'})
+        # Set the graduation year class to include date-picker
+        self.fields['graduation_date'].widget.attrs.update({'class': 'date-picker'})
 
         #Set custom class on all widgets
         for name, field in self.fields.items():

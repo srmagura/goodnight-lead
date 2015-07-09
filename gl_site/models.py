@@ -94,7 +94,8 @@ class LeadUserInfo(models.Model):
     )
     year = models.IntegerField(choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
 
-    graduation_year = models.DateField()
+    # User graduation date
+    graduation_date = models.DateField()
 
     # Foreign key linking to an organization
     organization = models.ForeignKey(Organization)
