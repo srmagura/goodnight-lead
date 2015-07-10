@@ -4,6 +4,9 @@ from gl_site.models import Organization, Session, LeadUserInfo
 # Django User
 from django.contrib.auth.models import User
 
+# Date utilities
+from datetime import date
+
 class Factory:
     """ Factory class for creating commonly used objects in testing """
 
@@ -47,7 +50,7 @@ class Factory:
             user = user,
             gender = 'M',
             major = 'Tester',
-            year = 1,
+            graduation_date = date.today(),
             organization = organization,
             session = session
         )
@@ -83,7 +86,7 @@ class Factory:
             # Info fields
             'gender': leaduserinfo.gender,
             'major': leaduserinfo.major,
-            'year': leaduserinfo.year,
+            'graduation_date': leaduserinfo.graduation_date,
         }
 
     @staticmethod
@@ -105,7 +108,7 @@ class Factory:
             # Info fields
             'gender': 'M',
             'major': 'Tester',
-            'year' : 1,
+            'graduation_date' : str(date.today()),
             'organization_code' : organization.code
         }
         Factory.incrementIndex()

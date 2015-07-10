@@ -13,6 +13,9 @@ from gl_site.test.Factory import Factory
 # Regex parser
 import re
 
+# Date utilities
+from datetime import date
+
 class TestMainViews_Dashboard(TestCase):
     """ Test class for the dashboard view """
 
@@ -45,9 +48,8 @@ class TestMainViews_Dashboard(TestCase):
         self.assertTemplateUsed(response, template_name = 'dashboard.html')
 
         # Verify the expected amount of data is passed
-        self.assertTrue(len(response.context) == 2)
         self.assertTrue('inventories' in response.context)
-        self.assertTrue(len(response.context['inventories']) == 6)
+        self.assertEquals(len(response.context['inventories']), 6)
         self.assertTrue('quotes' in response.context)
 
 class TestMainViews_Home(TestCase):
@@ -249,7 +251,7 @@ class testMainViews_Register(TestCase):
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), registrationform['gender'])
         self.assertEqual(info_form['major'].value(), registrationform['major'])
-        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['graduation_date'].value(), str(registrationform['graduation_date']))
         self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
@@ -262,7 +264,7 @@ class testMainViews_Register(TestCase):
         self.assertEqual(user_form['password2'].errors.as_text(), '')
         self.assertEqual(info_form['gender'].errors.as_text(), '')
         self.assertEqual(info_form['major'].errors.as_text(), '')
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
         self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_EmailNotUnique(self):
@@ -301,7 +303,7 @@ class testMainViews_Register(TestCase):
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), registrationform['gender'])
         self.assertEqual(info_form['major'].value(), registrationform['major'])
-        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['graduation_date'].value(), str(registrationform['graduation_date']))
         self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
 
@@ -315,7 +317,7 @@ class testMainViews_Register(TestCase):
         self.assertEqual(user_form['password2'].errors.as_text(), '')
         self.assertEqual(info_form['gender'].errors.as_text(), '')
         self.assertEqual(info_form['major'].errors.as_text(), '')
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
         self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_PasswordConfirmationFailed(self):
@@ -354,7 +356,7 @@ class testMainViews_Register(TestCase):
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), registrationform['gender'])
         self.assertEqual(info_form['major'].value(), registrationform['major'])
-        self.assertEqual(info_form['year'].value(), str(registrationform['year']))
+        self.assertEqual(info_form['graduation_date'].value(), str(registrationform['graduation_date']))
         self.assertEqual(info_form['organization_code'].value(), registrationform['organization_code'])
 
         # Correct error messages gets set
@@ -367,7 +369,7 @@ class testMainViews_Register(TestCase):
             'The two password fields didn\'t match.')
         self.assertEqual(info_form['gender'].errors.as_text(), '')
         self.assertEqual(info_form['major'].errors.as_text(), '')
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
         self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testUserInfoNotValid_FieldsLeftBlank(self):
@@ -382,7 +384,7 @@ class testMainViews_Register(TestCase):
                 # Lead info
                 'gender': 'M',
                 'major': 'tester',
-                'year': '1',
+                'graduation_date': date.today(),
                 'organization_code': self.organization.code
             },
             follow = True)
@@ -407,7 +409,7 @@ class testMainViews_Register(TestCase):
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), 'M')
         self.assertEqual(info_form['major'].value(), 'tester')
-        self.assertEqual(info_form['year'].value(), '1')
+        self.assertEqual(info_form['graduation_date'].value(), str(date.today()))
         self.assertEqual(info_form['organization_code'].value(), self.organization.code)
 
         # Correct error messages gets set
@@ -425,7 +427,7 @@ class testMainViews_Register(TestCase):
             'This field is required.')
         self.assertEqual(info_form['gender'].errors.as_text(), '')
         self.assertEqual(info_form['major'].errors.as_text(), '')
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
         self.assertEqual(info_form['organization_code'].errors.as_text(), '')
 
     def testLEADInfoNotValid_FieldsLeftBlank(self):
@@ -467,7 +469,7 @@ class testMainViews_Register(TestCase):
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), None)
         self.assertEqual(info_form['major'].value(), None)
-        self.assertEqual(info_form['year'].value(), None)
+        self.assertEqual(info_form['graduation_date'].value(), None)
         self.assertEqual(info_form['organization_code'].value(), None)
 
         # Correct error messages gets set
@@ -481,7 +483,7 @@ class testMainViews_Register(TestCase):
             'This field is required.')
         self.assertEqual(re.sub(r'\* ', '', info_form['major'].errors.as_text()),
             'This field is required.')
-        self.assertEqual(re.sub(r'\* ', '', info_form['year'].errors.as_text()),
+        self.assertEqual(re.sub(r'\* ', '', info_form['graduation_date'].errors.as_text()),
             'This field is required.')
         self.assertEqual(re.sub(r'\* ', '', info_form['organization_code'].errors.as_text()),
             'This field is required.')
@@ -522,7 +524,7 @@ class testMainViews_Register(TestCase):
 
         self.assertEqual(info_form['gender'].errors.as_text(), '')
         self.assertEqual(info_form['major'].errors.as_text(), '')
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
         self.assertEqual(re.sub(r'\* ', '', info_form['organization_code'].errors.as_text()),
             'Invalid organization code.')
 

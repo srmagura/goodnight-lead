@@ -7,9 +7,11 @@ from gl_site.test.Factory import Factory
 # Regex parser
 import re
 
+# Date utilities
+from datetime import date
+
 class testAccountViews_AccountSettings(TestCase):
     """ Test class for verifying the account settings view """
-
 
     def setUp(self):
         """ Set Up
@@ -81,8 +83,8 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('major' in info_form.fields)
         self.assertEqual(info_form['major'].value(), self.info.major)
 
-        self.assertTrue('year' in info_form.fields)
-        self.assertEqual(info_form['year'].value(), self.info.year)
+        self.assertTrue('graduation_date' in info_form.fields)
+        self.assertEqual(info_form['graduation_date'].value(), self.info.graduation_date)
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -151,9 +153,9 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info_form['major'].value(), self.info.major)
         self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in info_form.fields)
-        self.assertEqual(info_form['year'].value(), str(self.info.year))
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertTrue('graduation_date' in info_form.fields)
+        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -223,9 +225,9 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info_form['major'].value(), self.info.major)
         self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in info_form.fields)
-        self.assertEqual(info_form['year'].value(), str(self.info.year))
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertTrue('graduation_date' in info_form.fields)
+        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -290,9 +292,9 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info_form['major'].value(), self.info.major)
         self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in info_form.fields)
-        self.assertEqual(info_form['year'].value(), str(self.info.year))
-        self.assertEqual(info_form['year'].errors.as_text(), '')
+        self.assertTrue('graduation_date' in info_form.fields)
+        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
+        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -300,18 +302,18 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertTrue('session' in response.context)
         self.assertEqual(response.context['session'].name, self.session.name)
 
-    def testYearNotValid(self):
-        """ Account Settings - Year not valid.
-            Verify that submitting an invalid year
+    def testGradDateNotValid(self):
+        """ Account Settings - graduation_date not valid.
+            Verify that submitting an invalid graduation_date
             kicks back an error
         """
 
         # Log in
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
-        # Create the post dict and set year
+        # Create the post dict and set graduation_date
         settingsform = Factory.createUserSettingsPostDict(self.user, self.info)
-        settingsform['year'] = -1
+        settingsform['graduation_date'] = -1
 
         # Make the POST request
         response = self.client.post('/account-settings', settingsform, follow = True)
@@ -355,10 +357,10 @@ class testAccountViews_AccountSettings(TestCase):
         self.assertEqual(info_form['major'].value(), self.info.major)
         self.assertEqual(info_form['major'].errors.as_text(), '')
 
-        self.assertTrue('year' in info_form.fields)
-        self.assertEqual(info_form['year'].value(), '-1')
-        self.assertEqual(re.sub(r'\* ', '', info_form['year'].errors.as_text()),
-            'Select a valid choice. -1 is not one of the available choices.')
+        self.assertTrue('graduation_date' in info_form.fields)
+        self.assertEqual(info_form['graduation_date'].value(), '-1')
+        self.assertEqual(re.sub(r'\* ', '', info_form['graduation_date'].errors.as_text()),
+            'Enter a valid date.')
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -386,7 +388,7 @@ class testAccountViews_AccountSettings(TestCase):
                 # Info fields
                 'gender': 'F',
                 'major': 'Original Major',
-                'year': 4,
+                'graduation_date': str(date(2000, 1, 1)),
             }, follow = True)
 
         # Verify redirected to index
@@ -408,7 +410,7 @@ class testAccountViews_AccountSettings(TestCase):
         info = user.leaduserinfo
         self.assertEqual(info.gender, 'F')
         self.assertEqual(info.major, 'Original Major')
-        self.assertEqual(info.year, 4)
+        self.assertEqual(info.graduation_date, date(2000, 1, 1))
         self.assertEqual(info.organization, self.organization)
         self.assertEqual(info.session, self.session)
 
