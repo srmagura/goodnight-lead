@@ -69,6 +69,13 @@ class InfoForm(ModelForm):
         # Set the graduation year class to include date-picker
         self.fields['graduation_date'].widget.attrs.update({'class': 'date-picker'})
 
+        self.fields['graduation_date'].help_text = ('Select the date you '
+            'graduated/plan to graduate from college. Approximate dates '
+            'are acceptable. If you are pursuing an advanced degree, please '
+            'enter the year you completed your undergraduate studies. '
+            'If you do not plan to complete a college degree, please '
+            'enter the last year you attended school.')
+
         #Set custom class on all widgets
         for name, field in self.fields.items():
             if 'class' in field.widget.attrs:
@@ -80,15 +87,19 @@ class InfoRegistrationForm(InfoForm):
     """ LeadUserInfo registration form """
 
     # The entry code for the specified organization
-    organization_code = forms.CharField(max_length=120, widget=forms.PasswordInput(render_value=True))
+    organization_code = forms.CharField(max_length=120,
+        widget=forms.PasswordInput(render_value=True))
 
     def __init__(self, *args, **kwargs):
-        """ Override the init method in order to pass session uuid.
-            UUID is needed to perform validation in clean.
+        """
+        Override the init method in order to pass session uuid.
+        UUID is needed to perform validation in clean.
         """
         self.session_uuid = kwargs.pop('session_uuid', None)
-
         super(InfoRegistrationForm, self).__init__(*args, **kwargs)
+
+        self.fields['organization_code'].help_text = ('Enter the organization '
+            'code provided by your group.')
 
     def clean(self):
         """ Override the default clean (validation) method """

@@ -15,9 +15,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-4 col-md-4 page-heading">
-                {% block page_heading %}
-                {% endblock %}
+                <div class="main">
+                    {% block page_heading_main %}
+                    {% endblock %}
+                </div>
+                <div class="sub">
+                    {% block page_heading_subtitle %}
+                    {% endblock %}
+                </div>
             </div>
+
         </div>
         {% block before_form %}
         {% endblock %}
@@ -52,20 +59,33 @@
                             {% endif %}
                             {% for field in info_form %}
                                 <div class="form-group {% if field.errors %} has-error {% endif %}">
-                                    <label class = "control-label"> {{ field.label }} </label>
-                                    <span class = "form-control-feedback"> {{ field.errors }} </span>
+                                    <label class="control-label"> {{ field.label }} </label>
+
+                                    {% if field.help_text %}
+                                    &nbsp;-&nbsp;
+                                    <a class="popover-toggle" tabindex="0"
+                                        role="button" data-toggle="popover"
+                                        data-placement="top"
+                                        data-trigger="focus"
+                                        data-content="{{ field.help_text }}">
+                                        Help <span class="glyphicon glyphicon-info-sign"></span>
+                                    </a>
+                                    {% endif %}
+                                    <span class="form-control-feedback"> {{ field.errors }} </span>
                                     {{ field }}
                                 </div>
                             {% endfor %}
                         </div>
                         <div class="bottom-popover-container-wrapper">
                             <div class="bottom-popover-container">
-                                <a class="popover-toggle" data-placement="top"
+                                <a class="popover-toggle" data-toggle="popover"
+                                    tabindex="0" role="button"
+                                    data-trigger="focus" data-placement="top"
                                     data-content="We collect demographic information for data analysis purposes only.
                                     This enables us to make comparisons based on gender, major, .etc.
                                     We won't share your data with anyone outside of your organization. When creating informational
                                     reports from your organization's data, we'll do our best to keep you anonymous.">
-                                    Why demographics? <span class="glyphicon glyphicon-eye-open"></span></a>
+                                    Why demographics? <span class="glyphicon glyphicon-info-sign"></span></a>
                             </div>
                         </div>
                     </fieldset>

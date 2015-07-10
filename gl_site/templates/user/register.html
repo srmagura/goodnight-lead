@@ -11,20 +11,24 @@
     <style>
     .login-link
     {
-        padding: 17.5px 0 7.5px;
+        padding: 15px 0 7.5px;
     }
     </style>
 {% endblock %}
 
-{% block page_heading %}
+{% block page_heading_main %}
     Register
+{% endblock %}
+
+{% block page_heading_subtitle %}
+    {{ organization }} - {{ session }}
 {% endblock %}
 
 {% block before_form %}
     <div class="row login-link">
         <div class="col-md-offset-2 col-md-8">
-            Already have an account? Login
-            <a href="{% url 'login' %}">here.</a>
+                Already have an account? Login
+                <a href="{% url 'login' %}">here.</a>
         </div>
     </div>
 {% endblock %}

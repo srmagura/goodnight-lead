@@ -150,9 +150,14 @@ a.navbar-brand .navbar-text {
 
 .page-heading
 {
+    text-align: center;
+}
+
+.page-heading .main
+{
     font-size: 26pt;
     color: #666;
-    text-align: center;
+    padding-bottom: 3px;
 }
 
 /* TODO see #30 */

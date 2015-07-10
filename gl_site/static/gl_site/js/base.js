@@ -9,10 +9,7 @@ $extendedWidth = 150; //The width of the extended navbar
 
 $(document).ready(
     function() {
-        $('.popover-toggle').popover({
-            trigger: 'click',
-            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
-        });
+        $('.popover-toggle').popover();
 
         //Get the initial window size - breakpoint at 768px (bootstrap xs breakpoint)
         $windowWidth = $(window).width();

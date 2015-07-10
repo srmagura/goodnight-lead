@@ -144,6 +144,8 @@ def register(request, session_uuid):
             'info_form': info_form,
             'session_uuid': session_uuid,
             'action_url': request.build_absolute_uri(),
+            'organization': session.organization,
+            'session': session
         }
     )
 
