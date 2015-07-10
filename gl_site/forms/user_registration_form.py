@@ -72,9 +72,9 @@ class InfoForm(ModelForm):
         self.fields['graduation_date'].help_text = ('Select the date you '
             'graduated/plan to graduate from college. Approximate dates '
             'are acceptable. If you are pursuing an advanced degree, please '
-            'enter the year you completed your undergraduate studies. '
+            'enter the date you completed your undergraduate studies. '
             'If you do not plan to complete a college degree, please '
-            'enter the last year you attended school.')
+            'enter the last date you attended school.')
 
         #Set custom class on all widgets
         for name, field in self.fields.items():
