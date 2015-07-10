@@ -2,6 +2,11 @@
 {% load staticfiles %}
 
 {% block head %}
+    <!-- Date Picker dependencies -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="{% static 'gl_site/js/datePicker.js' %}"></script>
+
     <script src="{% static 'gl_site/js/equalHeight.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/user_info.css' %}">
 {% endblock %}

@@ -86,14 +86,6 @@ class LeadUserInfo(models.Model):
 
     major = models.CharField(max_length=100)
 
-    year_choices = (
-        (1, 'Freshman'),
-        (2, 'Sophmore'),
-        (3, 'Junior'),
-        (4, 'Senior'),
-    )
-    year = models.IntegerField(choices=year_choices, validators=[MinValueValidator(1), MaxValueValidator(4)])
-
     # User graduation date
     graduation_date = models.DateField()
 
