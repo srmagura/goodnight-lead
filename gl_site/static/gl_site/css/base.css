@@ -70,83 +70,7 @@ a.navbar-brand .navbar-text {
 .popover-toggle {
     cursor:pointer;
 }
-.bottom-popover-container {
-    position:absolute;
-    bottom:15px;
-    width: 65%;
-}
-.bottom-popover-container-wrapper {
-    margin-top:30px;
-}
 /*******************/
-
-/******AccountSettings******/
-.legend {
-    width:auto;
-    border:none;
-    background:none;
-    background-color:transparent;
-    margin:0;
-    padding:0;
-}
-
-.panel-no-horizontal-padding {
-    padding-left:0;
-    padding-right:0;
-}
-/***************************/
-
-/******InventoryResults******/
-.results-table {
-    border-collapse:separate !important;
-    border-spacing: 2px;
-    font-size:12px;
-}
-.results-table tr {
-    height: 40px;
-}
-.section-table {
-    width:100%;
-    border:1px solid black;
-    border-collapse:collapse;
-}
-.section-table th {
-    height:20px;
-    background-color: grey;
-    text-align:center;
-}
-.section-table td {
-    border:1px solid black;
-    text-align:center;
-}
-.header-row td {
-    text-align: center;
-}
-.row-label {
-    margin:0;
-    padding:0;
-    max-width: 30px;
-}
-.row-label p {
-    -o-transform:rotate(270deg);
-    -moz-transform:rotate(270deg);
-    -webkit-transform:rotate(270deg); /* Opera, Chrome, and Safari */
-    -ms-transform:rotate(270deg); /* IE 9 */
-    transform:rotate(270deg);
-}
-/****************************/
-/******Quote Carousel******/
-.carousel-inner {
-    height:150px;
-    background-image: url('../images/background.jpeg');
-}
-.carousel-content-placeholder {
-    height:150px;
-}
-.carousel-control {
-    background-image:none;
-}
-/**************************/
 
 .page-heading
 {
@@ -160,7 +84,6 @@ a.navbar-brand .navbar-text {
     padding-bottom: 3px;
 }
 
-/* TODO see #30 */
 .logo-heading
 {
     font-size: 36pt;
@@ -178,11 +101,6 @@ a.navbar-brand .navbar-text {
     height: 36pt;
     margin-bottom: 10px;
 }
-
-/*.page-login .reset-password
-{
-    margin-top: 20px;
-}*/
 
 .lead-panel
 {
@@ -213,57 +131,4 @@ a.navbar-brand .navbar-text {
 .hidden
 {
     display: none;
-}
-
-.inventory-table .name
-{
-    width: 50%;
-}
-
-.inventory-table .take
-{
-    width: 20%;
-}
-
-.inventory-table .review
-{
-    width: 30%;
-}
-
-.inventory-table .take, .inventory-table .review
-{
-    text-align: center;
-}
-
-.take-inventory .description
-{
-    padding: 10px 0;
-}
-
-.take-inventory .form-group ul
-{
-    margin: 0;
-    padding: 0 5px;
-}
-
-.take-inventory .form-group li
-{
-    display: inline-block;
-    list-style-type: none;
-    padding: 0 7px;
-}
-
-.take-inventory .form-group li label
-{
-    font-weight: normal;
-}
-
-.take-inventory .answer-codes td
-{
-    padding: 5px 7px;
-}
-
-.take-inventory .answer-codes .code
-{
-    font-weight: bold;
 }

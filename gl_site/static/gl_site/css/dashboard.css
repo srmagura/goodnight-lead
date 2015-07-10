@@ -1,0 +1,32 @@
+.inventory-table .name
+{
+    width: 50%;
+}
+
+.inventory-table .take
+{
+    width: 20%;
+}
+
+.inventory-table .review
+{
+    width: 30%;
+}
+
+.inventory-table .take, .inventory-table .review
+{
+    text-align: center;
+}
+
+/******Quote Carousel******/
+.carousel-inner {
+    height:150px;
+    background-image: url('../images/background.jpeg');
+}
+.carousel-content-placeholder {
+    height:150px;
+}
+.carousel-control {
+    background-image:none;
+}
+/**************************/

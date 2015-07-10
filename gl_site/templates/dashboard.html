@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% block title %} Home {% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         {% include 'logo_heading.html' %}
