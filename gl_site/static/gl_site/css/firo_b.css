@@ -1,0 +1,39 @@
+/******InventoryResults******/
+.results-table {
+    border-collapse:separate !important;
+    border-spacing: 2px;
+    font-size:12px;
+}
+.results-table tr {
+    height: 40px;
+}
+.section-table {
+    width:100%;
+    border:1px solid black;
+    border-collapse:collapse;
+}
+.section-table th {
+    height:20px;
+    background-color: grey;
+    text-align:center;
+}
+.section-table td {
+    border:1px solid black;
+    text-align:center;
+}
+.header-row td {
+    text-align: center;
+}
+.row-label {
+    margin:0;
+    padding:0;
+    max-width: 30px;
+}
+.row-label p {
+    -o-transform:rotate(270deg);
+    -moz-transform:rotate(270deg);
+    -webkit-transform:rotate(270deg); /* Opera, Chrome, and Safari */
+    -ms-transform:rotate(270deg); /* IE 9 */
+    transform:rotate(270deg);
+}
+/****************************/

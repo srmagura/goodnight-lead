@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% block title %} Home {% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         {% include 'logo_heading.html' %}
@@ -18,7 +22,7 @@
                 </div>
             </div>
         {% endif %}
-        
+
         <div class="row">
             <div class="col-md-offset-1 col-md-5">
                 <div class="panel panel-default">
@@ -32,8 +36,8 @@
 
                             <p>
                                 <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
-                                If you are depressed or experiencing other mental distress then these inventories
-                                will not be useful for you.
+                                If you are depressed or experiencing psychological distress then these inventories may not
+                                be useful for you at this time. Please contact your LEAD Lab coach for referral to a counselor.
                             </p>
                         </div>
                         <table class="table inventory-table">

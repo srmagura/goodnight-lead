@@ -1,7 +1,12 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}
     {{inventory.name}}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gl_site/css/take_inventory.css' %}">
 {% endblock %}
 
 {% block content %}

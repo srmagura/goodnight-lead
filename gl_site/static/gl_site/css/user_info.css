@@ -1,3 +1,13 @@
+.legend {
+    width:auto;
+    border:none;
+    background:none;
+    background-color:transparent;
+    margin:0;
+    padding:0;
+}
+
+/***** Button panel *****/
 .lead-panel.button-panel
 {
     padding: 10px;
@@ -6,4 +16,14 @@
 .button-panel .btn-group, .button-panel .more-buttons
 {
     margin: 10px;
+}
+
+/***** Container for "why demographics?" anchor *****/
+.bottom-popover-container {
+    position:absolute;
+    bottom:15px;
+    width: 65%;
+}
+.bottom-popover-container-wrapper {
+    margin-top:30px;
 }

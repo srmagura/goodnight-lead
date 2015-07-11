@@ -19,6 +19,7 @@ from gl_site.inventories.views import get_submission, submission_is_complete
 from gl_site.models import Session
 
 #Other imports
+import random
 from django.contrib import messages
 from gl_site.quotes.dashboard import quotes as dashboard_quotes
 
@@ -63,7 +64,10 @@ def dashboard(request):
             'is_started': submission is not None}
         entries.append(entry)
 
-    data = {'inventories': entries, 'quotes': dashboard_quotes}
+    shuffled_quotes = list(dashboard_quotes)
+    random.shuffle(shuffled_quotes)
+
+    data = {'inventories': entries, 'quotes': shuffled_quotes}
     return render(request, 'dashboard.html', data)
 
 @logout_required
