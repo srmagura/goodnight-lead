@@ -49,7 +49,7 @@ class Factory:
         info = LeadUserInfo.objects.create(
             user = user,
             gender = 'M',
-            major = 'Tester',
+            major = LeadUserInfo.OTHER,
             education = 'FR',
             graduation_date = date.today(),
             organization = organization,
@@ -109,7 +109,7 @@ class Factory:
 
             # Info fields
             'gender': 'M',
-            'major': 'Tester',
+            'major': LeadUserInfo.OTHER,
             'education': 'FR',
             'graduation_date' : str(date.today()),
             'organization_code' : organization.code

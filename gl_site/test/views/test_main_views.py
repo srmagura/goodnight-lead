@@ -383,7 +383,7 @@ class testMainViews_Register(TestCase):
             {
                 # Lead info
                 'gender': 'M',
-                'major': 'tester',
+                'major': LeadUserInfo.OTHER,
                 'graduation_date': date.today(),
                 'organization_code': self.organization.code
             },
@@ -408,7 +408,7 @@ class testMainViews_Register(TestCase):
         # lead stuff
         info_form = response.context['info_form']
         self.assertEqual(info_form['gender'].value(), 'M')
-        self.assertEqual(info_form['major'].value(), 'tester')
+        self.assertEqual(info_form['major'].value(), LeadUserInfo.OTHER)
         self.assertEqual(info_form['graduation_date'].value(), str(date.today()))
         self.assertEqual(info_form['organization_code'].value(), self.organization.code)
 

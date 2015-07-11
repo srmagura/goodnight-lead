@@ -4,6 +4,9 @@ from django.test import TestCase
 # Object factory for testing
 from gl_site.test.Factory import Factory
 
+# Import for constants
+from gl_site.models import LeadUserInfo
+
 # Regex parser
 import re
 
@@ -387,7 +390,7 @@ class testAccountViews_AccountSettings(TestCase):
 
                 # Info fields
                 'gender': 'F',
-                'major': 'Original Major',
+                'major': LeadUserInfo.ENGINEERING,
                 'education': 'SE',
                 'graduation_date': str(date(2000, 1, 1)),
             }, follow = True)
@@ -410,7 +413,7 @@ class testAccountViews_AccountSettings(TestCase):
         # Verify info
         info = user.leaduserinfo
         self.assertEqual(info.gender, 'F')
-        self.assertEqual(info.major, 'Original Major')
+        self.assertEqual(info.major, LeadUserInfo.ENGINEERING)
         self.assertEqual(info.graduation_date, date(2000, 1, 1))
         self.assertEqual(info.organization, self.organization)
         self.assertEqual(info.session, self.session)
