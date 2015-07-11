@@ -388,6 +388,7 @@ class testAccountViews_AccountSettings(TestCase):
                 # Info fields
                 'gender': 'F',
                 'major': 'Original Major',
+                'education': 'SE',
                 'graduation_date': str(date(2000, 1, 1)),
             }, follow = True)
 

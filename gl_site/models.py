@@ -86,6 +86,25 @@ class LeadUserInfo(models.Model):
 
     major = models.CharField(max_length=100)
 
+    # User education level
+    HIGH_SCHOOL = ('HS', 'High School')
+    FRESHMAN = ('FR', 'Undergraduate - Freshman')
+    SOPHMORE = ('SO', 'Undergraduate - Sophmore')
+    JUNIOR = ('JU', 'Undergraduate - Junior')
+    SENIOR = ('SE', 'Undergraduate - Senior')
+    GRADUATE_SCHOOL = ('GS', 'Graduate School')
+    GRADUATED = ('GR', 'Graduated')
+    education_choices = (
+        HIGH_SCHOOL,
+        FRESHMAN,
+        SOPHMORE,
+        JUNIOR,
+        SENIOR,
+        GRADUATE_SCHOOL,
+        GRADUATED
+    )
+    education = models.CharField(max_length = 2, choices = education_choices)
+
     # User graduation date
     graduation_date = models.DateField()
 

@@ -50,6 +50,7 @@ class Factory:
             user = user,
             gender = 'M',
             major = 'Tester',
+            education = 'FR',
             graduation_date = date.today(),
             organization = organization,
             session = session
@@ -86,6 +87,7 @@ class Factory:
             # Info fields
             'gender': leaduserinfo.gender,
             'major': leaduserinfo.major,
+            'education': leaduserinfo.education,
             'graduation_date': leaduserinfo.graduation_date,
         }
 
@@ -108,6 +110,7 @@ class Factory:
             # Info fields
             'gender': 'M',
             'major': 'Tester',
+            'education': 'FR',
             'graduation_date' : str(date.today()),
             'organization_code' : organization.code
         }
