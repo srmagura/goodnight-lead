@@ -2,14 +2,14 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from gl_site.custom_auth import login_required
 
 #Form imports
 from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
 
 from django.contrib import messages
 
-@login_required(redirect_field_name = None)
+@login_required
 def account_settings(request):
     """
     Account information/settings view
@@ -44,7 +44,7 @@ def account_settings(request):
     )
 
 #Password change view
-@login_required(redirect_field_name = None)
+@login_required
 def password(request):
     if(request.method == 'POST'):
         passwordform = PasswordChangeForm(request.POST)

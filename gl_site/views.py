@@ -1,11 +1,11 @@
 #http imports
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 
 #User imports
 import django.contrib.auth as auth
-from django.contrib.auth.decorators import login_required
+from gl_site.custom_auth import login_required, logout_required
 
 #forms
 from gl_site.forms.user_registration_form import UserForm, InfoRegistrationForm
@@ -16,39 +16,14 @@ from gl_site.inventories import inventory_by_id
 from gl_site.inventories.views import get_submission, submission_is_complete
 
 # Model imports
-from gl_site.models import Session
+from gl_site.models import Session, LeadUserInfo
 
 #Other imports
 import random
 from django.contrib import messages
 from gl_site.quotes.dashboard import quotes as dashboard_quotes
 
-
-def logout_required(function):
-    """
-    We don't want logged in users to access certain pages (like the login
-    page.) If they're already logged in, redirect to the dashboard.
-    """
-    def _dec(view_func):
-        def _view(request, *args, **kwargs):
-            if request.user.is_authenticated():
-                return HttpResponseRedirect('/')
-            else:
-                return view_func(request, *args, **kwargs)
-
-        _view.__name__ = view_func.__name__
-        _view.__dict__ = view_func.__dict__
-        _view.__doc__ = view_func.__doc__
-
-        return _view
-
-    if function is None:
-        return _dec
-    else:
-        return _dec(function)
-
-
-@login_required(redirect_field_name = None)
+@login_required
 def dashboard(request):
     """
     The dashboard view, i.e. the homepage that logged-in users see.
@@ -82,15 +57,33 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect('/')
-            else:
-                # Return a 'disabled account' error message
-                return HttpResponse('disabled')
+
+        valid = True
+
+        if user is None:
+            valid = False
+            message = 'Incorrect username or password.'
+        elif not user.is_active:
+            valid = False
+            message = 'Account is disabled.'
         else:
-            messages.warning(request, "Incorrect username or password")
+            lead_user_info = LeadUserInfo.objects.filter(user=user)
+            if not lead_user_info.exists():
+                valid = False
+                message = ('Your account has no associated demographic '
+                    'information, and thus you are not allowed to login. '
+                    'This can only occur if your account was not created '
+                    'through the user registration form. '
+                    'If you are an administrator, you can still login to '
+                    'the admin site. If you would like to access the public '
+                    'part of the site, please create a new account through '
+                    'the user registration form.')
+
+        if valid:
+            auth.login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, message)
 
     return render(request, 'user/login.html')
 
@@ -171,13 +164,13 @@ def reset_password_page(request):
         {'form': form, 'success': success}
     )
 
-@login_required(redirect_field_name = None)
+@login_required
 #Logs out a user and redirects to the login page
 def logout_user(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
 #If the user types in an incorrect url or somehow follows a bad link
-@login_required(redirect_field_name = None)
+@login_required
 def page_not_found(request):
     return render(request, 'page_not_found.html')

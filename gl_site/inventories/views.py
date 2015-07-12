@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from gl_site.custom_auth import login_required
 
 from gl_site.inventories import inventory_by_id
 
@@ -29,7 +29,7 @@ def get_submission(user, inventory_id):
 def submission_is_complete(submission):
     return submission is not None and submission.is_complete()
 
-@login_required(redirect_field_name = None)
+@login_required
 def take_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):
         inventory = inventory_by_id[int(inventory_id)]()
@@ -65,7 +65,7 @@ def take_inventory(request, inventory_id):
     return render(request, template, data)
 
 
-@login_required(redirect_field_name = None)
+@login_required
 def review_inventory(request, inventory_id):
     if validate_inventory_id(inventory_id):
         inventory = inventory_by_id[int(inventory_id)]()
