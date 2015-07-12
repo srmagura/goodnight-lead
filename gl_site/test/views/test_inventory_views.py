@@ -23,7 +23,7 @@ class testInventoryViews_TakeInventory(TestCase):
         """
 
         # Create a user account and login
-        self.user = Factory.createUser()
+        self.user, user_info = Factory.createUser()
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
     def testLoginRequired(self):
@@ -119,7 +119,7 @@ class testInventoryViews_ReviewInventory(TestCase):
     """
     def setUp(self):
         # Create a user account and login
-        self.user = Factory.createUser()
+        self.user, user_info = Factory.createUser()
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Create an inventory

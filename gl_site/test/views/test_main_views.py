@@ -21,7 +21,7 @@ class TestMainViews_Dashboard(TestCase):
 
     def setUp(self):
         """ Set Up """
-        self.user = Factory.createUser()
+        self.user, user_info = Factory.createUser()
 
     def testLoginRequiredNoRedirectField(self):
         """
@@ -52,12 +52,16 @@ class TestMainViews_Dashboard(TestCase):
         self.assertEquals(len(response.context['inventories']), 6)
         self.assertTrue('quotes' in response.context)
 
+
+INVALID_LOGIN_MSG = 'Incorrect username or password.'
+
 class TestMainViews_Home(TestCase):
     """ Test Case for the home view """
 
     def setUp(self):
         """ Set Up """
-        self.user = Factory.createUser()
+        user, user_info = Factory.createUser()
+        self.user = user
 
     def testLogoutRequired(self):
         """ Verify that a logged in user cannot make it to the login page """
@@ -84,7 +88,7 @@ class TestMainViews_Home(TestCase):
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
         for message in messages:
-            self.assertEqual(message.message, "Incorrect username or password")
+            self.assertEqual(message.message, INVALID_LOGIN_MSG)
 
         # Correct template used
         self.assertTemplateUsed(response, template_name = 'user/login.html')
@@ -107,7 +111,7 @@ class TestMainViews_Home(TestCase):
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
         for message in messages:
-            self.assertEqual(message.message, "Incorrect username or password")
+            self.assertEqual(message.message, INVALID_LOGIN_MSG)
 
         # Correct template used
         self.assertTemplateUsed(response, template_name = 'user/login.html')
@@ -130,7 +134,7 @@ class TestMainViews_Home(TestCase):
         messages = response.context['messages']
         self.assertEqual(len(messages), 1)
         for message in messages:
-            self.assertEqual(message.message, "Incorrect username or password")
+            self.assertEqual(message.message, INVALID_LOGIN_MSG)
 
         # Correct template used
         self.assertTemplateUsed(response, template_name = 'user/login.html')
@@ -164,13 +168,9 @@ class testMainViews_Register(TestCase):
 
     def setUp(self):
         """ Create user account for testing """
-        self.user = Factory.createUser()
-
-        self.organization = Factory.createOrganization(self.user)
-
-        self.session = Factory.createSession(self.organization, self.user)
-
-        self.info = Factory.createDemographics(self.user, self.organization, self.session)
+        self.user, self.info = Factory.createUser()
+        self.organization = self.info.organization
+        self.session = self.info.session
 
     def testLogoutRequired(self):
         """ A logged in user cannot access this page """
@@ -579,9 +579,7 @@ class testMainViews_ResetPasswordPage(TestCase):
         """
         Set up user account for testing
         """
-
-        # Create the user
-        self.user = Factory.createUser()
+        self.user, user_info = Factory.createUser()
 
     def testLogoutRequired(self):
         """
@@ -650,7 +648,7 @@ class testMainViews_Logout(TestCase):
 
     def testLogout(self):
         # Create an account and log in
-        user = Factory.createUser()
+        user, user_info = Factory.createUser()
         self.client.login(username = user.username, password = Factory.defaultPassword)
 
         # Make the get reqeust
@@ -682,7 +680,7 @@ class testMainViews_PageNotFound(TestCase):
         """
 
         # Create an account and log in
-        user = Factory.createUser()
+        user, user_info = Factory.createUser()
         self.client.login(username = user.username, password = Factory.defaultPassword)
 
         # Make the GET request

@@ -42,9 +42,22 @@ class Factory:
         Factory.incrementIndex()
         return session
 
-    @staticmethod
-    def createDemographics(user, organization, session):
-        """ Create user demographics and link to user, org, and session """
+    @classmethod
+    def createUser(cls):
+        """
+        Create a default user, including its LeadUserInfo, Organization,
+        and Session.
+        """
+        user = User.objects.create_user(
+            username = "testuser{}".format(Factory.index),
+            email = "testuser{}@gmail.com".format(Factory.index),
+            password = Factory.defaultPassword,
+            first_name = "test{}".format(Factory.index),
+            last_name = "user{}".format(Factory.index)
+        )
+
+        organization = cls.createOrganization(user)
+        session = cls.createSession(organization, user)
 
         info = LeadUserInfo.objects.create(
             user = user,
@@ -55,22 +68,9 @@ class Factory:
             organization = organization,
             session = session
         )
-        Factory.incrementIndex()
-        return info
 
-    @staticmethod
-    def createUser():
-        """ Create a default user """
-
-        user = User.objects.create_user(
-            username = "testuser{}".format(Factory.index),
-            email = "testuser{}@gmail.com".format(Factory.index),
-            password = Factory.defaultPassword,
-            first_name = "test{}".format(Factory.index),
-            last_name = "user{}".format(Factory.index)
-        )
         Factory.incrementIndex()
-        return user
+        return (user, info)
 
     @staticmethod
     def createUserSettingsPostDict(user, leaduserinfo):

@@ -21,13 +21,9 @@ class testAccountViews_AccountSettings(TestCase):
             Create a user account and user info
             to be used for testing
         """
-        self.user = Factory.createUser()
-
-        self.organization = Factory.createOrganization(self.user)
-
-        self.session = Factory.createSession(self.organization, self.user)
-
-        self.info = Factory.createDemographics(self.user, self.organization, self.session)
+        self.user, self.info = Factory.createUser()
+        self.organization = self.info.organization
+        self.session = self.info.session
 
     def testLoginRequired(self):
         """ Account Settings - Log in required.
@@ -103,8 +99,7 @@ class testAccountViews_AccountSettings(TestCase):
         """
 
         # Create a second user
-        user2 = Factory.createUser()
-        Factory.createDemographics(user2, self.organization, self.session)
+        user2, user2_info = Factory.createUser()
 
         # Log in as the first user
         self.client.login(username = self.user, password = Factory.defaultPassword)
@@ -174,8 +169,7 @@ class testAccountViews_AccountSettings(TestCase):
         """
 
         # Create a second user
-        user2 = Factory.createUser()
-        Factory.createDemographics(user2, self.organization, self.session)
+        user2, user2_info = Factory.createUser()
 
         # Log in as the first user
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
@@ -425,14 +419,9 @@ class testAccountViews_Password(TestCase):
         """ Password - Set up.
             Set up a user account for testing.
         """
-
-        self.user = Factory.createUser()
-
-        self.organization = Factory.createOrganization(self.user)
-
-        self.session = Factory.createSession(self.organization, self.user)
-
-        self.info = Factory.createDemographics(self.user, self.organization, self.session)
+        self.user, self.info = Factory.createUser()
+        self.organization = self.info.organization
+        self.session = self.info.session
 
     def testLoginRequired(self):
         """ Password - Log in required.
