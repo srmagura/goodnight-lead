@@ -15,6 +15,7 @@ $(document).ready(function() {
                 changeYear: true,
                 yearRange: "c-30:c+30",
                 showOn: "both",
+                dateFormat: "yy-mm-dd"
             })
             // Set the datepicker css classes
             .attr(

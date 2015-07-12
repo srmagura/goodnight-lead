@@ -84,7 +84,56 @@ class LeadUserInfo(models.Model):
     )
     gender = models.CharField(max_length=1, choices=gender_choices)
 
-    major = models.CharField(max_length=100)
+    BUSINESS = 'Business'
+    EDUCATION = 'Education'
+    ENGINEERING = 'Engineering'
+    DESIGN = 'Design and Fine Arts'
+    HUMANITIES = 'Humanities'
+    LAW = 'Law'
+    LIFE_SCIENCE = 'Life Sciences'
+    MATH = 'Math and Physical Sciences'
+    MEDICINE = 'Medicine'
+    SOCIAL_SCIENCE = 'Social Sciences'
+    HEALTH = 'Health'
+    APPLIED_FIELDS = 'Applied Fields'
+    OTHER = 'Other'
+
+    # User major / career field
+    major_choices = (
+        (BUSINESS, BUSINESS),
+        (EDUCATION, EDUCATION),
+        (ENGINEERING, ENGINEERING),
+        (DESIGN, DESIGN),
+        (HUMANITIES, HUMANITIES),
+        (LAW, LAW),
+        (LIFE_SCIENCE, LIFE_SCIENCE),
+        (MATH, MATH),
+        (MEDICINE, MEDICINE),
+        (SOCIAL_SCIENCE, SOCIAL_SCIENCE),
+        (HEALTH, HEALTH),
+        (APPLIED_FIELDS, APPLIED_FIELDS),
+        (OTHER, OTHER)
+    )
+    major = models.CharField('Major / Career', max_length=100, choices = major_choices)
+
+    # User education level
+    HIGH_SCHOOL = ('HS', 'High School')
+    FRESHMAN = ('FR', 'Undergraduate - Freshman')
+    SOPHMORE = ('SO', 'Undergraduate - Sophmore')
+    JUNIOR = ('JU', 'Undergraduate - Junior')
+    SENIOR = ('SE', 'Undergraduate - Senior')
+    GRADUATE_SCHOOL = ('GS', 'Graduate School')
+    GRADUATED = ('GR', 'Graduated')
+    education_choices = (
+        HIGH_SCHOOL,
+        FRESHMAN,
+        SOPHMORE,
+        JUNIOR,
+        SENIOR,
+        GRADUATE_SCHOOL,
+        GRADUATED
+    )
+    education = models.CharField(max_length = 2, choices = education_choices)
 
     # User graduation date
     graduation_date = models.DateField()
