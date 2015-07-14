@@ -8,7 +8,6 @@ from gl_site.inventories import views as inventory_views
 from gl_site.accounts import views as account_views
 
 from django.contrib import admin
-admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', views.dashboard, name='dashboard'),

@@ -164,13 +164,11 @@ def reset_password_page(request):
         {'form': form, 'success': success}
     )
 
-@login_required
 #Logs out a user and redirects to the login page
 def logout_user(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
 #If the user types in an incorrect url or somehow follows a bad link
-@login_required
 def page_not_found(request):
     return render(request, 'page_not_found.html')

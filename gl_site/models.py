@@ -68,7 +68,7 @@ class Session(models.Model):
 class LeadUserInfo(models.Model):
     """ Additional user info which extends the django User
         class using a one-to-one relationship.
-        Saved in the app_leaduserinfo table
+        Saved in the leaduserinfo table
         Access through user.leaduserinfo
     """
 
