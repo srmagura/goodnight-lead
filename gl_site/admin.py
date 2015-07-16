@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Model imports
-from gl_site.models import Organization, Session
+from gl_site.models import Organization, Session, SiteConfig
 
 # Reverse and OS used for Session urls
 from django.core.urlresolvers import reverse
@@ -20,14 +20,16 @@ class InlineSessionAdmin(admin.TabularInline):
     def get_url(self, instance):
         """ Return an absolute url to the session's registration page """
         if instance.uuid is not "":
-            # This really shouldn't have to be hardcoded
-            # Unfortunately Django seems to have no good method for
-            # building an absolute uri without access to the request
-            # object and using separate settings files.
-            # Use environment variables and set prod as default.
-            domain = os.getenv('GOODNIGHT_LEAD_DOMAIN_NAME', 'https://goodnight-lead.herokuapp.com')
+            configs = SiteConfig.objects.all()
+
+            if configs.exists():
+                config = configs[0]
+                base_url = configs[0].base_url
+            else:
+                base_url = '[base_url]'
+
             rel = reverse('register', args=(instance.uuid, ))
-            url = "{}{}".format(domain, rel)
+            url = "{}{}".format(base_url, rel)
             return url
         else:
             return ""
@@ -60,3 +62,12 @@ class OrganizationAdmin(admin.ModelAdmin):
                 instance.created_by = request.user
                 instance.save()
             formset.save_m2m()
+
+    def render_change_form(self, request, context, *args, **kwargs):
+        """
+        Add one of our own variables to the template's context.
+
+        (This ModelAdmin is rendered using a customized template.)
+        """
+        context['show_save_url'] = not SiteConfig.objects.all().exists()
+        return super().render_change_form(request, context, *args, **kwargs)

@@ -16,7 +16,7 @@ from gl_site.inventories import inventory_by_id
 from gl_site.inventories.views import get_submission, submission_is_complete
 
 # Model imports
-from gl_site.models import Session, LeadUserInfo
+from gl_site.models import Session, LeadUserInfo, SiteConfig
 
 #Other imports
 import random
@@ -164,11 +164,33 @@ def reset_password_page(request):
         {'form': form, 'success': success}
     )
 
-#Logs out a user and redirects to the login page
 def logout_user(request):
+    """
+    Logs out a user and redirects to the login page
+    """
     auth.logout(request)
     return HttpResponseRedirect("/")
 
-#If the user types in an incorrect url or somehow follows a bad link
 def page_not_found(request):
+    """
+    If the user types in an incorrect url or somehow follows a bad link
+    """
     return render(request, 'page_not_found.html')
+
+def set_base_url(request):
+    """
+    Use the request object to set SiteConfig.base_url.
+    """
+    base_url = request.build_absolute_uri('/')[:-1]
+    config_query = SiteConfig.objects.all()
+
+    if config_query.exists():
+        config = config_query[0]
+        config.base_url = base_url
+    else:
+        config = SiteConfig(base_url=base_url)
+
+    config.save()
+
+    return render(request, 'set_base_url.html',
+        {'base_url': base_url})

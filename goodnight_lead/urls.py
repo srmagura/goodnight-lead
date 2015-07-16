@@ -27,6 +27,8 @@ urlpatterns = patterns('',
         name='review_inventory'),
 
     url(r'^admin', include(admin.site.urls)),
+    url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
+
     url(r'^.*$', views.page_not_found, name='page_not_found'),
 
 )
