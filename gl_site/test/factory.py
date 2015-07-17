@@ -11,7 +11,7 @@ class Factory:
     """ Factory class for creating commonly used objects in testing """
 
     index = 0
-    defaultPassword = 'password'
+    default_password = 'password'
 
     @classmethod
     def increment_index(cls):
@@ -51,7 +51,7 @@ class Factory:
         user = User.objects.create_user(
             username = "testuser{}".format(cls.index),
             email = "testuser{}@gmail.com".format(cls.index),
-            password = cls.defaultPassword,
+            password = cls.default_password,
             first_name = "test{}".format(cls.index),
             last_name = "user{}".format(cls.index)
         )
@@ -73,6 +73,23 @@ class Factory:
         return (user, info)
 
     @classmethod
+    def create_admin(cls):
+        """
+        Create and return a superuser.
+
+        Note that the superuser does not have an associated LeadUserInfo.
+        This is the case for superusers created via manage.py
+        createsuperuser.
+        """
+        admin = User.objects.create_superuser(
+            "testadmin{}".format(cls.index),
+            "testadmin{}@gmail.com".format(cls.index),
+            cls.default_password,
+        )
+
+        return admin
+
+    @classmethod
     def create_user_settings_post_dict(cls, user, leaduserinfo):
         """ Create the dictionary sent through post for account settings """
 
@@ -80,7 +97,7 @@ class Factory:
             # User fields
             'username': user.username,
             'email': user.email,
-            'password': cls.defaultPassword,
+            'password': cls.default_password,
             'first_name': user.first_name,
             'last_name': user.last_name,
 
@@ -102,8 +119,8 @@ class Factory:
             # User fields
             'username' : "testuser{}".format(cls.index),
             'email' : "testuser{}@gmail.com".format(cls.index),
-            'password1' : cls.defaultPassword,
-            'password2' : cls.defaultPassword,
+            'password1' : cls.default_password,
+            'password2' : cls.default_password,
             'first_name' : "test{}".format(cls.index),
             'last_name' : "user{}".format(cls.index),
 

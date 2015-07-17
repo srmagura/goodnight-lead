@@ -47,7 +47,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the GET request
         response = self.client.get('/account-settings', follow = True)
@@ -81,7 +81,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         user2, user2_info = Factory.create_user()
 
         # Log in as the first user
-        self.client.login(username = self.user, password = Factory.defaultPassword)
+        self.client.login(username = self.user, password = Factory.default_password)
 
         # Get the post info and change username
         settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
@@ -122,7 +122,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         user2, user2_info = Factory.create_user()
 
         # Log in as the first user
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Get the post dict and set email not unique
         settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
@@ -160,7 +160,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Get the post dict and change gender choice
         settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
@@ -197,7 +197,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Create the post dict and set graduation_date
         settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
@@ -235,7 +235,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the POST request
         response = self.client.post('/account-settings', {

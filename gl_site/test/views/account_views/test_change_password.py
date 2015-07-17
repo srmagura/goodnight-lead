@@ -33,7 +33,7 @@ class TestChangePassword(TestCase):
         """
 
         # Login
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the GET request
         response = self.client.get('/account-settings/password', follow = True)
@@ -62,11 +62,11 @@ class TestChangePassword(TestCase):
         """
 
         # Login
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the POST request
         response = self.client.post('/account-settings/password', {
-                'password1': Factory.defaultPassword,
+                'password1': Factory.default_password,
                 'password2': 'wrong'
             }, follow = True)
 
@@ -82,7 +82,7 @@ class TestChangePassword(TestCase):
         self.assertTrue('password1' in form.fields)
         self.assertTrue('password2' in form.fields)
 
-        self.assertEqual(form['password1'].value(), Factory.defaultPassword)
+        self.assertEqual(form['password1'].value(), Factory.default_password)
         self.assertEqual(form['password2'].value(), 'wrong')
 
         self.assertEqual(form['password1'].errors.as_text(), '')
@@ -97,7 +97,7 @@ class TestChangePassword(TestCase):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the POST request
         response = self.client.post('/account-settings/password', {

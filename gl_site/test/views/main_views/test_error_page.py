@@ -18,7 +18,7 @@ class TestErrorPage(TestCase):
 
         # Create an account and log in
         user, user_info = Factory.create_user()
-        self.client.login(username = user.username, password = Factory.defaultPassword)
+        self.client.login(username = user.username, password = Factory.default_password)
 
         # Make the GET request
         response = self.client.get('/unsupportedpage', follow = True)

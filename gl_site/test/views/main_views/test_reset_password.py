@@ -23,7 +23,7 @@ class TestResetPasswordPage(TestCase):
         """
 
         # Login
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the GET request
         response = self.client.get('/reset_password', follow = True)

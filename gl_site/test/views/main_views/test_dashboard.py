@@ -26,7 +26,7 @@ class TestDashboard(TestCase):
         """ Test that a user who is logged in is sent to the dashboard """
 
         # login
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the request
         response = self.client.get('/', follow = True)

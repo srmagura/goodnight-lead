@@ -32,7 +32,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """ A logged in user cannot access this page """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the response
         response = self.client.get('/register/{}'.format(self.info.session.uuid), follow = True)

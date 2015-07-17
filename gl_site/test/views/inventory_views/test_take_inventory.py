@@ -20,7 +20,7 @@ class TestTakeInventory(TestCase):
 
         # Create a user account and login
         self.user, user_info = Factory.create_user()
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
     def testLoginRequired(self):
         """

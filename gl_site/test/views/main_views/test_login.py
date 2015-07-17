@@ -3,10 +3,11 @@ from django.test import TestCase
 
 # Object factory
 from gl_site.test.factory import Factory
+from .auth_test_util import AuthTestUtil
 
 INVALID_LOGIN_MSG = 'Incorrect username or password.'
 
-class TestLogin(TestCase):
+class TestLogin(TestCase, AuthTestUtil):
     """ Test Case for the home view """
 
     def setUp(self):
@@ -18,7 +19,7 @@ class TestLogin(TestCase):
         """ Verify that a logged in user cannot make it to the login page """
 
         # login
-        self.client.login(username = self.user.username, password = Factory.defaultPassword)
+        self.client.login(username = self.user.username, password = Factory.default_password)
 
         # Make the request
         response = self.client.post('/login', follow = True)
@@ -30,22 +31,8 @@ class TestLogin(TestCase):
         Authentication failure should set a warning message
         and rerender the template.
         """
-
-        # Make the request with username and password set
-        response = self.client.post('/login',
-            {'username': 'invalid', 'password': Factory.defaultPassword}, follow = True)
-
-        # Get messages and verify
-        messages = response.context['messages']
-        self.assertEqual(len(messages), 1)
-        for message in messages:
-            self.assertEqual(message.message, INVALID_LOGIN_MSG)
-
-        # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
-
-        # Not authenticated
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assert_invalid_login('invalid', Factory.default_password,
+            INVALID_LOGIN_MSG)
 
     def testInvalidLogin_Password(self):
         """
@@ -53,22 +40,8 @@ class TestLogin(TestCase):
         Authentication failure should set a warning message
         and rerender the template.
         """
-
-        # Make the request with username and password set
-        response = self.client.post('/login',
-            {'username': self.user.username, 'password': 'invalid'}, follow = True)
-
-        # Get messages and verify
-        messages = response.context['messages']
-        self.assertEqual(len(messages), 1)
-        for message in messages:
-            self.assertEqual(message.message, INVALID_LOGIN_MSG)
-
-        # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
-
-        # Not authenticated
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assert_invalid_login(self.user.username, 'invalid',
+            INVALID_LOGIN_MSG)
 
     def testInvalidLogin_Both(self):
         """
@@ -76,22 +49,8 @@ class TestLogin(TestCase):
         Authentication failure should set a warning message
         and rerender the template.
         """
-
-        # Make the request with username and password set
-        response = self.client.post('/login',
-            {'username': 'invalid', 'password': 'invalid'}, follow = True)
-
-        # Get messages and verify
-        messages = response.context['messages']
-        self.assertEqual(len(messages), 1)
-        for message in messages:
-            self.assertEqual(message.message, INVALID_LOGIN_MSG)
-
-        # Correct template used
-        self.assertTemplateUsed(response, template_name = 'user/login.html')
-
-        # Not authenticated
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assert_invalid_login('invalid', 'invalid',
+            INVALID_LOGIN_MSG)
 
     def testValidLogin(self):
         """
@@ -101,7 +60,7 @@ class TestLogin(TestCase):
 
         # Make the request with username and password set
         response = self.client.post('/login',
-            {'username': self.user.username, 'password': Factory.defaultPassword}, follow = True)
+            {'username': self.user.username, 'password': Factory.default_password}, follow = True)
 
         # Get messages and verify
         messages = response.context['messages']
