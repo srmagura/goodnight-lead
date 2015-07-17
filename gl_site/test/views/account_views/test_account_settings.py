@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Object factory for testing
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 # Import for constants
 from gl_site.models import LeadUserInfo
@@ -24,7 +24,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
             Create a user account and user info
             to be used for testing
         """
-        self.user, self.info = Factory.createUser()
+        self.user, self.info = Factory.create_user()
         self.organization = self.info.organization
         self.session = self.info.session
 
@@ -60,7 +60,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         self.assertTrue('info_form' in response.context)
 
         # Expected form values
-        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
 
         # Validate field values in user_form
         user_form = response.context['user_form']
@@ -78,13 +78,13 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Create a second user
-        user2, user2_info = Factory.createUser()
+        user2, user2_info = Factory.create_user()
 
         # Log in as the first user
         self.client.login(username = self.user, password = Factory.defaultPassword)
 
         # Get the post info and change username
-        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
         settings_form['username'] = user2.username
 
         # Make the POST request
@@ -119,13 +119,13 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         """
 
         # Create a second user
-        user2, user2_info = Factory.createUser()
+        user2, user2_info = Factory.create_user()
 
         # Log in as the first user
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Get the post dict and set email not unique
-        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
         settings_form['email'] = user2.email
 
         # Make the POST request
@@ -163,7 +163,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Get the post dict and change gender choice
-        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
         settings_form['gender'] = 'i'
 
         # Make the POST request
@@ -200,7 +200,7 @@ class TestAccountSettings(TestCase, AccountFormValidator):
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Create the post dict and set graduation_date
-        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form = Factory.create_user_settings_post_dict(self.user, self.info)
         settings_form['graduation_date'] = -1
 
         # Make the POST request

@@ -2,14 +2,14 @@
 from django.test import TestCase
 
 # Object factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 class TestDashboard(TestCase):
     """ Test class for the dashboard view """
 
     def setUp(self):
         """ Set Up """
-        self.user, user_info = Factory.createUser()
+        self.user, user_info = Factory.create_user()
 
     def testLoginRequiredNoRedirectField(self):
         """

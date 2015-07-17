@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Object factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 class TestLogout(TestCase):
     """
@@ -11,7 +11,7 @@ class TestLogout(TestCase):
 
     def testLogout(self):
         # Create an account and log in
-        user, user_info = Factory.createUser()
+        user, user_info = Factory.create_user()
         self.client.login(username = user.username, password = Factory.defaultPassword)
 
         # Make the get reqeust

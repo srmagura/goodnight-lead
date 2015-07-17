@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 # Object factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 # Import use info for testing account creation
 from gl_site.models import LeadUserInfo
@@ -24,7 +24,7 @@ class TestRegister(TestCase, AccountFormValidator):
 
     def setUp(self):
         """ Create user account for testing """
-        self.user, self.info = Factory.createUser()
+        self.user, self.info = Factory.create_user()
         self.organization = self.info.organization
         self.session = self.info.session
 
@@ -80,7 +80,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """
 
         # Get the POST dict
-        registration_form = Factory.createUserRegistrationPostDict(self.organization)
+        registration_form = Factory.create_user_registration_post_dict(self.organization)
         registration_form['username'] = self.user.username
 
         # Make the post request
@@ -111,7 +111,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """
 
         # Get the POST dict
-        registration_form = Factory.createUserRegistrationPostDict(self.organization)
+        registration_form = Factory.create_user_registration_post_dict(self.organization)
         registration_form['email'] = self.user.email
 
         # Make the post request
@@ -142,7 +142,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """
 
         # Get the POST dict
-        registration_form = Factory.createUserRegistrationPostDict(self.organization)
+        registration_form = Factory.create_user_registration_post_dict(self.organization)
         registration_form['password2'] = 'incorrect'
 
         # Make the post request
@@ -245,7 +245,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """ Verify an invalid organization sends an error """
 
         # Get the POST dict
-        registration_form = Factory.createUserRegistrationPostDict(self.organization)
+        registration_form = Factory.create_user_registration_post_dict(self.organization)
         registration_form['organization_code'] = 'invalid'
 
         # Make the post request
@@ -268,7 +268,7 @@ class TestRegister(TestCase, AccountFormValidator):
         """
 
         # Get the POST dict
-        registration_form = Factory.createUserRegistrationPostDict(self.organization)
+        registration_form = Factory.create_user_registration_post_dict(self.organization)
 
         # Make the post request
         response = self.client.post('/register/{}'.format(self.info.session.uuid),

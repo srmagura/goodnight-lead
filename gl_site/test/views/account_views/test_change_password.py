@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Object factory for testing
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 class TestChangePassword(TestCase):
     """ Test class for the change password view """
@@ -11,7 +11,7 @@ class TestChangePassword(TestCase):
         """ Password - Set up.
             Set up a user account for testing.
         """
-        self.user, self.info = Factory.createUser()
+        self.user, self.info = Factory.create_user()
         self.organization = self.info.organization
         self.session = self.info.session
 

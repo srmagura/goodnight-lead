@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Object factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 class TestResetPasswordPage(TestCase):
     """
@@ -14,7 +14,7 @@ class TestResetPasswordPage(TestCase):
         """
         Set up user account for testing
         """
-        self.user, user_info = Factory.createUser()
+        self.user, user_info = Factory.create_user()
 
     def testLogoutRequired(self):
         """

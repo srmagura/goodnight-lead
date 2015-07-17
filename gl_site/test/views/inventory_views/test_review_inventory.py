@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 # Import Submission
 from gl_site.models import Submission, Metric
@@ -13,7 +13,7 @@ class testInventoryViews_ReviewInventory(TestCase):
     """
     def setUp(self):
         # Create a user account and login
-        self.user, user_info = Factory.createUser()
+        self.user, user_info = Factory.create_user()
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Create an inventory

@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Object factory
-from gl_site.test.Factory import Factory
+from gl_site.test.factory import Factory
 
 INVALID_LOGIN_MSG = 'Incorrect username or password.'
 
@@ -11,7 +11,7 @@ class TestLogin(TestCase):
 
     def setUp(self):
         """ Set Up """
-        user, user_info = Factory.createUser()
+        user, user_info = Factory.create_user()
         self.user = user
 
     def testLogoutRequired(self):
