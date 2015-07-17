@@ -16,45 +16,11 @@ import re
 # Date utilities
 from datetime import date
 
-class TestRegister(TestCase):
+# Common validation
+from gl_site.test.form_validation import AccountFormValidator
+
+class TestRegister(TestCase, AccountFormValidator):
     """ Test method for register view """
-
-    FIELD_ERRORS = {
-        'username': 'A user with that username already exists.',
-        'email': 'Email already in use',
-        'password2': 'The two password fields didn\'t match.',
-        'organization_code': 'Invalid organization code.'
-    }
-
-    def validate_user_form(self, user_form, registration_form, expected_errors):
-        """ Validate that a user_form matches a registration_form """
-
-        # Validate each field
-        for field in user_form:
-            # All fields should be equal
-            self.assertEquals(field.value(), registration_form[field.name])
-
-            # Verify the error is correct
-            if (field.name in expected_errors):
-                self.assertEqual(re.sub(r'\* ', '', field.errors.as_text()),
-                    self.FIELD_ERRORS[field.name])
-            else:
-                self.assertEqual(field.errors, [])
-
-    def validate_info_form(self, info_form, registration_form, expected_errors):
-        """ Validate that an info_form matches a registration form """
-
-        # Validate each field
-        for field in info_form:
-            # All fields should be equal
-            self.assertEquals(field.value(), registration_form[field.name])
-
-            # Verify the error is correct
-            if (field.name in expected_errors):
-                self.assertEqual(re.sub(r'\* ', '', field.errors.as_text()),
-                    self.FIELD_ERRORS[field.name])
-            else:
-                self.assertEqual(field.errors, [])
 
     def setUp(self):
         """ Create user account for testing """
@@ -133,8 +99,8 @@ class TestRegister(TestCase):
         info_form = response.context['info_form']
 
         # Validate
-        self.validate_user_form(user_form, registration_form, ('username'))
-        self.validate_info_form(info_form, registration_form, ())
+        self.validate_form(user_form, registration_form, ('username'))
+        self.validate_form(info_form, registration_form, ())
 
     def testUserInfoNotValid_EmailNotUnique(self):
         """
@@ -161,11 +127,11 @@ class TestRegister(TestCase):
 
         # Verify form fields retain their set values
         user_form = response.context['user_form']
-        self.validate_user_form(user_form, registration_form, ('email'))
+        self.validate_form(user_form, registration_form, ('email'))
 
         # lead stuff
         info_form = response.context['info_form']
-        self.validate_info_form(info_form, registration_form, ())
+        self.validate_form(info_form, registration_form, ())
 
     def testUserInfoNotValid_PasswordConfirmationFailed(self):
         """
@@ -192,11 +158,11 @@ class TestRegister(TestCase):
 
         # Verify form fields retain their set values
         user_form = response.context['user_form']
-        self.validate_user_form(user_form, registration_form, ('password2'))
+        self.validate_form(user_form, registration_form, ('password2'))
 
         # lead stuff
         info_form = response.context['info_form']
-        self.validate_info_form(info_form, registration_form, ())
+        self.validate_form(info_form, registration_form, ())
 
     def testUserInfoNotValid_FieldsLeftBlank(self):
         """
@@ -234,7 +200,7 @@ class TestRegister(TestCase):
 
         # lead stuff
         info_form = response.context['info_form']
-        self.validate_info_form(info_form, registration_form, ())
+        self.validate_form(info_form, registration_form, ())
 
     def testLEADInfoNotValid_FieldsLeftBlank(self):
         """
@@ -266,7 +232,7 @@ class TestRegister(TestCase):
 
         # Verify form fields retain their set values
         user_form = response.context['user_form']
-        self.validate_user_form(user_form, registration_form, ())
+        self.validate_form(user_form, registration_form, ())
 
         # lead stuff
         info_form = response.context['info_form']
@@ -288,10 +254,10 @@ class TestRegister(TestCase):
 
         # Get the forms
         user_form = response.context['user_form']
-        self.validate_user_form(user_form, registration_form, ())
+        self.validate_form(user_form, registration_form, ())
 
         info_form = response.context['info_form']
-        self.validate_info_form(info_form, registration_form, ('organization_code'))
+        self.validate_form(info_form, registration_form, ('organization_code'))
 
     def testValidInfo(self):
         """

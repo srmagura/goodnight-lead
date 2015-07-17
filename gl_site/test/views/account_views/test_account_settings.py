@@ -13,7 +13,10 @@ import re
 # Date utilities
 from datetime import date
 
-class TestAccountSettings(TestCase):
+# Common validation
+from gl_site.test.form_validation import AccountFormValidator
+
+class TestAccountSettings(TestCase, AccountFormValidator):
     """ Test class for verifying the account settings view """
 
     def setUp(self):
@@ -56,40 +59,16 @@ class TestAccountSettings(TestCase):
         self.assertTrue('user_form' in response.context)
         self.assertTrue('info_form' in response.context)
 
+        # Expected form values
+        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+
         # Validate field values in user_form
-        userform = response.context['user_form']
-
-        self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), self.user.username)
-
-        self.assertTrue('email' in userform.fields)
-        self.assertEquals(userform['email'].value(), self.user.email)
-
-        self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), self.user.first_name)
-
-        self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), self.user.last_name)
+        user_form = response.context['user_form']
+        self.validate_form(user_form, settings_form, ())
 
         # Validate field values in info_form
         info_form = response.context['info_form']
-
-        self.assertTrue('user' not in info_form.fields)
-
-        self.assertTrue('gender' in info_form.fields)
-        self.assertEqual(info_form['gender'].value(), self.info.gender)
-
-        self.assertTrue('major' in info_form.fields)
-        self.assertEqual(info_form['major'].value(), self.info.major)
-
-        self.assertTrue('graduation_date' in info_form.fields)
-        self.assertEqual(info_form['graduation_date'].value(), self.info.graduation_date)
-
-        self.assertTrue('organization' in response.context)
-        self.assertEqual(response.context['organization'].name, self.organization.name)
-
-        self.assertTrue('session' in response.context)
-        self.assertEqual(response.context['session'].name, self.session.name)
+        self.validate_form(info_form, settings_form, ())
 
     def testUsernameNotUnique(self):
         """ Account Settings - Username not unique.
@@ -105,11 +84,11 @@ class TestAccountSettings(TestCase):
         self.client.login(username = self.user, password = Factory.defaultPassword)
 
         # Get the post info and change username
-        settingsform = Factory.createUserSettingsPostDict(self.user, self.info)
-        settingsform['username'] = user2.username
+        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form['username'] = user2.username
 
         # Make the POST request
-        response = self.client.post('/account-settings', settingsform, follow = True)
+        response = self.client.post('/account-settings', settings_form, follow = True)
 
         # Verify the correct template was used
         self.assertTemplateUsed(response, 'user/settings.html')
@@ -119,41 +98,12 @@ class TestAccountSettings(TestCase):
         self.assertTrue('info_form' in response.context)
 
         # Validate field values in user_form
-        userform = response.context['user_form']
-
-        self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), user2.username)
-        self.assertEqual(re.sub(r'\* ', '', userform['username'].errors.as_text()),
-            'A user with that username already exists.')
-
-        self.assertTrue('email' in userform.fields)
-        self.assertEquals(userform['email'].value(), self.user.email)
-        self.assertEqual(userform['email'].errors.as_text(), '')
-
-        self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), self.user.first_name)
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-
-        self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), self.user.last_name)
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
+        user_form = response.context['user_form']
+        self.validate_form(user_form, settings_form, ('username'))
 
         # Validate field values in info_form
         info_form = response.context['info_form']
-
-        self.assertTrue('user' not in info_form.fields)
-
-        self.assertTrue('gender' in info_form.fields)
-        self.assertEqual(info_form['gender'].value(), self.info.gender)
-        self.assertEqual(info_form['gender'].errors.as_text(), '')
-
-        self.assertTrue('major' in info_form.fields)
-        self.assertEqual(info_form['major'].value(), self.info.major)
-        self.assertEqual(info_form['major'].errors.as_text(), '')
-
-        self.assertTrue('graduation_date' in info_form.fields)
-        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
-        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
+        self.validate_form(info_form, settings_form, ())
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -175,11 +125,11 @@ class TestAccountSettings(TestCase):
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Get the post dict and set email not unique
-        settingsform = Factory.createUserSettingsPostDict(self.user, self.info)
-        settingsform['email'] = user2.email
+        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form['email'] = user2.email
 
         # Make the POST request
-        response = self.client.post('/account-settings', settingsform, follow = True)
+        response = self.client.post('/account-settings', settings_form, follow = True)
 
         # Verify the correct template was used
         self.assertTemplateUsed(response, 'user/settings.html')
@@ -189,42 +139,12 @@ class TestAccountSettings(TestCase):
         self.assertTrue('info_form' in response.context)
 
         # Validate field values in user_form
-        userform = response.context['user_form']
-
-        self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), self.user.username)
-        self.assertEqual(userform['username'].errors.as_text(), '')
-
-        self.assertTrue('email' in userform.fields)
-        self.assertNotEquals(userform['email'].value(), self.user.email)
-        self.assertEquals(userform['email'].value(), user2.email)
-        self.assertEqual(re.sub(r'\* ', '', userform['email'].errors.as_text()),
-            'Email already in use')
-
-        self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), self.user.first_name)
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-
-        self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), self.user.last_name)
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
+        user_form = response.context['user_form']
+        self.validate_form(user_form, settings_form, ('email'))
 
         # Validate field values in info_form
         info_form = response.context['info_form']
-
-        self.assertTrue('user' not in info_form.fields)
-
-        self.assertTrue('gender' in info_form.fields)
-        self.assertEqual(info_form['gender'].value(), self.info.gender)
-        self.assertEqual(info_form['gender'].errors.as_text(), '')
-
-        self.assertTrue('major' in info_form.fields)
-        self.assertEqual(info_form['major'].value(), self.info.major)
-        self.assertEqual(info_form['major'].errors.as_text(), '')
-
-        self.assertTrue('graduation_date' in info_form.fields)
-        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
-        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
+        self.validate_form(info_form, settings_form, ())
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -243,11 +163,11 @@ class TestAccountSettings(TestCase):
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Get the post dict and change gender choice
-        settingsform = Factory.createUserSettingsPostDict(self.user, self.info)
-        settingsform['gender'] = 'i'
+        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form['gender'] = 'i'
 
         # Make the POST request
-        response = self.client.post('/account-settings', settingsform, follow = True)
+        response = self.client.post('/account-settings', settings_form, follow = True)
 
         # Verify the correct template was used
         self.assertTemplateUsed(response, 'user/settings.html')
@@ -257,41 +177,12 @@ class TestAccountSettings(TestCase):
         self.assertTrue('info_form' in response.context)
 
         # Validate field values in user_form
-        userform = response.context['user_form']
-
-        self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), self.user.username)
-        self.assertEqual(userform['username'].errors.as_text(), '')
-
-        self.assertTrue('email' in userform.fields)
-        self.assertEquals(userform['email'].value(), self.user.email)
-        self.assertEqual(userform['email'].errors.as_text(), '')
-
-        self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), self.user.first_name)
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-
-        self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), self.user.last_name)
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
+        user_form = response.context['user_form']
+        self.validate_form(user_form, settings_form, ())
 
         # Validate field values in info_form
         info_form = response.context['info_form']
-
-        self.assertTrue('user' not in info_form.fields)
-
-        self.assertTrue('gender' in info_form.fields)
-        self.assertEqual(info_form['gender'].value(), 'i')
-        self.assertEqual(re.sub(r'\* ', '', info_form['gender'].errors.as_text()),
-            'Select a valid choice. i is not one of the available choices.')
-
-        self.assertTrue('major' in info_form.fields)
-        self.assertEqual(info_form['major'].value(), self.info.major)
-        self.assertEqual(info_form['major'].errors.as_text(), '')
-
-        self.assertTrue('graduation_date' in info_form.fields)
-        self.assertEqual(info_form['graduation_date'].value(), str(self.info.graduation_date))
-        self.assertEqual(info_form['graduation_date'].errors.as_text(), '')
+        self.validate_form(info_form, settings_form, ('gender'))
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
@@ -309,11 +200,11 @@ class TestAccountSettings(TestCase):
         self.client.login(username = self.user.username, password = Factory.defaultPassword)
 
         # Create the post dict and set graduation_date
-        settingsform = Factory.createUserSettingsPostDict(self.user, self.info)
-        settingsform['graduation_date'] = -1
+        settings_form = Factory.createUserSettingsPostDict(self.user, self.info)
+        settings_form['graduation_date'] = -1
 
         # Make the POST request
-        response = self.client.post('/account-settings', settingsform, follow = True)
+        response = self.client.post('/account-settings', settings_form, follow = True)
 
         # Verify the correct template was used
         self.assertTemplateUsed(response, 'user/settings.html')
@@ -323,46 +214,18 @@ class TestAccountSettings(TestCase):
         self.assertTrue('info_form' in response.context)
 
         # Validate field values in user_form
-        userform = response.context['user_form']
-
-        self.assertTrue('username' in userform.fields)
-        self.assertEquals(userform['username'].value(), self.user.username)
-        self.assertEqual(userform['username'].errors.as_text(), '')
-
-        self.assertTrue('email' in userform.fields)
-        self.assertEquals(userform['email'].value(), self.user.email)
-        self.assertEqual(userform['email'].errors.as_text(), '')
-
-        self.assertTrue('first_name' in userform.fields)
-        self.assertEquals(userform['first_name'].value(), self.user.first_name)
-        self.assertEqual(userform['first_name'].errors.as_text(), '')
-
-        self.assertTrue('last_name' in userform.fields)
-        self.assertEquals(userform['last_name'].value(), self.user.last_name)
-        self.assertEqual(userform['last_name'].errors.as_text(), '')
+        user_form = response.context['user_form']
+        self.validate_form(user_form, settings_form, ())
 
         # Validate field values in info_form
         info_form = response.context['info_form']
-
-        self.assertTrue('user' not in info_form.fields)
-
-        self.assertTrue('gender' in info_form.fields)
-        self.assertEqual(info_form['gender'].value(), self.info.gender)
-        self.assertEqual(info_form['gender'].errors.as_text(), '')
-
-        self.assertTrue('major' in info_form.fields)
-        self.assertEqual(info_form['major'].value(), self.info.major)
-        self.assertEqual(info_form['major'].errors.as_text(), '')
-
-        self.assertTrue('graduation_date' in info_form.fields)
-        self.assertEqual(info_form['graduation_date'].value(), '-1')
-        self.assertEqual(re.sub(r'\* ', '', info_form['graduation_date'].errors.as_text()),
-            'Enter a valid date.')
+        self.validate_form(info_form, settings_form, ('graduation_date'))
 
         self.assertTrue('organization' in response.context)
         self.assertEqual(response.context['organization'].name, self.organization.name)
 
         self.assertTrue('session' in response.context)
+        self.assertEqual(response.context['session'].name, self.session.name)
 
     def testValidSubmission(self):
         """ Account Settings - Valid submission.
