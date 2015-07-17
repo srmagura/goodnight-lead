@@ -9,17 +9,6 @@ class TestLogout(TestCase):
     Test case for the logout view
     """
 
-    def testLoginRequired(self):
-        """
-        Verify the view does not load if logged out
-        """
-
-        # Make the get reqeust
-        response = self.client.get('/logout', follow = True)
-
-        # Verify redirect
-        self.assertRedirects(response, '/login')
-
     def testLogout(self):
         # Create an account and log in
         user, user_info = Factory.createUser()

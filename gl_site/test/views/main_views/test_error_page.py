@@ -10,16 +10,6 @@ class TestErrorPage(TestCase):
     displays correctly
     """
 
-    def testLoginRequired(self):
-        """
-        Navigation to an unknown page while not logged in
-        redirects to the login page
-        """
-
-        # Make the response and verify redirect
-        response = self.client.get('/unsupportedpage', follow = True)
-        self.assertRedirects(response, '/login')
-
     def testPageNotFound(self):
         """
         Verify the correct templage is rendered

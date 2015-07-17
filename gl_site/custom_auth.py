@@ -1,13 +1,13 @@
 """
 Function decorators for authentication that are specific to our app.
 
-USE THE login_required FROM THIS MODULE INSTEAD OF DJANGO'S BUILT-IN ONE.
+USE THE login_required FROM THIS MODULE INSTEAD OF DJANGO'S BUILT-IN
+login_required.
 """
 from django.http import HttpResponseRedirect
 from django.conf import settings
 
 import django.contrib.auth as auth
-from django.contrib.auth.decorators import user_passes_test
 
 from gl_site.models import LeadUserInfo
 

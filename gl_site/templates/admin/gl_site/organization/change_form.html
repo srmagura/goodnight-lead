@@ -1,0 +1,12 @@
+{% extends 'admin/change_form.html' %}
+{% block form_top %}
+{% if show_save_url %}
+    <br>
+    <h1>
+        <span style="color: #6600CC;">First time setup:</span>
+        <a href="{% url 'set_base_url' %}" target="_blank">click here</a>
+        to set [base_url]. Then refresh this page.
+    </h1>
+    <br>
+{% endif %}
+{% endblock %}
