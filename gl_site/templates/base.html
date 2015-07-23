@@ -41,12 +41,12 @@
                         </div>
                         <!-- Links toggle, commented till we have use of it -->
                         <div class="pull-right">
-                            <!-- <button type="button" class="navbar-toggle" data-target="#bs-example-navbar-collapse-1">
+                            <button type="button" class="navbar-toggle" data-target="#navbar-links-list">
                                 <span class="sr-only">Show links</span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
-                            </button> -->
+                            </button>
                         </div>
                     </div>
                     <!-- Navbar Brand -->
@@ -55,12 +55,11 @@
                 <!-- Inner Navbar -->
                 <nav class="navbar-inverse navbar-slide" role="navigation">
                     <!-- Navbar Links, commented till we have use of it -->
-                    <!-- <div class="collapse navbar-collapse navbar-left" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse navbar-left" id="navbar-links-list">
                         <ul class="nav navbar-nav">
-                            <li><a href="#">Link</a></li>
-                            <li><a href="#">Link</a></li>
+                            <li><a href="{% url 'view_statistics' %}">Statistics</a></li>
                         </ul>
-                    </div> -->
+                    </div>
 
                     <!-- User dropdown/slideout menu -->
                     {% if user.is_authenticated %}

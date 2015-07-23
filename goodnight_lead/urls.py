@@ -6,6 +6,7 @@ from django.conf.urls import patterns, url, include
 from gl_site import views
 from gl_site.inventories import views as inventory_views
 from gl_site.accounts import views as account_views
+from gl_site.statistics import views as statistic_views
 
 from django.contrib import admin
 
@@ -25,6 +26,8 @@ urlpatterns = patterns('',
         name='take_inventory'),
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', inventory_views.review_inventory,
         name='review_inventory'),
+
+    url(r'^view_statistics$', statistic_views.view_statistics, name='view_statistics'),
 
     url(r'^admin', include(admin.site.urls)),
     url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
