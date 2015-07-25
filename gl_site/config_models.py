@@ -27,6 +27,9 @@ class DashboardText(models.Model):
     about_panel_title = models.CharField(max_length=128)
     about_panel_contents = RichTextField()
 
+    def __str__(self):
+        return 'DashboardText object'
+
     class Meta:
         verbose_name = 'Dashboard text'
         verbose_name_plural = 'Dashboard text'

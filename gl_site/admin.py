@@ -9,8 +9,6 @@ from gl_site.config_models import SiteConfig, DashboardText
 from django.core.urlresolvers import reverse
 
 
-admin.site.register(DashboardText)
-
 class InlineSessionAdmin(admin.TabularInline):
     """ Inline class for managing sessions within the organization editor """
     model = Session
@@ -75,3 +73,19 @@ class OrganizationAdmin(admin.ModelAdmin):
         """
         context['show_save_url'] = not SiteConfig.objects.all().exists()
         return super().render_change_form(request, context, *args, **kwargs)
+
+
+@admin.register(DashboardText)
+class DashboardTextAdmin(admin.ModelAdmin):
+    """
+    Prevent anyone from creating or deleting a DashboardText object.
+
+    Our migrations create a single DashboardText object, and there
+    should always be exactly one.
+    """
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
