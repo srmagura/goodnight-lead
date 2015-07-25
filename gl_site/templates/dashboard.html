@@ -33,18 +33,17 @@
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="panel-body">
-                                    <p>Take an inventory which you haven't taken yet, or view the results from one you have.</p>
+                                    <p>{{ inventory_desc }} </p>
 
                                     <p>
                                         <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
-                                        If you are depressed or experiencing psychological distress then these inventories may not
-                                        be useful for you at this time. Please contact your LEAD Lab coach for referral to a counselor.
+                                        {{ mental_health_warning }}
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <table class="table inventory-table">
                                     {% for entry in inventories %}
                                     <tr>
@@ -81,19 +80,11 @@
             <div class="col-md-offset-2 col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="panel-title">About LEAD</span>
+                    <span class="panel-title">{{ about_panel_title }}</span>
                     <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#about-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                 </div>
                 <div class="panel-body panel-collapse collapse collapse-xs in" id="about-collapse">
-                    Lorem ipsum dolor sit amet, oblique petentium assueverit eos id, his choro dicunt ex. Liber patrioque cum cu. Nam ut tractatos similique, eum ea alia disputationi. Facete utamur albucius id est, te eum nostrum fierent assentior. Pro ad viris deterruisset.
-
-Viris oportere volutpat vis eu. Ut ius nominati indoctum elaboraret. Ne iusto nostrum fastidii nam. Malorum explicari definitiones no ius. At bonorum conceptam vis.
-
-Nusquam vulputate adversarium mea ne, pri et ferri quodsi sententiae. Tempor tritani convenire cu vim. Periculis hendrerit has at, consulatu vituperatoribus has cu. Ex qualisque dignissim sadipscing est, pro dolores ancillae definitiones at, et prompta lucilius sed.
-
-An erat affert iuvaret eum, no eum nonumy blandit constituam. Duo lobortis petentium ad. Erant feugait denique eum ut, eos et falli legendos. Suscipit pertinacia per et, tota regione vituperatoribus cum ad, homero facete suscipit vis no. No mandamus pertinacia accommodare nam, cum et nobis oportere.
-
-Usu ponderum elaboraret assueverit ea, in mea suscipit apeirian, habeo disputando efficiantur ad eum. Mutat gloriatur cotidieque has ad, eu quas justo facilis has. Ex prompta consulatu mea. Ferri mucius aliquando pro at. Mea timeam fabulas platonem cu, meliore voluptua aliquando est no.
+                    {{ about_panel_contents|safe }}
                 </div>
             </div>
         </div>

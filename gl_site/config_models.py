@@ -25,7 +25,11 @@ class DashboardText(models.Model):
     inventory_desc = models.TextField()
     mental_health_warning = models.TextField()
     about_panel_title = models.CharField(max_length=128)
-    about_panel_contents = RichTextField()
+    about_panel_contents = RichTextField(help_text=
+        'Note: uploading images to the server is not currently supported. '
+        'If you want to insert an image that is hosted elsewhere on the web, '
+        'you can do so by copying its URL into image insert dialog.'
+    )
 
     def __str__(self):
         return 'DashboardText object'

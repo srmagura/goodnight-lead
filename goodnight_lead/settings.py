@@ -95,6 +95,8 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, '../static'),)
 
+# We don't currently support uploading images from ckeditor, but we still
+# need to define this variable
 CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
 #Default url for login page (override django default)
