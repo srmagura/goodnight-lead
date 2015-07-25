@@ -27,7 +27,8 @@ urlpatterns = patterns('',
     url(r'^inventory/review/(?P<inventory_id>[0-9]+)$', inventory_views.review_inventory,
         name='review_inventory'),
 
-    url(r'^view_statistics$', statistic_views.view_statistics, name='view_statistics'),
+    url(r'^statistics/view$', statistic_views.view_statistics, name='view_statistics'),
+    url(r'^statistics/load_data$', statistic_views.load_data, name='load_data'),
 
     url(r'^admin', include(admin.site.urls)),
     url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
