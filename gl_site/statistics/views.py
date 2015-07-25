@@ -53,11 +53,20 @@ def load_data(request):
         if (form.is_valid()):
             try:
                 # If organization is not explicitly defined
-                # and the user is staff, load data for all organizations.
-                if (request.user.is_staff and form.cleaned_data['organization'] is None):
-                    organizations = Organization.objects.all()
-                # Load the user's organization.
+                if (form.cleaned_data['organization'] is None):
+                    # The user is staff, load data for all organizations.
+                    if (request.user.is_staff):
+                        organizations = Organization.objects.all()
+                    # The user is not staff, load their organization.
+                    else:
+                        organizations = [request.user.leaduserinfo.organization]
+                # Load the selected organization
                 else:
+                    # Verify the user has the permissions for the requested organization
+                    if (not request.user.is_staff and
+                        form.cleaned_data['organization'] != request.user.leaduserinfo.organization):
+
+                        raise LookupError("Invalid organization selection")
                     organizations = [form.cleaned_data['organization']]
 
                 # If session is not explicitly defined
