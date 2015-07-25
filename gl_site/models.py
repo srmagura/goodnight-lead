@@ -5,13 +5,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Import for providing sessions uuids
 from uuid import uuid1
 
-class SiteConfig(models.Model):
-    """
-    Configuration variables for gl_site.
-    """
-
-    base_url = models.CharField(max_length=200)
-
 class Organization(models.Model):
     """ Organization affiliated with each user.
         Each user shares a many to one relationship

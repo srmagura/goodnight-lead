@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
     'gl_site'
 )
 
@@ -93,6 +94,8 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, '../static'),)
+
+CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
 #Default url for login page (override django default)
 LOGIN_URL = '/login'

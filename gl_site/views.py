@@ -16,7 +16,8 @@ from gl_site.inventories import inventory_by_id
 from gl_site.inventories.views import get_submission, submission_is_complete
 
 # Model imports
-from gl_site.models import Session, LeadUserInfo, SiteConfig
+from gl_site.models import Session, LeadUserInfo
+from gl_site.config_models import SiteConfig
 
 #Other imports
 import random

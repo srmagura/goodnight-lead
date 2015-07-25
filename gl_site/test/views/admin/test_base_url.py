@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from gl_site.models import SiteConfig
+from gl_site.config_models import SiteConfig
 
 class TestBaseURL(TestCase):
 

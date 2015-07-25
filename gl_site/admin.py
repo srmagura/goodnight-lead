@@ -2,11 +2,14 @@
 from django.contrib import admin
 
 # Model imports
-from gl_site.models import Organization, Session, SiteConfig
+from gl_site.models import Organization, Session
+from gl_site.config_models import SiteConfig, DashboardText
 
 # Reverse and OS used for Session urls
 from django.core.urlresolvers import reverse
-import os
+
+
+admin.site.register(DashboardText)
 
 class InlineSessionAdmin(admin.TabularInline):
     """ Inline class for managing sessions within the organization editor """
@@ -35,6 +38,7 @@ class InlineSessionAdmin(admin.TabularInline):
             return ""
 
     get_url.short_description = "Registration URL"
+
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
