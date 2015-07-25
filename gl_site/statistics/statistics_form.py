@@ -1,7 +1,10 @@
+# Forms
 from django import forms
 
-from gl_site.models import Organization, Session
+# Models
+from gl_site.models import Session
 
+# Utils
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
@@ -40,11 +43,15 @@ class SessionWidget(forms.widgets.Select):
 class statistics_request_form(forms.Form):
     """ Form used for requesting statistics from the statistics page """
 
+    # The organization being requested
     organization = forms.ModelChoiceField(queryset=None, required=False)
 
+    # The session being requested
     session = forms.ModelChoiceField(queryset=None, required=False, widget=SessionWidget)
 
     def __init__(self, organizations, sessions, *args, **kwargs):
+        """ Override init to set field querysets manually """
+
         super(statistics_request_form, self).__init__(*args, **kwargs)
 
         # Set field query sets

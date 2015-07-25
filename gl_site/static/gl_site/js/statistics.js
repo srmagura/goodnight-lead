@@ -1,5 +1,8 @@
 /**
  * Statistics view. Document on load.
+ *
+ * Refer to http://api.jquery.com/jQuery.ajax/
+ * for ajax documentation.
  */
 $(function() {
     // Store jquery elements in more convenient varialbes
@@ -10,24 +13,6 @@ $(function() {
     // Remove all options but the empty value from the session select.
     var $options = $session.children().detach("[organization!='']");
 
-    // Bind the form submit action to a custom function
-    // for making an ajax requests.
-    $form.submit(function(e) {
-        // Prevent the default post action from occurring
-        e.preventDefault();
-
-        // Generate post data
-        var post = $(this).serialize();
-
-        // Load the post url
-        var url = $(this).attr("action");
-
-        // Make the POST request
-        $.post(url, post, function(data) {
-            $("#content").html(JSON.stringify(data));
-        });
-    });
-
     // Bind the organization on change to a function to dynamically
     // set the values of the session input.
     $org.change(function() {
@@ -36,5 +21,25 @@ $(function() {
 
         // Append all sessions matching the organization
         $session.append($options.filter("[organization='" + $org.val() + "']"));
+    });
+
+    // Bind the form submit action to a custom function
+    // for making an ajax post request.
+    $form.submit(function(e) {
+        // Prevent the default post action from occurring
+        e.preventDefault();
+
+        // Generate post data
+        var get = $(this).serialize();
+
+        // Load the post url
+        var url = $(this).attr("action");
+
+        // Make the GET request
+        $.get(url, get).done(function(data) {
+            $("#content").html(JSON.stringify(data));
+        }).fail(function(xhr, status, error) {
+            $("#content").html("failure: " + xhr.responseText);
+        });
     });
 });
