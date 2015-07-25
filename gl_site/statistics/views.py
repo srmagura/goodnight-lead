@@ -77,8 +77,9 @@ def load_data(request):
                     if (form.cleaned_data['session'].organization not in organizations):
                         raise LookupError("Invalid session selection")
                     sessions = [form.cleaned_data['session']]
-            except LookupError:
-                return JsonResponse(["Invalid parameters"], status=400, safe=False)
+
+            except LookupError as e:
+                return JsonResponse([str(e)], status=400, safe=False)
 
             return JsonResponse({
                 'organizations': [org.name for org in organizations],
