@@ -37,9 +37,32 @@ $(function() {
 
         // Make the GET request
         $.get(url, get).done(function(data) {
-            $("#content").html(JSON.stringify(data));
+            gd = data;
+            //  Clear the other graphs
+            $("#content").empty();
+
+            for (var key in data) {
+                var inventory = data[key];
+
+                // Create the jQuery div
+                $("#content").append('<div id="' + key + '"/>');
+
+                // Draw the plot
+                var box = d3plus.viz()
+                    .container(("#" + key))
+                    .data(inventory)
+                    .type("box")
+                    .id("name")
+                    .x("key")
+                    .y("value")
+                    .title(key)
+                    .height(500)
+                    .draw();
+            }
+
         }).fail(function(xhr, status, error) {
             $("#content").html("failure: " + xhr.responseText);
         });
     });
 });
+var gd;

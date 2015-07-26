@@ -7,7 +7,10 @@ from gl_site.custom_auth import login_required
 from gl_site.statistics.statistics_form import  statistics_request_form
 
 # Models
-from gl_site.models import Organization, Session
+from gl_site.models import Organization, Session, Metric
+
+# Inventories
+from gl_site.inventories import inventory_by_id
 
 def get_queryset(request):
     """ Non view helper function for returning proper querysets """
@@ -78,12 +81,44 @@ def load_data(request):
                         raise LookupError("Invalid session selection")
                     sessions = [form.cleaned_data['session']]
 
+
+                data = generate_data_from_sessions(sessions)
+
+                return JsonResponse(data)
             except LookupError as e:
                 return JsonResponse([str(e)], status=400, safe=False)
 
-            return JsonResponse({
-                'organizations': [org.name for org in organizations],
-                'sessions': [session.name for session in sessions]
-            })
-
     return JsonResponse(["Method not allowed"], status=405, safe=False)
+
+def generate_data_from_sessions(sessions):
+    """ Generate the data dict used to render the graphs """
+
+    # Get all metrics belonging to users
+    # registered for each session in sessions
+    metrics = Metric.objects.filter(submission__user__leaduserinfo__session__in=sessions)
+
+    # Data set to be returned
+    data = {}
+
+    # Process all metrics
+    metric_id = 0 # Unique anonymous id for each metric
+    for metric in metrics:
+        # Inventory the metric belongs to
+        inventory_cls = inventory_by_id[metric.submission.inventory_id]
+        inventory_name = inventory_cls.__name__
+
+        # If the inventory does not yet exist in the returned data set, add it
+        if (inventory_name not in data):
+            data[inventory_name] = []
+
+        # Append the value to the data set
+        data[inventory_name].append({
+            "name": ("Metric-{}".format(metric_id)),
+            "key": metric.key,
+            "value": metric.value
+        })
+
+        # Increment id
+        metric_id += 1
+
+    return data
