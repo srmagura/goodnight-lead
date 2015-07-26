@@ -12,12 +12,29 @@
 {% endblock %}
 
 {% block content %}
-    <form id="statistics_request_form" action="{% url 'load_data' %}" method="POST">
-        {% csrf_token %}
-        {% for field in form %}
-            {{ field.name }}{{ field }}
-        {% endfor %}
-        <input type="submit"/>
-    </form>
-    <div id="content"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="lead-panel">
+                    <form id="statistics_request_form" action="{% url 'load_data' %}" method="get">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <input type="submit" class="form-control btn btn-default"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <!-- Base div each inventory graph is appended to -->
+                <div id="graphs"></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

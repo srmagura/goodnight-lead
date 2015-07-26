@@ -5,10 +5,15 @@
  * for ajax documentation.
  */
 $(function() {
+    // Graph height
+    var graph_height = 750;
+    // Drawn plots
+    var graphs = [];
+
     // Store jquery elements in more convenient varialbes
     var $form = $("#statistics_request_form");
-    var $org = $form.children("#id_organization");
-    var $session = $form.children("#id_session");
+    var $org = $("#id_organization");
+    var $session = $("#id_session");
 
     // Remove all options but the empty value from the session select.
     var $options = $session.children().detach("[organization!='']");
@@ -21,6 +26,16 @@ $(function() {
 
         // Append all sessions matching the organization
         $session.append($options.filter("[organization='" + $org.val() + "']"));
+    });
+
+    // Bind the window resize event to a funciton for
+    // redrawing the graphs
+    $(window).resize(function() {
+        var width = $("#graphs").width();
+
+        for (var key in graphs) {
+            graphs[key].width(width).draw();
+        }
     });
 
     // Bind the form submit action to a custom function
@@ -39,16 +54,17 @@ $(function() {
         $.get(url, get).done(function(data) {
             gd = data;
             //  Clear the other graphs
-            $("#content").empty();
+            $("#graphs").empty();
 
             for (var key in data) {
                 var inventory = data[key];
 
                 // Create the jQuery div
-                $("#content").append('<div id="' + key + '"/>');
+                $("#graphs").append('<div id="' + key + '"/>');
 
                 // Draw the plot
-                var box = d3plus.viz()
+                graphs.push(
+                    d3plus.viz()
                     .container(("#" + key))
                     .data(inventory)
                     .type("box")
@@ -56,12 +72,13 @@ $(function() {
                     .x("key")
                     .y("value")
                     .title(key)
-                    .height(500)
-                    .draw();
+                    .height(graph_height)
+                    .draw()
+                );
             }
 
         }).fail(function(xhr, status, error) {
-            $("#content").html("failure: " + xhr.responseText);
+            $("#graphs").html("failure: " + xhr.responseText);
         });
     });
 });
