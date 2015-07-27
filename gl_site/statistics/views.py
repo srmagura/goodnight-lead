@@ -7,23 +7,10 @@ from gl_site.custom_auth import login_required
 from gl_site.statistics.statistics_form import  statistics_request_form
 
 # Models
-from gl_site.models import Organization, Session, Metric
+from gl_site.models import Organization, Session
 
-# Inventories
-from gl_site.inventories import inventory_by_id
-
-def get_queryset(request):
-    """ Non view helper function for returning proper querysets """
-    # Get the list of organizations the user can view data for.
-    if (request.user.is_staff):
-        organizations = Organization.objects.all()
-    else:
-        organizations = Organization.objects.filter(id=request.user.leaduserinfo.organization.id)
-
-    # Load all sessions belonging to the organizations
-    sessions = Session.objects.filter(organization__in = organizations)
-
-    return {'organizations': organizations, 'sessions': sessions}
+# Data
+from .data_generation import generate_data_from_sessions, get_queryset
 
 @login_required
 def view_statistics(request):
@@ -84,41 +71,8 @@ def load_data(request):
 
                 data = generate_data_from_sessions(sessions)
 
-                return JsonResponse(data)
+                return JsonResponse(data, safe=False)
             except LookupError as e:
                 return JsonResponse([str(e)], status=400, safe=False)
 
     return JsonResponse(["Method not allowed"], status=405, safe=False)
-
-def generate_data_from_sessions(sessions):
-    """ Generate the data dict used to render the graphs """
-
-    # Get all metrics belonging to users
-    # registered for each session in sessions
-    metrics = Metric.objects.filter(submission__user__leaduserinfo__session__in=sessions)
-
-    # Data set to be returned
-    data = {}
-
-    # Process all metrics
-    metric_id = 0 # Unique anonymous id for each metric
-    for metric in metrics:
-        # Inventory the metric belongs to
-        inventory_cls = inventory_by_id[metric.submission.inventory_id]
-        inventory_name = inventory_cls.__name__
-
-        # If the inventory does not yet exist in the returned data set, add it
-        if (inventory_name not in data):
-            data[inventory_name] = []
-
-        # Append the value to the data set
-        data[inventory_name].append({
-            "name": ("Metric-{}".format(metric_id)),
-            "key": metric.key,
-            "value": metric.value
-        })
-
-        # Increment id
-        metric_id += 1
-
-    return data

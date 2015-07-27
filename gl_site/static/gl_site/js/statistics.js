@@ -6,7 +6,7 @@
  */
 $(function() {
     // Graph height
-    var graph_height = 750;
+    var graph_height = 600;
     // Drawn plots
     var graphs = [];
 
@@ -52,26 +52,28 @@ $(function() {
 
         // Make the GET request
         $.get(url, get).done(function(data) {
-            gd = data;
             //  Clear the other graphs
             $("#graphs").empty();
 
             for (var key in data) {
-                var inventory = data[key];
+                var inventory = data[key].inventory;
+                var inventory_data = data[key].data;
 
                 // Create the jQuery div
-                $("#graphs").append('<div id="' + key + '"/>');
+                $("#graphs").append('<div id="' + inventory + '"/>');
+
+                var type = (inventory == "Via") ? "bar" : "box";
 
                 // Draw the plot
                 graphs.push(
                     d3plus.viz()
-                    .container(("#" + key))
-                    .data(inventory)
-                    .type("box")
+                    .container(("#" + inventory))
+                    .data(inventory_data)
+                    .type(type)
                     .id("name")
                     .x("key")
                     .y("value")
-                    .title(key)
+                    .title(inventory)
                     .height(graph_height)
                     .draw()
                 );
@@ -82,4 +84,3 @@ $(function() {
         });
     });
 });
-var gd;
