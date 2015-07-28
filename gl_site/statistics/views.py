@@ -9,6 +9,11 @@ from gl_site.statistics.statistics_form import  statistics_request_form
 # Data
 from .data_generation import generate_data_from_sessions, get_queryset, validate_sessions
 
+# Response statuses
+BAD_REQUEST = 400
+FORBIDDEN = 403
+METHOD_NOT_ALLOWED = 405
+
 @login_required
 def view_statistics(request):
     """ View responsable for initially loading the statistics page """
@@ -25,33 +30,36 @@ def view_statistics(request):
 def load_data(request):
     """ Returns a JSON respons containing statistics data """
 
-    if (request.method == 'GET'):
-        # Get the querysets accessable by the user
-        querysets = get_queryset(request.user)
+    # Deny non GET requests
+    if (request.method != 'GET'):
+        return JsonResponse(["Method not allowed"], status=METHOD_NOT_ALLOWED, safe=False)
 
-        # Build the submitted form from request data
-        form = statistics_request_form(
-            querysets['organizations'],
-            querysets['sessions'],
-            request.GET
+    # Get the querysets accessable by the user
+    querysets = get_queryset(request.user)
+
+    # Build the submitted form from request data
+    form = statistics_request_form(
+        querysets['organizations'],
+        querysets['sessions'],
+        request.GET
+    )
+
+    # Validate the form
+    if (not form.is_valid()):
+        return JsonResponse(["Invalid data selection"], status=FORBIDDEN, safe=False)
+
+    try:
+        # Validate sessions
+        sessions = validate_sessions(
+            form.cleaned_data['organization'],
+            form.cleaned_data['session'],
+            request.user
         )
 
-        # Validate the form
-        if (form.is_valid()):
-            try:
-                # Validate sessions
-                sessions = validate_sessions(
-                    form.cleaned_data['organization'],
-                    form.cleaned_data['session'],
-                    request.user
-                )
+        # Generate the data
+        data = generate_data_from_sessions(sessions)
 
-                # Generate the data
-                data = generate_data_from_sessions(sessions)
-
-                # Return the JSON encoded response
-                return JsonResponse(data, safe=False)
-            except LookupError as e:
-                return JsonResponse([str(e)], status=400, safe=False)
-
-    return JsonResponse(["Method not allowed"], status=405, safe=False)
+        # Return the JSON encoded response
+        return JsonResponse(data, safe=False)
+    except LookupError as e:
+        return JsonResponse([str(e)], status=BAD_REQUEST, safe=False)
