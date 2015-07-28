@@ -116,7 +116,7 @@ def generate_data_from_sessions(sessions, user):
     # Get all via Submissions
     submissions = Submission.objects.filter(inventory_id=Via.inventory_id)
 
-    if (len(submissions) > MINIMUM_SUBMISSIONS or user.is_staff):
+    if (len(submissions) >= MINIMUM_SUBMISSIONS or user.is_staff):
         # Process each submission
         for submission in submissions:
             # Get the associated metrics and process them
