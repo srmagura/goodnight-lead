@@ -14,6 +14,10 @@ BAD_REQUEST = 400
 FORBIDDEN = 403
 METHOD_NOT_ALLOWED = 405
 
+# Error messages
+METHOD_NOT_ALLOWED_MESSAGE = "Method not allowed."
+INVALID_DATA_SELECTION = "Invalid data selection."
+
 @login_required
 def view_statistics(request):
     """ View responsable for initially loading the statistics page """
@@ -32,7 +36,7 @@ def load_data(request):
 
     # Deny non GET requests
     if (request.method != 'GET'):
-        return JsonResponse(["Method not allowed"], status=METHOD_NOT_ALLOWED, safe=False)
+        return JsonResponse([METHOD_NOT_ALLOWED_MESSAGE], status=METHOD_NOT_ALLOWED, safe=False)
 
     # Get the querysets accessable by the user
     querysets = get_queryset(request.user)
@@ -46,7 +50,7 @@ def load_data(request):
 
     # Validate the form
     if (not form.is_valid()):
-        return JsonResponse(["Invalid data selection"], status=FORBIDDEN, safe=False)
+        return JsonResponse([INVALID_DATA_SELECTION], status=FORBIDDEN, safe=False)
 
     try:
         # Validate sessions
