@@ -5,23 +5,58 @@ from gl_site.models import Metric, Submission, Organization, Session
 from gl_site.inventories import inventory_by_id
 from gl_site.inventories.via import Via
 
-from . import via_inverse
+# Via categories
+from gl_site.statistics import via_inverse
 
-def get_queryset(request):
-    """ Non view helper function for returning proper querysets """
+def get_queryset(user):
+    """ Return proper querysets viewable by a given user """
     # Get the list of organizations the user can view data for.
-    if (request.user.is_staff):
+    if (user.is_staff):
         organizations = Organization.objects.all()
     else:
-        organizations = Organization.objects.filter(id=request.user.leaduserinfo.organization.id)
+        organizations = Organization.objects.filter(id=user.leaduserinfo.organization.id)
 
     # Load all sessions belonging to the organizations
     sessions = Session.objects.filter(organization__in = organizations)
 
     return {'organizations': organizations, 'sessions': sessions}
 
+def validate_sessions(organization, session, user):
+    """ Validate a user's selection of organization and session.
+        Returns an iterable containing all sessions.
+        Throws an exceptioin if an error occurs.
+    """
+
+    # If organization is not explicitly defined
+    if (organization is None):
+        # The user is staff, load data for all organizations.
+        if (user.is_staff):
+            organizations = Organization.objects.all()
+        # The user is not staff, load their organization.
+        else:
+            organizations = [user.leaduserinfo.organization]
+    # Load the selected organization
+    else:
+        # Verify the user has the permissions for the requested organization
+        if (not user.is_staff and
+            organization != user.leaduserinfo.organization):
+
+            raise LookupError("Invalid organization selection")
+        organizations = [organization]
+
+    # If session is not explicitly defined
+    # load data for all sessions
+    if (session is None):
+        sessions = Session.objects.filter(organization__in = organizations)
+    else:
+        if (session.organization not in organizations):
+            raise LookupError("Invalid session selection")
+        sessions = [session]
+
+    return sessions
+
 def generate_data_from_sessions(sessions):
-    """ Generate the data dict used to render the graphs """
+    """ Generate the data for a set of selected sessions """
 
     # Get all metrics belonging to users
     # registered for each session in sessions.
