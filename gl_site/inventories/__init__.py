@@ -11,7 +11,12 @@ inventory_cls_list = (
     BigFive, CoreSelf, CareerCommitment,
     Ambiguity, FiroB, Via
 )
-    
+
+numeric_inventory_cls_list = (
+    BigFive, CoreSelf, CareerCommitment,
+    Ambiguity, FiroB
+)
+
 inventory_by_id = dict(zip(range(len(inventory_cls_list)), inventory_cls_list))
 
 for inventory_id, inventory in inventory_by_id.items():
