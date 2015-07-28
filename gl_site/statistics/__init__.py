@@ -4,7 +4,7 @@ via_categories = {
     'Humanity': ['Love', 'Kindness', 'Social Intelligence'],
     'Justice': ['Citizenship', 'Fairness', 'Leadership'],
     'Temperance': ['Forgiveness', 'Humility', 'Prudence', 'Self Regulation'],
-    'Transcendence': ['Appreciation of Beauty', 'Gratitude', 'Hopefulness', 'Humour', 'Spirituality']
+    'Transcendence': ['Appreciation Of Beauty', 'Gratitude', 'Hopefulness', 'Humour', 'Spirituality']
 }
 via_inverse = {}
 for key, value in via_categories.items():

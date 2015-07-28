@@ -63,15 +63,16 @@ def validate_sessions(organization, session, user):
 
     return sessions
 
-def generate_data_from_sessions(sessions):
+def generate_data_from_sessions(sessions, user):
     """ Generate the data for a set of selected sessions """
 
     # List of inventories to exclude
     excludes = []
-    for inventory_cls in numeric_inventory_cls_list:
-        count = Submission.objects.filter(inventory_id=inventory_cls.inventory_id).count()
-        if (count < MINIMUM_SUBMISSIONS):
-            excludes.append(inventory_cls.inventory_id)
+    if (not user.is_staff):
+        for inventory_cls in numeric_inventory_cls_list:
+            count = Submission.objects.filter(inventory_id=inventory_cls.inventory_id).count()
+            if (count < MINIMUM_SUBMISSIONS):
+                excludes.append(inventory_cls.inventory_id)
 
     # Get all metrics belonging to users
     # registered for each session in sessions.
@@ -115,7 +116,7 @@ def generate_data_from_sessions(sessions):
     # Get all via Submissions
     submissions = Submission.objects.filter(inventory_id=Via.inventory_id)
 
-    if (len(submissions) > MINIMUM_SUBMISSIONS):
+    if (len(submissions) > MINIMUM_SUBMISSIONS or user.is_staff):
         # Process each submission
         for submission in submissions:
             # Get the associated metrics and process them

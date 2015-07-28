@@ -61,7 +61,7 @@ def load_data(request):
         )
 
         # Generate the data
-        data = generate_data_from_sessions(sessions)
+        data = generate_data_from_sessions(sessions, request.user)
 
         # Return the JSON encoded response
         return JsonResponse(data, safe=False)
