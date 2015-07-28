@@ -80,7 +80,25 @@ $(function() {
             }
 
         }).fail(function(xhr, status, error) {
-            $("#graphs").html("failure: " + xhr.responseText);
+            messages = JSON.parse(xhr.responseText);
+
+            for (var i in messages) {
+                // Append the error message to the page
+                $messageDiv = $("<div></div>").attr(
+                    "class",
+                    "alert alert-danger alert-dismissable"
+                );
+                $dismiss = $("<button></button>").attr(
+                        "class", "close"
+                    ).attr(
+                        "data-dismiss", "alert"
+                    ).attr(
+                        "aria-hidden", "true"
+                    )
+                    .html("&times;");
+                $messageDiv.html(messages[i]).append($dismiss);
+                $("#statistics-messages").append($messageDiv);
+            }
         });
     });
 });
