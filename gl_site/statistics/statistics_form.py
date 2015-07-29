@@ -44,10 +44,10 @@ class statistics_request_form(forms.Form):
     """ Form used for requesting statistics from the statistics page """
 
     # The organization being requested
-    organization = forms.ModelChoiceField(queryset=None, required=False, empty_label="All")
+    organization = forms.ModelChoiceField(queryset=None, required=False)
 
     # The session being requested
-    session = forms.ModelChoiceField(queryset=None, required=False, widget=SessionWidget, empty_label="All")
+    session = forms.ModelChoiceField(queryset=None, required=False, widget=SessionWidget)
 
     def __init__(self, organizations, sessions, *args, **kwargs):
         """ Override init to set field querysets manually """
@@ -58,9 +58,14 @@ class statistics_request_form(forms.Form):
         self.fields['organization'].queryset = organizations
         self.fields['session'].queryset = sessions
 
-        #Set custom class on all widgets
-        for name, field in self.fields.items():
+        #Set custom class and empty field on all widgets
+        for field in self.fields.values():
             if 'class' in field.widget.attrs:
                 field.widget.attrs['class'] += 'form-control'
             else:
                 field.widget.attrs.update({'class':'form-control'})
+
+            if field.queryset.count() == 1:
+                field.empty_label = None
+            else:
+                field.empty_label = "All"

@@ -10,21 +10,29 @@ $(function() {
     // Drawn plots
     var graphs = {};
 
-
     // Store jquery elements in more convenient varialbes
     var $form = $("#statistics_request_form");
     var $org = $("#id_organization");
     var $session = $("#id_session");
+    var $options;
     var $graphColumn = $("#graph-column");
     var $graphs = $("#graphs");
+    var $graphContainers;
     var $messages = $("#statistics-messages");
     var $inventorySelect = $("#inventory-selection");
 
     // Hide the graphs
     $graphColumn.hide();
 
-    // Remove all options but the empty value from the session select.
-    var $options = $session.children().detach("[organization!='']");
+    // If there is more than one organization, remove
+    // all options but the empty value from the session select.
+    if ($org.children().length > 1) {
+        $options = $session.children().detach("[organization!='']");
+    }
+    // Disable organization select if there is only one choice
+    else {
+        $org.prop("disabled", true);
+    }
 
     // Bind the organization on change to a function to dynamically
     // set the values of the session input.
@@ -39,7 +47,7 @@ $(function() {
     // Bind the window resize event to a funciton for
     // redrawing the graphs
     $(window).resize(function() {
-        var width = $graph.width();
+        var width = $graphs.width();
 
         for (var key in graphs) {
             graphs[key].width(width).draw();
@@ -47,11 +55,12 @@ $(function() {
     });
 
     // Inventory selection change
-    // Hide all graphs and show the selected one
+    // Attach the selected graph.
     $inventorySelect.change(function() {
-        var selected = $inventorySelect.val()
-        $graphs.children().not("#" + selected).hide();
-        $graphs.children("#" + selected).show();
+        var selected = $inventorySelect.val();
+        $graphs.empty();
+        $graphs.append($graphContainers.filter("#" + selected));
+        graphs[selected].draw();
     });
 
     // Bind the form submit action to a custom function
@@ -93,7 +102,7 @@ $(function() {
                     $('<div></div>').attr("id", inventory)
                 );
 
-                // Draw the plot
+                // Generate the plot
                 graphs[inventory] = d3plus.viz()
                     .container(("#" + inventory))
                     .data(inventory_data)
@@ -102,14 +111,17 @@ $(function() {
                     .x("key")
                     .y("value")
                     .height(graph_height)
-                    .draw();
+                    .width($graphs.width())
             }
+
+            // Detach the rendered graphs.
+            $graphContainers = $graphs.children().detach();
 
             // Fire the change event manually
             $inventorySelect.change();
 
         }).fail(function(xhr, status, error) {
-            // Hide the graph column and pares for messages
+            // Hide the graph column and parse for messages
             $graphColumn.hide();
             messages = JSON.parse(xhr.responseText);
 
