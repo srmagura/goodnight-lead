@@ -32,7 +32,7 @@ def get_queryset(user):
 def validate_sessions(organization, session, user):
     """ Validate a user's selection of organization and session.
         Returns an iterable containing all sessions.
-        Throws an exceptioin if an error occurs.
+        Throws an exception if an error occurs.
     """
 
     # If organization is not explicitly defined
