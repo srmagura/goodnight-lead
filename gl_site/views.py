@@ -16,7 +16,8 @@ from gl_site.inventories import inventory_by_id
 from gl_site.inventories.views import get_submission, submission_is_complete
 
 # Model imports
-from gl_site.models import Session, LeadUserInfo, SiteConfig
+from gl_site.models import Session, LeadUserInfo
+from gl_site.config_models import SiteConfig, DashboardText
 
 #Other imports
 import random
@@ -42,7 +43,16 @@ def dashboard(request):
     shuffled_quotes = list(dashboard_quotes)
     random.shuffle(shuffled_quotes)
 
-    data = {'inventories': entries, 'quotes': shuffled_quotes}
+    dashbaord_text = DashboardText.objects.all()[0]
+
+    data = {
+        'inventories': entries,
+        'quotes': shuffled_quotes,
+        'inventory_desc': dashbaord_text.inventory_desc,
+        'mental_health_warning': dashbaord_text.mental_health_warning,
+        'about_panel_title': dashbaord_text.about_panel_title,
+        'about_panel_contents': dashbaord_text.about_panel_contents,
+    }
     return render(request, 'dashboard.html', data)
 
 @logout_required

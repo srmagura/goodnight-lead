@@ -1,12 +1,30 @@
 # Import admin for model admin
 from django.contrib import admin
+import django.contrib.auth as auth
 
 # Model imports
-from gl_site.models import Organization, Session, SiteConfig
+from django.contrib.auth.models import User
+from gl_site.models import Organization, Session
+from gl_site.config_models import SiteConfig, DashboardText
 
 # Reverse and OS used for Session urls
 from django.core.urlresolvers import reverse
-import os
+
+
+admin.site.unregister(User)
+@admin.register(User)
+class UserAdmin(auth.admin.UserAdmin):
+    """
+    Prevent anyone from creating a User through the admin site.
+
+    Extends the default auth.admin.UserAdmin. Users should only be
+    created through the registration page, excluding the initial admin
+    user, which is created using `manage.py createsuperuser`.
+    """
+    
+    def has_add_permission(self, request):
+        return False
+
 
 class InlineSessionAdmin(admin.TabularInline):
     """ Inline class for managing sessions within the organization editor """
@@ -35,6 +53,7 @@ class InlineSessionAdmin(admin.TabularInline):
             return ""
 
     get_url.short_description = "Registration URL"
+
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
@@ -71,3 +90,19 @@ class OrganizationAdmin(admin.ModelAdmin):
         """
         context['show_save_url'] = not SiteConfig.objects.all().exists()
         return super().render_change_form(request, context, *args, **kwargs)
+
+
+@admin.register(DashboardText)
+class DashboardTextAdmin(admin.ModelAdmin):
+    """
+    Prevent anyone from creating or deleting a DashboardText object.
+
+    Our migrations create a single DashboardText object, and there
+    should always be exactly one.
+    """
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

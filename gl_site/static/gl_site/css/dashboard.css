@@ -1,3 +1,24 @@
+.panel
+{
+    border-color: #ccc;
+}
+
+.logo-heading
+{
+    padding-bottom: 8px;
+}
+
+.inventory-row
+{
+    padding-top: 5px;
+}
+
+.inventory-table
+{
+    margin: -1px 0 0 -1px;
+    border-left: 1px solid #ddd;
+}
+
 .inventory-table .name
 {
     width: 50%;
@@ -19,6 +40,11 @@
 }
 
 /******Quote Carousel******/
+.carousel-row
+{
+    padding-top: 15px;
+}
+
 .carousel-inner {
     height:150px;
     background-image: url('../images/background.jpeg');

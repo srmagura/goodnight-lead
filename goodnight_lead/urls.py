@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^statistics/load_data$', statistic_views.load_data, name='load_data'),
 
     url(r'^admin', include(admin.site.urls)),
+    url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
 
     url(r'^.*$', views.page_not_found, name='page_not_found'),

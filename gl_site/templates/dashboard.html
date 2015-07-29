@@ -23,104 +23,76 @@
             </div>
         {% endif %}
 
-        <div class="row">
-            <div class="col-md-offset-1 col-md-5">
+
+        <div class="row inventory-row">
+            <div class="col-md-offset-2 col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <span>View Inventories</span>
+                        <span class="panel-title">Inventories</span>
                         <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#inventories-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
                     </div>
                     <div class="panel-collapse collapse collapse-xs in" id="inventories-collapse">
-                        <div class="panel-body">
-                            <p>Take an inventory which you haven't taken yet, or view the results from one you have.</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel-body">
+                                    <p>{{ inventory_desc }} </p>
 
-                            <p>
-                                <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
-                                If you are depressed or experiencing psychological distress then these inventories may not
-                                be useful for you at this time. Please contact your LEAD Lab coach for referral to a counselor.
-                            </p>
-                        </div>
-                        <table class="table inventory-table">
-                            {% for entry in inventories %}
-                                <tr>
-                                    <td class="name">{{ entry.name }}</td>
-                                    <td class="take">
-                                    {% if entry.is_complete %}
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    {% else %}
-                                        <a href="inventory/take/{{ entry.inventory_id }}">
-                                            {% if entry.is_started %}
-                                                Continue
+                                    <p>
+                                        <b>Attention</b> <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;
+                                        {{ mental_health_warning }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table inventory-table">
+                                    {% for entry in inventories %}
+                                    <tr>
+                                        <td class="name">{{ entry.name }}</td>
+                                        <td class="take">
+                                            {% if entry.is_complete %}
+                                            <span class="glyphicon glyphicon-ok"></span>
                                             {% else %}
+                                            <a href="inventory/take/{{ entry.inventory_id }}">
+                                                {% if entry.is_started %}
+                                                Continue
+                                                {% else %}
                                                 Take
+                                                {% endif %}
+                                            </a>
                                             {% endif %}
-                                        </a>
-                                    {% endif %}
-                                    </td>
-                                    <td class="review">
-                                    {% if entry.is_complete %}
-                                        <a href="inventory/review/{{ entry.inventory_id }}">View results</a>
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                             {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <span>On Leadership</span>
-                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel2-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
-                    </div>
-                    <div class="panel-collapse collapse collapse-xs in" id="panel2-collapse">
-                        <div class="panel-body">
-                            Leadership is more than the leader. Most professional development focuses on leader development. However, it is just as important to consider followers and the contexts when learning about leadership. The LEAD Lab emphasizes all three parts of the Leadership Triangle.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <span>About the LEAD Lab</span>
-                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel3-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
-                    </div>
-                    <div class="panel-collapse collapse collapse-xs in" id="panel3-collapse">
-                        <div class="panel-body">
-                            LEAD stands for Learn, Evaluate, Assess, and Develop. Effective leaders engage in all of these activities. The <b><i>lab</i></b> emphasizes that learning about leadership is experimental. You will make mistakes. However, labs are meant for experimentation to figure out what works. One leadership scholar Dr. Padilla has said that leadership cannot be taught but it can be learned.
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <span>LEAD Lab I</span>
-                        <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#panel4-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
-                    </div>
-                    <div class="panel-collapse collapse collapse-xs in" id="panel4-collapse">
-                        <div class="panel-body">
-                            Lead Lab I is a pilot program this fall. There are a series of leadership coaching sessions to help you, as emerging leaders, develop your self awareness, recognize leader preferences in others, and to have an appreciation of all three elements in the leadership triangle (leader, followers, contexts).<br /><br />
-                            <table class="table">
-                                <tr>
-                                    <td>9.29.14</td><td>Lead Lab 1 – The Leader: Understanding self to understand others.</td>
-                                </tr>
-                                <tr>
-                                    <td>10.13.14</td><td>Lead Lab 2 – Leadership in STEM: Process not a Person.</td>
-                                </tr>
-                                <tr>
-                                    <td>10.20.14</td><td>Lead Lab 3 – Leadership in Practice.</td>
-                                </tr>
-                                <tr>
-                                    <td>10.29.14</td><td>Lead Lab 4 – Leading from Strengths.</td>
-                                </tr>
-                            </table>
+                                        </td>
+                                        <td class="review">
+                                            {% if entry.is_complete %}
+                                            <a href="inventory/review/{{ entry.inventory_id }}">View results</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-offset-1 col-md-10">
-                <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="10000">
+            <div class="col-md-offset-2 col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="panel-title">{{ about_panel_title }}</span>
+                    <a class="visible-xs pull-right" onclick="rotateChevron($(this))" data-toggle="collapse" href="#about-collapse"><span class="glyphicon glyphicon-chevron-up visible-xs-icon"></span></a>
+                </div>
+                <div class="panel-body panel-collapse collapse collapse-xs in" id="about-collapse">
+                    {{ about_panel_contents|safe }}
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="row carousel-row">
+            <div class="col-md-offset-2 col-md-8">
+                <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="15000">
 
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner">
