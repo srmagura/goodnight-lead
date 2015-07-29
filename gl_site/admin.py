@@ -1,12 +1,29 @@
 # Import admin for model admin
 from django.contrib import admin
+import django.contrib.auth as auth
 
 # Model imports
+from django.contrib.auth.models import User
 from gl_site.models import Organization, Session
 from gl_site.config_models import SiteConfig, DashboardText
 
 # Reverse and OS used for Session urls
 from django.core.urlresolvers import reverse
+
+
+admin.site.unregister(User)
+@admin.register(User)
+class UserAdmin(auth.admin.UserAdmin):
+    """
+    Prevent anyone from creating a User through the admin site.
+
+    Extends the default auth.admin.UserAdmin. Users should only be
+    created through the registration page, excluding the initial admin
+    user, which is created using `manage.py createsuperuser`.
+    """
+    
+    def has_add_permission(self, request):
+        return False
 
 
 class InlineSessionAdmin(admin.TabularInline):
