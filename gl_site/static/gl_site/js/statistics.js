@@ -8,12 +8,20 @@ $(function() {
     // Graph height
     var graph_height = 600;
     // Drawn plots
-    var graphs = [];
+    var graphs = {};
+
 
     // Store jquery elements in more convenient varialbes
     var $form = $("#statistics_request_form");
     var $org = $("#id_organization");
     var $session = $("#id_session");
+    var $graphColumn = $("#graph-column");
+    var $graphs = $("#graphs");
+    var $messages = $("#statistics-messages");
+    var $inventorySelect = $("#inventory-selection");
+
+    // Hide the graphs
+    $graphColumn.hide();
 
     // Remove all options but the empty value from the session select.
     var $options = $session.children().detach("[organization!='']");
@@ -31,11 +39,19 @@ $(function() {
     // Bind the window resize event to a funciton for
     // redrawing the graphs
     $(window).resize(function() {
-        var width = $("#graphs").width();
+        var width = $graph.width();
 
         for (var key in graphs) {
             graphs[key].width(width).draw();
         }
+    });
+
+    // Inventory selection change
+    // Hide all graphs and show the selected one
+    $inventorySelect.change(function() {
+        var selected = $inventorySelect.val()
+        $graphs.children().not("#" + selected).hide();
+        $graphs.children("#" + selected).show();
     });
 
     // Bind the form submit action to a custom function
@@ -43,6 +59,9 @@ $(function() {
     $form.submit(function(e) {
         // Prevent the default post action from occurring
         e.preventDefault();
+
+        // Clear old messages
+        $messages.empty();
 
         // Generate post data
         var get = $(this).serialize();
@@ -52,36 +71,49 @@ $(function() {
 
         // Make the GET request
         $.get(url, get).done(function(data) {
-            //  Clear the other graphs
-            $("#graphs").empty();
+            // Show the graphs column and empty the previous data choices
+            $graphColumn.show();
+            $inventorySelect.empty();
+            $graphs.empty();
 
+            // Process all available inventories
             for (var key in data) {
                 var inventory = data[key].inventory;
                 var inventory_data = data[key].data;
 
-                // Create the jQuery div
-                $("#graphs").append('<div id="' + inventory + '"/>');
-
                 var type = (inventory == "Via") ? "bar" : "box";
 
+                // Append the select option and graph div for the inventory
+                $inventorySelect.append(
+                    $("<option></option>")
+                    .val(inventory)
+                    .html(inventory)
+                );
+                $graphs.append(
+                    $('<div></div>').attr("id", inventory)
+                );
+
                 // Draw the plot
-                graphs.push(
-                    d3plus.viz()
+                graphs[inventory] = d3plus.viz()
                     .container(("#" + inventory))
                     .data(inventory_data)
                     .type(type)
                     .id("name")
                     .x("key")
                     .y("value")
-                    .title(inventory)
                     .height(graph_height)
-                    .draw()
-                );
+                    .draw();
             }
 
+            // Fire the change event manually
+            $inventorySelect.change();
+
         }).fail(function(xhr, status, error) {
+            // Hide the graph column and pares for messages
+            $graphColumn.hide();
             messages = JSON.parse(xhr.responseText);
 
+            // Process each message
             for (var i in messages) {
                 // Append the error message to the page
                 $messageDiv = $("<div></div>").attr(
@@ -97,7 +129,7 @@ $(function() {
                     )
                     .html("&times;");
                 $messageDiv.html(messages[i]).append($dismiss);
-                $("#statistics-messages").append($messageDiv);
+                $messages.append($messageDiv);
             }
         });
     });
