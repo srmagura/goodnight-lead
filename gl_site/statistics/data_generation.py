@@ -113,8 +113,11 @@ def generate_data_from_sessions(sessions, user):
     # Via data
     via_data = {}
 
-    # Get all via Submissions
-    submissions = Submission.objects.filter(inventory_id=Via.inventory_id)
+    # Get all via Submissions in selected sessions.
+    submissions = Submission.objects.filter(
+        inventory_id=Via.inventory_id,
+        user__leaduserinfo__session__in=sessions
+    )
 
     if (len(submissions) >= MINIMUM_SUBMISSIONS or user.is_staff):
         # Process each submission
@@ -135,11 +138,12 @@ def generate_data_from_sessions(sessions, user):
                     via_data[name]['value'] += 1
 
         # Add the via data
-        data[Via.__name__] = []
-        for key, value in via_data.items():
-            value['name'] = via_inverse[key] # Via category
-            value['key'] = key
-            data[Via.__name__].append(value)
+        if (len(via_data.items()) > 0):
+            data[Via.__name__] = []
+            for key, value in via_data.items():
+                value['name'] = via_inverse[key] # Via category
+                value['key'] = key
+                data[Via.__name__].append(value)
 
     # Return an ordered list
     data_list = []
