@@ -1,11 +1,15 @@
 # gl_site models
-from gl_site.models import Organization, Session, LeadUserInfo
+from gl_site.models import Organization, Session, LeadUserInfo, Submission
 
 # Django User
 from django.contrib.auth.models import User
 
 # Date utilities
 from datetime import date
+
+# Inventories
+from gl_site.inventories import inventory_cls_list
+from .statistics.inventory_answers_and_metrics import inventory_data
 
 class Factory:
     """ Factory class for creating commonly used objects in testing """
@@ -73,6 +77,32 @@ class Factory:
         return (user, info)
 
     @classmethod
+    def create_user_in_session(cls, session):
+        """ Create a user and place in the provided session """
+
+        user = User.objects.create_user(
+            username = "testuser{}".format(cls.index),
+            email = "testuser{}@gmail.com".format(cls.index),
+            password = cls.default_password,
+            first_name = "test{}".format(cls.index),
+            last_name = "user{}".format(cls.index)
+        )
+
+        info = LeadUserInfo.objects.create(
+            user = user,
+            gender = 'M',
+            major = LeadUserInfo.OTHER,
+            education = 'FR',
+            graduation_date = date.today(),
+            organization = session.organization,
+            session = session
+        )
+
+        cls.increment_index()
+
+        return (user, info)
+
+    @classmethod
     def create_admin(cls):
         """
         Create and return a superuser.
@@ -133,3 +163,46 @@ class Factory:
         }
         cls.increment_index()
         return form
+
+    @classmethod
+    def create_set_of_submissions(cls, user):
+        """ Generate and save a single set of submissions for each inventory """
+        for inventory_cls in inventory_cls_list:
+            # Create an inventory
+            inventory =  inventory_cls()
+
+            # Generate the submission
+            submission = Submission()
+            submission.inventory_id = inventory.inventory_id
+            submission.user = user
+            submission.current_page = inventory.n_pages - 1
+            submission.save()
+            inventory.set_submission(submission)
+
+            # Set answers and compute metrics
+            answers = inventory_data[inventory_cls.__name__]['answers']
+            cls.set_answers(inventory, answers)
+            inventory.compute_metrics()
+
+            # Save the metrics
+            inventory.save_metrics()
+
+    @classmethod
+    def set_answers(cls, inv, answers):
+        """ Imports provided answers into an inventory's
+            answers dictionary.
+
+            Inputs:
+            inv     - Instance of Inventory which the answers will be
+                      imported to.
+            answers - Set of pre-defined answers for an inventory.
+
+        """
+        if type(answers) is dict:
+            inv.answers = answers
+        else:
+            inv.answers = {}
+            i = 1
+            for answer in answers:
+                inv.answers[i] = answer
+                i += 1
