@@ -4,7 +4,7 @@ from django.shortcuts import render
 from gl_site.custom_auth import login_required
 
 # Forms
-from gl_site.statistics.statistics_form import  statistics_request_form
+from gl_site.statistics.statistics_form import  statistics_request_form, statistics_download_form
 
 # Data
 from .data_generation import generate_data_from_sessions, get_queryset, validate_sessions
@@ -28,7 +28,14 @@ def view_statistics(request):
         querysets['organizations'],
         querysets['sessions']
     )
-    return render(request, 'statistics/statistics.html', {'form': form})
+    downloads = statistics_download_form(
+        querysets['organizations'],
+        querysets['sessions']
+    )
+    return render(request, 'statistics/statistics.html', {
+        'form': form,
+        'downloads': downloads
+    })
 
 @login_required
 def load_data(request):
@@ -67,3 +74,6 @@ def load_data(request):
         return JsonResponse(data, safe=False)
     except LookupError as e:
         return JsonResponse([str(e)], status=BAD_REQUEST, safe=False)
+
+def download_data(request):
+    pass

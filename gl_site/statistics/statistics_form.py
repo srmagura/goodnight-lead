@@ -65,7 +65,18 @@ class statistics_request_form(forms.Form):
             else:
                 field.widget.attrs.update({'class':'form-control'})
 
-            if field.queryset.count() == 1:
-                field.empty_label = None
-            else:
-                field.empty_label = "All"
+            if hasattr(field, 'queryset'):
+                if field.queryset.count() == 1:
+                    field.empty_label = None
+                else:
+                    field.empty_label = "All"
+
+class statistics_download_form(statistics_request_form):
+    """ Form for performing a data download """
+
+    # Download choices
+    choices = (
+        ('application/json', 'JSON'),
+        ('application/xlsx', 'Excel')
+    )
+    download_choices = forms.ChoiceField(choices=choices)

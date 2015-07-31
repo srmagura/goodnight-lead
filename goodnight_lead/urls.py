@@ -29,6 +29,7 @@ urlpatterns = patterns('',
 
     url(r'^statistics/view$', statistic_views.view_statistics, name='view_statistics'),
     url(r'^statistics/load_data$', statistic_views.load_data, name='load_data'),
+    url(r'^statistics/download_data$', statistic_views.download_data, name='download_data'),
 
     url(r'^admin', include(admin.site.urls)),
     url(r'^ckeditor/', include('ckeditor.urls')),

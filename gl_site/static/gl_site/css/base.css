@@ -132,3 +132,12 @@ a.navbar-brand .navbar-text {
 {
     display: none;
 }
+
+.legend {
+    width:auto;
+    border:none;
+    background:none;
+    background-color:transparent;
+    margin:0;
+    padding:0;
+}

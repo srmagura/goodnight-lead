@@ -9,13 +9,17 @@
     <script src="http://www.d3plus.org/js/d3.js"></script>
     <script src="http://www.d3plus.org/js/d3plus.js"></script>
     <script src = "{% static 'gl_site/js/statistics.js' %}"></script>
+    <script src="{% static 'gl_site/js/equalHeight.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-4 col-md-4">
-                <div class="lead-panel">
+            <div class="col-md-offset-2 col-md-4">
+                <fieldset class="lead-panel equal-height">
+                    <legend class="legend">
+                        View Statistics
+                    </legend>
                     <form id="statistics_request_form" action="{% url 'load_data' %}" method="get">
                         {% csrf_token %}
                         {% for field in form %}
@@ -24,9 +28,26 @@
                                 {{ field }}
                             </div>
                         {% endfor %}
-                        <input type="submit" class="form-control btn btn-default"/>
+                        <input type="submit" class="form-control btn btn-default" value="View"/>
                     </form>
-                </div>
+                </fieldset>
+            </div>
+            <div class="col-md-4">
+                <fieldset class="lead-panel equal-height">
+                    <legend class="legend">
+                        Download Statistics
+                    </legend>
+                    <form id="statistics_download_form" action="{% url 'download_data' %}" method="get">
+                        {% csrf_token %}
+                        {% for field in downloads %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <input type="submit" class="form-control btn btn-default" value="Download"/>
+                    </form>
+                </fieldset>
             </div>
         </div>
         <div class="row">
