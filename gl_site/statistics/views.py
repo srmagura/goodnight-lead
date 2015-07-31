@@ -30,7 +30,8 @@ def view_statistics(request):
     )
     downloads = statistics_download_form(
         querysets['organizations'],
-        querysets['sessions']
+        querysets['sessions'],
+        auto_id='id_downloads_%s'
     )
     return render(request, 'statistics/statistics.html', {
         'form': form,
