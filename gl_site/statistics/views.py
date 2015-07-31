@@ -1,5 +1,5 @@
 # View imports
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from gl_site.custom_auth import login_required
 
@@ -8,6 +8,16 @@ from gl_site.statistics.statistics_form import  statistics_request_form, statist
 
 # Data
 from .data_generation import generate_data_from_sessions, get_queryset, validate_sessions
+
+# IO
+from django.core.files.base import ContentFile
+from io import BytesIO
+
+# JSON
+import json
+
+# Excel
+import xlsxwriter
 
 # Response statuses
 BAD_REQUEST = 400
@@ -77,4 +87,80 @@ def load_data(request):
         return JsonResponse([str(e)], status=BAD_REQUEST, safe=False)
 
 def download_data(request):
-    pass
+    # Get the querysets accessable by the user
+    querysets = get_queryset(request.user)
+
+    # Get the selected downloads
+    downloads = statistics_download_form(
+        querysets['organizations'],
+        querysets['sessions'],
+        request.GET,
+        auto_id='id_downloads_%s'
+    )
+
+    # If it is a valid choice
+    if ( downloads.is_valid()):
+        data = []
+        try:
+            # Validate sessions
+            sessions = validate_sessions(
+                downloads.cleaned_data['organization'],
+                downloads.cleaned_data['session'],
+                request.user
+            )
+
+            # Generate the data
+            data = generate_data_from_sessions(sessions, request.user)
+        except LookupError:
+            pass
+
+    else:
+        data_file = ContentFile('')
+
+    # Finalize the output
+    if (downloads.cleaned_data['file_type'] == 'application/xlsx'):
+        # Create an excel workbook wrapped around python byte io.
+        # Use in memory to prevent the use of temp files.
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # Create a worksheet.
+        worksheet = workbook.add_worksheet()
+
+        # Add data
+        column = 'A'
+        row = 1
+        for inventory in data:
+
+
+            cell = (column + '{}').format(row)
+            print(cell)
+            worksheet.write(cell, inventory['inventory'])
+
+            row += 1
+
+        # Close the workbook
+        workbook.close()
+
+        # Get the output bytes for creating a django file
+        output = output.getvalue()
+
+        # Set the appropriate application extension
+        extension = '.xlsx'
+    else:
+        # Generate the JSON output string
+        output = json.dumps(data)
+
+        # Set the appropriate application extension
+        extension = '.json'
+
+    # Generate the data file
+    data_file = ContentFile(output)
+
+    # Create the response containing the file
+    response = HttpResponse(
+        data_file,
+        content_type=downloads.cleaned_data['file_type']
+    )
+    response['Content-Disposition'] = 'attachment; filename=statistics{}'.format(extension)
+    return response
