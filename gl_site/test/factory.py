@@ -9,7 +9,7 @@ from datetime import date
 
 # Inventories
 from gl_site.inventories import inventory_cls_list
-from .statistics.inventory_answers_and_metrics import inventory_data
+from .statistics.inventory_answers import inventory_data
 
 class Factory:
     """ Factory class for creating commonly used objects in testing """
