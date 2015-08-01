@@ -42,6 +42,16 @@ $(function() {
 
         // Append all sessions matching the organization
         $session.append($options.filter("[organization='" + $org.val() + "']"));
+
+        // Set the downloads fields.
+        $('#id_downloads_organization').val($(this).val());
+        $('#id_downloads_session').val(null);
+    });
+
+    // Bind session on change to dynamically set the corresponding
+    // downloads input.
+    $session.change(function() {
+        $('#id_downloads_session').val($(this).val())
     });
 
     // Bind the window resize event to a funciton for

@@ -39,12 +39,16 @@
                     </legend>
                     <form id="statistics_download_form" action="{% url 'download_data' %}" method="get">
                         {% csrf_token %}
-                        {% for field in downloads %}
-                            <div class="form-group">
+                        {% for field in downloads.visible_fields %}
+                            <div class="form-group ">
                                 {{ field.label }}
                                 {{ field }}
                             </div>
                         {% endfor %}
+                        {% for field in downloads.hidden_fields %}
+                            {{ field }}
+                        {% endfor %}
+                        <br />
                         <input type="submit" class="form-control btn btn-default" value="Download"/>
                     </form>
                 </fieldset>
@@ -60,7 +64,7 @@
                 <div class="lead-panel">
                     <select id="inventory-selection" class="form-control"></select>
                     <!-- Base div each inventory graph is appended to -->
-                    <div id="graphs" style="margin-top:20px;"></div>
+                    <div id="graphs" class="margin-top-20-px"></div>
                 </div>
             </div>
         </div>

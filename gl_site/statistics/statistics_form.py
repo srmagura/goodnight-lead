@@ -80,3 +80,11 @@ class statistics_download_form(statistics_request_form):
         ('application/json', 'JSON')
     )
     file_type = forms.ChoiceField(choices=choices)
+
+    def __init__(self, *args, **kwargs):
+        """ Set ModelChoiceFields to hidden inputs """
+
+        super(statistics_download_form, self).__init__(*args, **kwargs)
+
+        self.fields['organization'].widget = forms.HiddenInput()
+        self.fields['session'].widget = forms.HiddenInput()
