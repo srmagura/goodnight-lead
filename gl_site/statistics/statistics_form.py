@@ -76,7 +76,7 @@ class statistics_download_form(statistics_request_form):
 
     # Download choices
     choices = (
-        ('application/json', 'JSON'),
-        ('application/xlsx', 'Excel')
+        ('application/xlsx', 'Excel'),
+        ('application/json', 'JSON')
     )
     file_type = forms.ChoiceField(choices=choices)

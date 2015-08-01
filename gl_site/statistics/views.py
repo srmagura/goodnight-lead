@@ -128,16 +128,23 @@ def download_data(request):
         worksheet = workbook.add_worksheet()
 
         # Add data
-        column = 'A'
         row = 1
         for inventory in data:
+            for metric in inventory['data']:
+                # Start in column A
+                column = ord('A')
+                cell = (chr(column) + '{}').format(row)
 
+                # Write the inventory namew
+                worksheet.write(cell, inventory['inventory'])
 
-            cell = (column + '{}').format(row)
-            print(cell)
-            worksheet.write(cell, inventory['inventory'])
+                for value in metric.values():
+                    column += 1
+                    cell = (chr(column) + '{}').format(row)
+                    worksheet.write(cell, value)
 
-            row += 1
+                # Move on to the next row
+                row += 1
 
         # Close the workbook
         workbook.close()
