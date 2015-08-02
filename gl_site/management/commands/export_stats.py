@@ -1,11 +1,11 @@
 from collections import OrderedDict
-from StringIO import StringIO
+from io import StringIO
 
 import numpy as np
 from django.core.management.base import BaseCommand, CommandError
 
-from app.models import Submission, Metric
-from app.inventories import inventory_by_id, BigFive, CoreSelf, CareerCommitment, Ambiguity, FiroB, Via
+from gl_site.models import Submission, Metric
+from gl_site.inventories import inventory_by_id, BigFive, CoreSelf, CareerCommitment, Ambiguity, FiroB, Via
 
 numeric_inventories = ('BigFive', 'CoreSelf',
     'CareerCommitment', 'Ambiguity', 'FiroB')

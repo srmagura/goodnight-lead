@@ -72,6 +72,10 @@ class TestGenerateData(TestCase):
         # Generate the 10th set of data
         Factory.create_set_of_submissions(self.user)
 
+        # Set staff to check for analysis
+        self.user.is_staff = True
+        self.user.save()
+
         # Load the data
         data = generate_data_from_sessions(self.sessions, self.user)
 
@@ -85,6 +89,8 @@ class TestGenerateData(TestCase):
             # Data is present
             self.assertIn('inventory', entry)
             self.assertIn('data', entry)
+            if (entry['inventory'] != 'Via'):
+                self.assertIn('analysis', entry)
 
             # Grab all the metrics
             metrics = Metric.objects.filter(

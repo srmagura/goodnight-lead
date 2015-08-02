@@ -121,7 +121,7 @@ $(function() {
                     .x("key")
                     .y("value")
                     .height(graph_height)
-                    .width($graphs.width())
+                    .width($graphs.width());
             }
 
             // Detach the rendered graphs.

@@ -8,6 +8,11 @@ from gl_site.inventories.via import Via
 # Via categories
 from gl_site.statistics import via_inverse
 
+# numpy
+import numpy
+
+from pprint import pprint
+
 # Minimum number of submissions needed to load data
 MINIMUM_SUBMISSIONS = 10
 
@@ -86,7 +91,24 @@ def generate_data_from_sessions(sessions, user):
         submission__inventory_id__in=excludes
     )
 
-    # Data set to be returned
+    # Data set to be generated
+    #
+    # Data dict takes the form
+    # {
+    #   'BigFive': {
+    #       'metrics': {
+    #           'agreeableness': [{}, {}]
+    #       },
+    #       'analysis': {
+    #           'agreeableness': [{}, {}]
+    #       }
+    #    },
+    #    'Ambiguity': {
+    #       ...
+    #    },
+    #    ...
+    # }
+    # Analysis only provided for staff. Not provided for Via.
     data = {}
 
     # Process all metrics
@@ -96,12 +118,16 @@ def generate_data_from_sessions(sessions, user):
         inventory_cls = inventory_by_id[metric.submission.inventory_id]
         inventory_name = inventory_cls.__name__
 
-        # If the inventory does not yet exist in the returned data set, add it
+        # If the inventory does not yet exist in the data set, add it
         if (inventory_name not in data):
-            data[inventory_name] = []
+            data[inventory_name] = {'metrics': {}}
+
+        # If the metric list does not exist
+        if (metric.key not in data[inventory_name]['metrics']):
+            data[inventory_name]['metrics'][metric.key] = []
 
         # Append the value to the data set
-        data[inventory_name].append({
+        data[inventory_name]['metrics'][metric.key].append({
             "name": ("Metric-{}".format(metric_id)),
             "key": metric.key,
             "value": metric.value
@@ -109,6 +135,31 @@ def generate_data_from_sessions(sessions, user):
 
         # Increment id
         metric_id += 1
+
+    # Generate min, max, mean, and standard deviation
+    # for staff only
+    if (user.is_staff):
+        # For each inventory. At this point list does not include Via.
+        for inventory in data.values():
+            # Create the analysis dict
+            inventory['analysis'] = {}
+
+            # For each subgroup of metrics
+            for key, items in inventory['metrics'].items():
+                # Data array
+                staff_data = []
+
+                # All item values that will be processed
+                item_values = [item['value'] for item in items]
+
+                # Calculate min, max, mean, and standard deviation
+                staff_data.append({'metric': key, 'type': 'min', 'value': min(item_values)})
+                staff_data.append({'metric': key, 'type': 'max', 'value': max(item_values)})
+                staff_data.append({'metric': key, 'type': 'mean', 'value': numpy.mean(item_values)})
+                staff_data.append({'metric': key, 'type': 'standard_deviation', 'value': numpy.std(item_values)})
+
+                # Append the data
+                inventory['analysis'][key] = staff_data
 
     # Via data
     via_data = {}
@@ -139,16 +190,27 @@ def generate_data_from_sessions(sessions, user):
 
         # Add the via data
         if (len(via_data.items()) > 0):
-            data[Via.__name__] = []
+            data[Via.__name__] = {'metrics': {}}
             for key, value in via_data.items():
                 value['name'] = via_inverse[key] # Via category
                 value['key'] = key
-                data[Via.__name__].append(value)
+                data[Via.__name__]['metrics'][key] = [value]
 
     # Return an ordered list
     data_list = []
     for key, value in data.items():
-        data_list.append({'inventory': key, 'data': value})
+        inventory = {'inventory': key, 'data': []}
+        for sublist in value['metrics'].values():
+            inventory['data'] += sublist
+
+        if ('analysis' in value):
+            inventory['analysis'] = []
+
+            for analysis in value['analysis'].values():
+                inventory['analysis'].append(analysis)
+
+        data_list.append(inventory)
+
     data_list = sorted(data_list, key=lambda k: k['inventory'])
 
     if (len(data_list) == 0):

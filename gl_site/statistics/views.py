@@ -99,7 +99,7 @@ def download_data(request):
     )
 
     # If it is a valid choice
-    if ( downloads.is_valid()):
+    if (downloads.is_valid()):
         data = []
         try:
             # Validate sessions
@@ -130,21 +130,29 @@ def download_data(request):
         # Add data
         row = 1
         for inventory in data:
-            for metric in inventory['data']:
-                # Start in column A
-                column = ord('A')
-                cell = (chr(column) + '{}').format(row)
+            # Generate the writeable data
+            writeable_data = [inventory['data']]
+            if ('analysis' in inventory):
+                for value in inventory['analysis']:
+                    writeable_data.append(value)
 
-                # Write the inventory namew
-                worksheet.write(cell, inventory['inventory'])
-
-                for value in metric.values():
-                    column += 1
+            # Write all the data
+            for data_set in writeable_data:
+                for data_point in data_set:
+                    # Start in column A
+                    column = ord('A')
                     cell = (chr(column) + '{}').format(row)
-                    worksheet.write(cell, value)
 
-                # Move on to the next row
-                row += 1
+                    # Write the inventory namew
+                    worksheet.write(cell, inventory['inventory'])
+
+                    for value in data_point.values():
+                        column += 1
+                        cell = (chr(column) + '{}').format(row)
+                        worksheet.write(cell, value)
+
+                    # Move on to the next row
+                    row += 1
 
         # Close the workbook
         workbook.close()
