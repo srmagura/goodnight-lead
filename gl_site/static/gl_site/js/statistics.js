@@ -7,22 +7,42 @@
 $(function() {
     // Graph height
     var graph_height = 600;
+
     // Drawn plots
     var graphs = {};
 
     // Store jquery elements in more convenient varialbes
-    var $form = $("#statistics_request_form");
-    var $org = $("#id_organization");
-    var $session = $("#id_session");
-    var $options;
-    var $graphColumn = $("#graph-column");
-    var $graphs = $("#graphs");
-    var $graphContainers;
-    var $messages = $("#statistics-messages");
-    var $inventorySelect = $("#inventory-selection");
+    var $form = $("#statistics_request_form"),
+        $org = $("#id_organization"),
+        $session = $("#id_session"),
+        $downloads_session = $("#id_downloads_session"),
+        $downloads_organization = $("#id_downloads_organization"),
+        $options,
 
-    // Hide the graphs
+        $graphColumn = $("#graph-column"),
+        $graphs = $("#graphs"),
+        $graphContainers,
+
+        $messages = $("#statistics-messages"),
+
+        $inventorySelect = $("#inventory-selection"),
+        $analysis = $("#analysis"),
+        $tables = $();
+
+    // Other variables
+    var MIN = 0,
+        MAX = 1,
+        MEAN = 2,
+        STANDARD_DEVIATION = 3,
+        PRECISION = 2,
+        VIA = "Via",
+        BAR = "bar",
+        BOX = "box",
+        ANALYSIS_PRIFIX = "#analysis-";
+
+    // Hide the graphs and analysis
     $graphColumn.hide();
+    $analysis.hide();
 
     // If there is more than one organization, remove
     // all options but the empty value from the session select.
@@ -44,14 +64,14 @@ $(function() {
         $session.append($options.filter("[organization='" + $org.val() + "']"));
 
         // Set the downloads fields.
-        $('#id_downloads_organization').val($(this).val());
-        $('#id_downloads_session').val(null);
+        $downloads_organization.val($(this).val());
+        $downloads_session.val(null);
     });
 
     // Bind session on change to dynamically set the corresponding
     // downloads input.
     $session.change(function() {
-        $('#id_downloads_session').val($(this).val())
+        $downloads_session.val($(this).val())
     });
 
     // Bind the window resize event to a funciton for
@@ -67,10 +87,26 @@ $(function() {
     // Inventory selection change
     // Attach the selected graph.
     $inventorySelect.change(function() {
+        // Get the selected inventory
         var selected = $inventorySelect.val();
+
+        // Empty the graphs, add the correct one, and draw
         $graphs.empty();
         $graphs.append($graphContainers.filter("#" + selected));
         graphs[selected].draw();
+
+        // Empty the tables
+        $analysis.empty();
+
+        // Add the correct one if it exists, otherwise hide
+        var $table = $tables.filter(ANALYSIS_PRIFIX + selected);
+
+        if ($table.length) {
+            $analysis.append($table);
+            $analysis.show();
+        } else {
+            $analysis.hide();
+        }
     });
 
     // Bind the form submit action to a custom function
@@ -99,8 +135,55 @@ $(function() {
             for (var key in data) {
                 var inventory = data[key].inventory;
                 var inventory_data = data[key].data;
+                var inventory_analysis = data[key].analysis;
 
-                var type = (inventory == "Via") ? "bar" : "box";
+                // If there is an inventory analysis, build the table for it
+                if (inventory_analysis) {
+                    var $table = $(
+                        '<table id="analysis-' + inventory +
+                        '" class="table table-hover table-collapsed"></table>'
+                    );
+                    $table.append(
+                        $("<caption>" + inventory + "</caption>"),
+                        $("<thead></thead>").append(
+                            $("<th>Metric</th>"),
+                            $("<th>Min</th>"),
+                            $("<th>Max</th>"),
+                            $("<th>Mean</th>"),
+                            $("<th>Standard Deviation</th>")
+                        )
+                    );
+
+                    var $body = $("<tbody></tbody>");
+
+                    for (var i in inventory_analysis) {
+                        analysis = inventory_analysis[i];
+                        $body.append(
+                            $("<tr></tr>").append(
+                                $("<td>" + analysis[MIN].metric +
+                                    "</td>"),
+                                $("<td>" + analysis[MIN].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[MAX].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[MEAN].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[STANDARD_DEVIATION]
+                                    .value.toFixed(PRECISION) +
+                                    "</td>")
+                            )
+                        );
+                    }
+
+                    // Add to the list of tables
+                    $table.append($body);
+                    $tables = $tables.add($table);
+                }
+
+                var type = (inventory == VIA) ? BAR : BOX;
 
                 // Append the select option and graph div for the inventory
                 $inventorySelect.append(
