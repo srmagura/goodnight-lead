@@ -205,7 +205,13 @@ $(function() {
                     .x("key")
                     .y("value")
                     .height(graph_height)
-                    .width($graphs.width());
+                    .width($graphs.width())
+                    .text("mute");
+
+                // Set the color for bar graphs like VIA
+                if (type == BAR) {
+                    graphs[inventory_name].color("name");
+                }
             }
 
             // Detach the rendered graphs.
