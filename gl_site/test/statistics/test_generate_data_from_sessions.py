@@ -10,6 +10,7 @@ from gl_site.models import Metric
 
 # Inventories
 from gl_site.inventories import inventory_cls_list
+from gl_site.inventories.via import Via
 
 class TestGenerateData(TestCase):
     """ Test case for generating statistics data from sessions """
@@ -82,14 +83,14 @@ class TestGenerateData(TestCase):
         # All 6 inventories should be listed
         self.assertEqual(6, len(data))
 
-        inventories_by_name = {i.__name__: i for i in inventory_cls_list}
+        inventories_by_name = {i.name: i for i in inventory_cls_list}
 
         # Validate each inventory
         for entry in data:
             # Data is present
             self.assertIn('inventory', entry)
             self.assertIn('data', entry)
-            if (entry['inventory'] != 'Via'):
+            if (entry['inventory'] != Via.name):
                 self.assertIn('analysis', entry)
 
             # Grab all the metrics
@@ -99,7 +100,7 @@ class TestGenerateData(TestCase):
             ).count()
 
             # If not via number of data points is equal to the nubmer of metrics
-            if entry['inventory'] != 'Via':
+            if entry['inventory'] != Via.name:
                 self.assertEqual(metrics, len(entry['data']))
             # Via datapoints is equal to the number of signature
             # strengths. 3 for this data set because all the data

@@ -145,3 +145,13 @@ a.navbar-brand .navbar-text {
 .margin-top-20-px {
     margin-top:20px;
 }
+
+/***** Container for informational popovers anchor *****/
+.bottom-popover-container {
+    position:absolute;
+    bottom:15px;
+    width: 65%;
+}
+.bottom-popover-container-wrapper {
+    margin-top:30px;
+}

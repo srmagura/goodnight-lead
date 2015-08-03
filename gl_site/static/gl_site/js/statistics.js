@@ -130,6 +130,7 @@ $(function() {
             $graphColumn.show();
             $inventorySelect.empty();
             $graphs.empty();
+            $tables.empty();
 
             // Process all available inventories
             for (var key in data) {
@@ -223,6 +224,8 @@ $(function() {
         }).fail(function(xhr, status, error) {
             // Hide the graph column and parse for messages
             $graphColumn.hide();
+            $analysis.hide();
+
             messages = JSON.parse(xhr.responseText);
 
             // Process each message
