@@ -114,7 +114,7 @@ def generate_data_from_sessions(sessions, user):
     for metric in metrics:
         # Inventory the metric belongs to
         inventory_cls = inventory_by_id[metric.submission.inventory_id]
-        inventory_name = inventory_cls.__name__
+        inventory_name = inventory_cls.name
 
         # If the inventory does not yet exist in the data set, add it
         if (inventory_name not in data):
@@ -188,11 +188,11 @@ def generate_data_from_sessions(sessions, user):
 
         # Add the via data
         if (len(via_data.items()) > 0):
-            data[Via.__name__] = {'metrics': {}}
+            data[Via.name] = {'metrics': {}}
             for key, value in via_data.items():
                 value['name'] = via_inverse[key] # Via category
                 value['key'] = key
-                data[Via.__name__]['metrics'][key] = [value]
+                data[Via.name]['metrics'][key] = [value]
 
     # Return an ordered list
     data_list = []

@@ -35,7 +35,7 @@ $(function() {
         MEAN = 2,
         STANDARD_DEVIATION = 3,
         PRECISION = 2,
-        VIA = "Via",
+        VIA = "VIA",
         BAR = "bar",
         BOX = "box",
         ANALYSIS_PRIFIX = "#analysis-";
@@ -133,14 +133,15 @@ $(function() {
 
             // Process all available inventories
             for (var key in data) {
-                var inventory = data[key].inventory;
-                var inventory_data = data[key].data;
-                var inventory_analysis = data[key].analysis;
+                var inventory = data[key].inventory,
+                    inventory_name = inventory.replace(/ /g, "-"),
+                    inventory_data = data[key].data,
+                    inventory_analysis = data[key].analysis;
 
                 // If there is an inventory analysis, build the table for it
                 if (inventory_analysis) {
                     var $table = $(
-                        '<table id="analysis-' + inventory +
+                        '<table id="analysis-' + inventory_name +
                         '" class="table table-hover table-collapsed"></table>'
                     );
                     $table.append(
@@ -183,21 +184,21 @@ $(function() {
                     $tables = $tables.add($table);
                 }
 
-                var type = (inventory == VIA) ? BAR : BOX;
+                var type = (inventory_name === VIA) ? BAR : BOX;
 
                 // Append the select option and graph div for the inventory
                 $inventorySelect.append(
                     $("<option></option>")
-                    .val(inventory)
+                    .val(inventory_name)
                     .html(inventory)
                 );
                 $graphs.append(
-                    $('<div></div>').attr("id", inventory)
+                    $('<div></div>').attr("id", inventory_name)
                 );
 
                 // Generate the plot
-                graphs[inventory] = d3plus.viz()
-                    .container(("#" + inventory))
+                graphs[inventory_name] = d3plus.viz()
+                    .container(("#" + inventory_name))
                     .data(inventory_data)
                     .type(type)
                     .id("name")
