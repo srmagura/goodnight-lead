@@ -11,8 +11,6 @@ from gl_site.statistics import via_inverse
 # numpy
 import numpy
 
-from pprint import pprint
-
 # Minimum number of submissions needed to load data
 MINIMUM_SUBMISSIONS = 10
 
