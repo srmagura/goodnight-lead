@@ -33,7 +33,12 @@ $(function() {
     var MIN = 0,
         MAX = 1,
         MEAN = 2,
-        STANDARD_DEVIATION = 3;
+        STANDARD_DEVIATION = 3,
+        PRECISION = 2,
+        VIA = "Via",
+        BAR = "bar",
+        BOX = "box",
+        ANALYSIS_PRIFIX = "#analysis-";
 
     // Hide the graphs and analysis
     $graphColumn.hide();
@@ -94,7 +99,7 @@ $(function() {
         $analysis.empty();
 
         // Add the correct one if it exists, otherwise hide
-        var $table = $tables.filter("#analysis-" + selected);
+        var $table = $tables.filter(ANALYSIS_PRIFIX + selected);
 
         if ($table.length) {
             $analysis.append($table);
@@ -155,11 +160,19 @@ $(function() {
                         analysis = inventory_analysis[i];
                         $body.append(
                             $("<tr></tr>").append(
-                                $("<td>" + analysis[0].metric + "</td>"),
-                                $("<td>" + analysis[0].value + "</td>"),
-                                $("<td>" + analysis[1].value + "</td>"),
-                                $("<td>" + analysis[2].value + "</td>"),
-                                $("<td>" + analysis[3].value.toFixed(2) +
+                                $("<td>" + analysis[MIN].metric +
+                                    "</td>"),
+                                $("<td>" + analysis[MIN].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[MAX].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[MEAN].value.toFixed(
+                                        PRECISION) +
+                                    "</td>"),
+                                $("<td>" + analysis[STANDARD_DEVIATION]
+                                    .value.toFixed(PRECISION) +
                                     "</td>")
                             )
                         );
@@ -168,10 +181,9 @@ $(function() {
                     // Add to the list of tables
                     $table.append($body);
                     $tables = $tables.add($table);
-                    console.log($tables);
                 }
 
-                var type = (inventory == "Via") ? "bar" : "box";
+                var type = (inventory == VIA) ? BAR : BOX;
 
                 // Append the select option and graph div for the inventory
                 $inventorySelect.append(
