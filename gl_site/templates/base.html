@@ -54,11 +54,13 @@
                 </div>
                 <!-- Inner Navbar -->
                 <nav class="navbar-inverse navbar-slide" role="navigation">
-                    <!-- Navbar Links, commented till we have use of it -->
+                    <!-- Navbar Links -->
                     <div class="collapse navbar-collapse navbar-left" id="navbar-links-list">
-                        <ul class="nav navbar-nav">
-                            <li><a href="{% url 'view_statistics' %}">Statistics</a></li>
-                        </ul>
+                        {% if user.is_authenticated %}
+                            <ul class="nav navbar-nav">
+                                <li><a href="{% url 'view_statistics' %}">Statistics</a></li>
+                            </ul>
+                        {% endif %}
                     </div>
 
                     <!-- User dropdown/slideout menu -->
