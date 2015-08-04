@@ -130,7 +130,7 @@ $(function() {
             $graphColumn.show();
             $inventorySelect.empty();
             $graphs.empty();
-            $tables.empty();
+            $tables = $();
 
             // Process all available inventories
             for (var key in data) {
