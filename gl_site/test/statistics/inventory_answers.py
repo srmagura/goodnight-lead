@@ -1,50 +1,34 @@
-inventory_data = {
-    'BigFive': {
-        'answers': '2615472635'
-    },
+import random
 
-    'CoreSelf': {
-        'answers': '454454423244'
-    },
+def _get_answers(n_questions, min, max):
+    """
+    Generate a random answer dictionary for an inventory.
 
-    'CareerCommitment': {
-        'answers': '43252422'
-    },
+    Answers are chosen randomly from random.randrange(min, max+1).
 
-    'Ambiguity': {
-        'answers': '2343255727467626'
-    },
+    n_questions -- number of questions in the inventory
+    """
+    result = {}
 
-    'FiroB': {
-        'answers': {
-            1: 2, 2: 2, 3: 4, 4: 3, 5: 4,
-            6: 5, 7: 3, 8: 3, 9: 3, 10: 6,
-            11: 2, 12: 4, 13: 3, 14: 2, 15: 3,
-            16: 3, 17: 1, 18: 3, 19: 2, 20: 3,
-            21: 4, 22: 5, 23: 4, 24: 6, 25: 4,
-            26: 3, 27: 4, 28: 3, 29: 2, 30: 5,
-            31: 3, 32: 3, 33: 3, 34: 3, 35: 4,
-            36: 2, 37: 2, 38: 1, 39: 3, 40: 5,
-            41: 5, 42: 3, 43: 3, 44: 3, 45: 2,
-            46: 5, 47: 5, 48: 2, 49: 3, 50: 4,
-            51: 2, 52: 4, 53: 2, 54: 3
-        }
-    },
+    for i in range(1, n_questions+1):
+        result[i] = random.randrange(min, max+1)
 
-    'Via': {
-        'answers': (
-            4, 4, 5, 2, 1, 2, 4, 3, 2, 4,
-            1, 2, 3, 4, 3, 1, 2, 2, 4, 4,
-            2, 4, 3, 5, 2, 3, 5, 1, 2, 4,
-            5, 5, 3, 5, 5, 4, 3, 1, 3, 3,
-            4, 3, 4, 2, 3, 3, 2, 4, 5, 3,
-            5, 1, 1, 4, 3, 4, 3, 2, 1, 3,
-            4, 1, 2, 2, 2, 3, 2, 2, 1, 2,
-            1, 2, 3, 4, 2, 1, 4, 1, 2, 2,
-            5, 1, 2, 5, 5, 2, 2, 5, 4, 5,
-            1, 2, 1, 2, 4, 4, 3, 2, 1, 3,
-            2, 1, 5, 1, 4, 5, 3, 3, 1, 5,
-            1, 2, 1, 5, 5, 1, 4, 5, 5, 1
-        )
-    }
-}
+    return result
+
+def get_answers(class_name):
+    """
+    Return a random answer dictionary for the inventory whose Python
+    class name matches `class_name`.
+    """
+    if class_name == 'BigFive':
+        return _get_answers(10, 1, 7)
+    elif class_name == 'CoreSelf':
+        return _get_answers(12, 1, 5)
+    elif class_name == 'CareerCommitment':
+        return _get_answers(8, 1, 5)
+    elif class_name == 'Ambiguity':
+        return _get_answers(16, 1, 7)
+    elif class_name == 'FiroB':
+        return _get_answers(54, 1, 6)
+    elif class_name == 'Via':
+        return _get_answers(120, 1, 5)

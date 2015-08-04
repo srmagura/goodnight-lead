@@ -103,7 +103,6 @@ class TestGenerateData(TestCase):
             if entry['inventory'] != Via.name:
                 self.assertEqual(metrics, len(entry['data']))
             # Via datapoints is equal to the number of signature
-            # strengths. 3 for this data set because all the data
-            # is always the same.
+            # strengths. There should be at least three
             else:
-                self.assertEqual(3, len(entry['data']))
+                self.assertTrue(len(entry['data']) >= 3)

@@ -9,7 +9,7 @@ from datetime import date
 
 # Inventories
 from gl_site.inventories import inventory_cls_list
-from .statistics.inventory_answers import inventory_data
+from .statistics.inventory_answers import get_answers
 
 class Factory:
     """ Factory class for creating commonly used objects in testing """
@@ -23,25 +23,27 @@ class Factory:
         cls.index = cls.index + 1
 
     @classmethod
-    def create_organization(cls, created_by):
+    def create_organization(cls, created_by, **kwargs):
         """ Create an organization and set the creating user """
+        name = kwargs.get('name', 'Test Organization {}'.format(cls.index))
 
         org = Organization.objects.create(
-            name = "Test Organization {}".format(cls.index),
-            code = "Secret {}".format(cls.index),
-            created_by = created_by
+            name=name,
+            code="Secret {}".format(cls.index),
+            created_by=created_by
         )
         cls.increment_index()
         return org
 
     @classmethod
-    def create_session(cls, organization, created_by):
+    def create_session(cls, organization, created_by, **kwargs):
         """ Create a session and set the organization and creating user """
+        name = kwargs.get('name', 'Test Session {}'.format(cls.index))
 
         session = Session.objects.create(
-            name = "Test Session {}".format(cls.index),
-            organization = organization,
-            created_by = created_by
+            name=name,
+            organization=organization,
+            created_by=created_by
         )
         cls.increment_index()
         return session
@@ -161,29 +163,8 @@ class Factory:
             inventory.set_submission(submission)
 
             # Set answers and compute metrics
-            answers = inventory_data[inventory_cls.__name__]['answers']
-            cls.set_answers(inventory, answers)
+            inventory.answers = get_answers(inventory_cls.__name__)
             inventory.compute_metrics()
 
             # Save the metrics
             inventory.save_metrics()
-
-    @classmethod
-    def set_answers(cls, inv, answers):
-        """ Imports provided answers into an inventory's
-            answers dictionary.
-
-            Inputs:
-            inv     - Instance of Inventory which the answers will be
-                      imported to.
-            answers - Set of pre-defined answers for an inventory.
-
-        """
-        if type(answers) is dict:
-            inv.answers = answers
-        else:
-            inv.answers = {}
-            i = 1
-            for answer in answers:
-                inv.answers[i] = answer
-                i += 1
