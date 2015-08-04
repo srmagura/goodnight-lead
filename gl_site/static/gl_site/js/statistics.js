@@ -248,4 +248,6 @@ $(function() {
             }
         });
     });
+
+    $form.submit()
 });

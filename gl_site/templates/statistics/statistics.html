@@ -8,8 +8,10 @@
 {% block head %}
     <script src="{% static 'gl_site/js/d3plus.v1.7.4/js/d3.min.js' %}"></script>
     <script src="{% static 'gl_site/js/d3plus.v1.7.4/js/d3plus.min.js' %}"></script>
-    <script src = "{% static 'gl_site/js/statistics.js' %}"></script>
+    <script src="{% static 'gl_site/js/statistics.js' %}"></script>
     <script src="{% static 'gl_site/js/equalHeight.js' %}"></script>
+
+    <link type="text/css" rel="stylesheet" href="{% static 'gl_site/css/statistics.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -18,58 +20,62 @@
             <div class="col-md-offset-2 col-md-4">
                 <fieldset class="lead-panel equal-height">
                     <legend class="legend">
-                        View Statistics
+                        Choose Sample
                     </legend>
+                    <p>
+                        You are currently viewing data for users who belong to the
+                        (organization/session) <span class="sample-name">[name here]</span>.
+                        There are <span class="sample-users">[#]</span> users in this sample.
+                        Use the form below to change the sample.
+                    </p>
                     <form id="statistics_request_form" action="{% url 'load_data' %}" method="get">
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="form-group">
-                                {{ field.label }}
+                                <label for="{{ field.name }}">{{ field.label }}</label>
                                 {{ field }}
                             </div>
                         {% endfor %}
-                        <input type="submit" class="form-control btn btn-default" value="View"/>
+                        <input type="submit" class="form-control btn btn-default" value="Change sample"/>
                     </form>
+                    <div class="bottom-popover-container-wrapper">
+                        <div class="bottom-popover-container">
+                            <a class="popover-toggle" data-toggle="popover"
+                                tabindex="0" role="button"
+                                data-trigger="focus" data-placement="top"
+                                data-html="true"
+                                data-content="All data displayed on this page and in exported files is
+                                anonymous. Only LEAD Lab admins can view or download statistics when the sample size
+                                is fewer than 10 users.">
+                                Your privacy <span class="glyphicon glyphicon-info-sign"></span></a>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
             <div class="col-md-4">
                 <fieldset class="lead-panel equal-height">
                     <legend class="legend">
-                        Download Statistics
+                        Export Data
                     </legend>
+                    <p>
+                        Use this form to export data to a file. Export files contain the inventory scores ("metrics")
+                        that were used to generate the plots displayed below, as well as the mean, standard deviation,
+                        and range for each metric type. <a href="">Visit the wiki for more information</a>
+                    </p>
+                    <br>
                     <form id="statistics_download_form" action="{% url 'download_data' %}" method="get">
                         {% csrf_token %}
                         {% for field in downloads.visible_fields %}
                             <div class="form-group ">
-                                {{ field.label }}
+                                <label for="{{ field.name }}">{{ field.label }}</label>
                                 {{ field }}
                             </div>
                         {% endfor %}
                         {% for field in downloads.hidden_fields %}
                             {{ field }}
                         {% endfor %}
-                        <br />
                         <input type="submit" class="form-control btn btn-default" value="Download"/>
                     </form>
-                    <div class="bottom-popover-container-wrapper">
-                        <div class="bottom-popover-container">
-                            <a class="popover-toggle" data-toggle="popover"
-                                tabindex="0" role="button"
-                                data-trigger="focus"
-                                data-html="true"
-                                data-content="The statistics page displays information for all
-                                inventories in the organizations that you have access to. Within
-                                an organization, you may choose to show statistics for any particular
-                                session, or all of them. <br /><br />
-                                For security, all metrics are anonymous. We do not display
-                                information for inventories if there are less than 10 data points
-                                available. If you are a program coordinator and would like to request
-                                this data, please contact a member of the Lead staff. <br /><br />
-                                Downloads will contain all data in the currently selected data set.
-                                For convenience, data is provided in both Excel and JSON formats.">
-                                About Statistics <span class="glyphicon glyphicon-info-sign"></span></a>
-                        </div>
-                    </div>
                 </fieldset>
             </div>
         </div>

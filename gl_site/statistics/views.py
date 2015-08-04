@@ -45,7 +45,8 @@ def view_statistics(request):
     )
     return render(request, 'statistics/statistics.html', {
         'form': form,
-        'downloads': downloads
+        'downloads': downloads,
+        'statistics_active': True,
     })
 
 @login_required

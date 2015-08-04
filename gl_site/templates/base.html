@@ -40,6 +40,7 @@
                             {% endif %}
                         </div>
                         <!-- Links toggle, commented till we have use of it -->
+                        <!--
                         <div class="pull-right">
                             <button type="button" class="navbar-toggle" data-target="#navbar-links-list">
                                 <span class="sr-only">Show links</span>
@@ -48,6 +49,7 @@
                                 <span class="icon-bar"></span>
                             </button>
                         </div>
+                        -->
                     </div>
                     <!-- Navbar Brand -->
                     <a class="navbar-brand" href="{% url 'dashboard' %}"><span><img height="40px" width="30px" class="navbar-logo pull-left" src="{% static 'gl_site/images/logo.png' %}"/><p class="navbar-text">Home</p></span></a>
@@ -58,7 +60,9 @@
                     <div class="collapse navbar-collapse navbar-left" id="navbar-links-list">
                         {% if user.is_authenticated %}
                             <ul class="nav navbar-nav">
-                                <li><a href="{% url 'view_statistics' %}">Statistics</a></li>
+                                <li class="{% if statistics_active %} active {% endif %}">
+                                    <a href="{% url 'view_statistics' %}">Statistics</a>
+                                </li>
                             </ul>
                         {% endif %}
                     </div>
