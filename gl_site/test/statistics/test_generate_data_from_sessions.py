@@ -29,12 +29,12 @@ class TestGenerateData(TestCase):
         self.sessions = [self.session1, self.session2, self.session3]
 
         # Attach an explicit, no staff user, to the organization
-        self.user, self.info = Factory.create_user_in_session(self.session1)
+        self.user, self.info = Factory.create_user(self.session1)
 
         # Generate data (3 sets of submissions) for each session
         for session in self.sessions:
             for i in range(0, 3):
-                user, info = Factory.create_user_in_session(session)
+                user, info = Factory.create_user(session)
                 Factory.create_set_of_submissions(user)
 
     def test_not_enough_user_staff(self):

@@ -47,10 +47,14 @@ class Factory:
         return session
 
     @classmethod
-    def create_user(cls):
+    def create_user(cls, session=None):
         """
         Create a default user, including its LeadUserInfo, Organization,
         and Session.
+
+        If a session argument is provided, the user will be placed in
+        the session and its organization. No new organization or session
+        is created.
         """
         user = User.objects.create_user(
             username = "testuser{}".format(cls.index),
@@ -60,8 +64,11 @@ class Factory:
             last_name = "user{}".format(cls.index)
         )
 
-        organization = cls.create_organization(user)
-        session = cls.create_session(organization, user)
+        if session is None:
+            organization = cls.create_organization(user)
+            session = cls.create_session(organization, user)
+        else:
+            organization = session.organization
 
         info = LeadUserInfo.objects.create(
             user = user,
@@ -74,32 +81,6 @@ class Factory:
         )
 
         cls.increment_index()
-        return (user, info)
-
-    @classmethod
-    def create_user_in_session(cls, session):
-        """ Create a user and place in the provided session """
-
-        user = User.objects.create_user(
-            username = "testuser{}".format(cls.index),
-            email = "testuser{}@gmail.com".format(cls.index),
-            password = cls.default_password,
-            first_name = "test{}".format(cls.index),
-            last_name = "user{}".format(cls.index)
-        )
-
-        info = LeadUserInfo.objects.create(
-            user = user,
-            gender = 'M',
-            major = LeadUserInfo.OTHER,
-            education = 'FR',
-            graduation_date = date.today(),
-            organization = session.organization,
-            session = session
-        )
-
-        cls.increment_index()
-
         return (user, info)
 
     @classmethod
