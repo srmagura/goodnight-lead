@@ -19,10 +19,6 @@ import json
 # Excel
 import xlsxwriter
 
-from django.db import connection, reset_queries
-from pprint import pprint
-
-
 # Response statuses
 BAD_REQUEST = 400
 FORBIDDEN = 403
@@ -83,16 +79,9 @@ def load_data(request):
             request.user
         )
 
-        reset_queries()
-
-
         # Generate and format the data
         data = generate_data_from_sessions(sessions, request.user)
         data = format_graph_data(data)
-
-        pprint(data)
-
-        pprint(connection.queries)
 
         # Return the JSON encoded response
         return JsonResponse(data, safe=False)

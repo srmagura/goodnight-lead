@@ -1,10 +1,10 @@
 via_categories = {
-    'Wisdom and Knowledge': ['Creativity', 'Curiosity', 'Open Mindedness', 'Love Of Learning', 'Perspective'],
-    'Courage': ['Bravery', 'Perserverance', 'Integrity', 'Vitality'],
-    'Humanity': ['Love', 'Kindness', 'Social Intelligence'],
-    'Justice': ['Citizenship', 'Fairness', 'Leadership'],
-    'Temperance': ['Forgiveness', 'Humility', 'Prudence', 'Self Regulation'],
-    'Transcendence': ['Appreciation Of Beauty', 'Gratitude', 'Hopefulness', 'Humour', 'Spirituality']
+    'Wisdom and Knowledge': ['creativity', 'curiosity', 'open_mindedness', 'love_of_learning', 'perspective'],
+    'Courage': ['bravery', 'perserverance', 'integrity', 'vitality'],
+    'Humanity': ['love', 'kindness', 'social_intelligence'],
+    'Justice': ['citizenship', 'fairness', 'leadership'],
+    'Temperance': ['forgiveness', 'humility', 'prudence', 'self_regulation'],
+    'Transcendence': ['appreciation_of_beauty', 'gratitude', 'hopefulness', 'humour', 'spirituality']
 }
 via_inverse = {}
 for key, value in via_categories.items():
