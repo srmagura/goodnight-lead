@@ -1,15 +1,14 @@
 # Models
 from gl_site.models import Metric, Submission, Organization, Session
+from django.db.models import Count, Min, Max, Avg, StdDev
+from django.contrib.auth.models import User
 
 # Inventories
-from gl_site.inventories import inventory_by_id, numeric_inventory_cls_list
+from gl_site.inventories import inventory_by_id, inventory_cls_list, numeric_inventory_cls_list
 from gl_site.inventories.via import Via
 
 # Via categories
 from gl_site.statistics import via_inverse
-
-# numpy
-import numpy
 
 # Minimum number of submissions needed to load data
 MINIMUM_SUBMISSIONS = 10
@@ -69,130 +68,132 @@ def validate_sessions(organization, session, user):
 def generate_data_from_sessions(sessions, user):
     """ Generate the data for a set of selected sessions """
 
-    # List of inventories to exclude
+    # Returned data set
+    data = {}
+
+    # SELECT COUNT from all submissions in the requested session
+    # for all inventories. GROUP BY inventory_id.
+    # Aggregate by count and annotate results
+    data['submission_counts'] = Submission.objects.filter(
+        user__leaduserinfo__session__in=sessions
+    ).values(
+        'inventory_id'
+    ).annotate(
+        count=Count('inventory_id')
+    )
+
+    # Process excludes. Inventories with 0 submissions do not show up,
+    # but they will be excluded by default as there are no submissions.
+    # Admins will see all submissions.
     excludes = []
     if (not user.is_staff):
-        for inventory_cls in numeric_inventory_cls_list:
-            count = Submission.objects.filter(inventory_id=inventory_cls.inventory_id).count()
-            if (count < MINIMUM_SUBMISSIONS):
-                excludes.append(inventory_cls.inventory_id)
+        for submission in data['submission_counts']:
+            if (submission['count'] < MINIMUM_SUBMISSIONS):
+                excludes.append(submission['inventory_id'])
 
-    # Get all metrics belonging to users
-    # registered for each session in sessions.
-    # If a session is in the excludes list it is ignored
-    # Exclude Via. It is processed separately for simplicity.
-    metrics = Metric.objects.filter(
+    # If there are no inventories in the submission counts, or excludes
+    # contains all inventories, there is no data to return.
+    if (len(excludes) == len(inventory_cls_list) or not data['submission_counts']):
+        raise LookupError(NO_DATA)
+
+    # Get all metrics in the provided sessions that are
+    # not in the excludes list or VIA.
+    # GROUP BY key and submission.inventory_id.
+    # Aggregate on Min, Max, Avg (mean), and StdDev.
+    # Annotate selected values with aggregation results.
+    data['metrics_analysis'] = Metric.objects.filter(
         submission__user__leaduserinfo__session__in=sessions
     ).exclude(
         submission__inventory_id=Via.inventory_id
     ).exclude(
         submission__inventory_id__in=excludes
+    ).values(
+        'key', 'submission__inventory_id'
+    ).annotate(
+        min=Min('value'),
+        max=Max('value'),
+        mean=Avg('value'),
+        standard_deviation=StdDev('value')
     )
 
-    # Data set to be generated
-    #
-    # Data dict takes the form
-    # {
-    #   'BigFive': {
-    #       'metrics': {
-    #           'agreeableness': [{}, {}]
-    #       },
-    #       'analysis': {
-    #           'agreeableness': [{}, {}]
-    #       }
-    #    },
-    #    'Ambiguity': {
-    #       ...
-    #    },
-    #    ...
-    # }
-    # Analysis only provided for staff. Not provided for Via.
-    data = {}
-
-    # Process all metrics
-    metric_id = 0 # Unique anonymous id for each metric
-    for metric in metrics:
-        # Inventory the metric belongs to
-        inventory_cls = inventory_by_id[metric.submission.inventory_id]
-        inventory_name = inventory_cls.name
-
-        # If the inventory does not yet exist in the data set, add it
-        if (inventory_name not in data):
-            data[inventory_name] = {'metrics': {}}
-
-        # If the metric list does not exist
-        if (metric.key not in data[inventory_name]['metrics']):
-            data[inventory_name]['metrics'][metric.key] = []
-
-        # Append the value to the data set
-        data[inventory_name]['metrics'][metric.key].append({
-            "name": ("Metric-{}".format(metric_id)),
-            "key": metric.key,
-            "value": metric.value
-        })
-
-        # Increment id
-        metric_id += 1
-
-    # Generate min, max, mean, and standard deviation
-    # for staff only
-    if (user.is_staff):
-        # For each inventory. At this point list does not include Via.
-        for inventory in data.values():
-            # Create the analysis dict
-            inventory['analysis'] = {}
-
-            # For each subgroup of metrics
-            for key, items in inventory['metrics'].items():
-                # Data array
-                staff_data = []
-
-                # All item values that will be processed
-                item_values = [item['value'] for item in items]
-
-                # Calculate min, max, mean, and standard deviation
-                staff_data.append({'metric': key, 'type': 'min', 'value': min(item_values)})
-                staff_data.append({'metric': key, 'type': 'max', 'value': max(item_values)})
-                staff_data.append({'metric': key, 'type': 'mean', 'value': numpy.mean(item_values)})
-                staff_data.append({'metric': key, 'type': 'standard_deviation', 'value': numpy.std(item_values)})
-
-                # Append the data
-                inventory['analysis'][key] = staff_data
-
-    # Via data
-    via_data = {}
-
-    # Get all via Submissions in selected sessions.
-    submissions = Submission.objects.filter(
-        inventory_id=Via.inventory_id,
-        user__leaduserinfo__session__in=sessions
+    # Get all users, filtered by users that are in in the
+    # selected sessions. Prefetch all submissions by
+    # user.submission_set as the reverse many to one foreign
+    # key relationship held by Submission. Prefetch all metrics
+    # by submission_set.metric_set as the reverse many to one
+    # foreign key relationship held by Metric.
+    data['users'] = User.objects.prefetch_related(
+        'submission_set__metric_set'
+    ).filter(
+        leaduserinfo__session__in=sessions
     )
 
-    if (len(submissions) >= MINIMUM_SUBMISSIONS or user.is_staff):
-        # Process each submission
-        for submission in submissions:
-            # Get the associated metrics and process them
-            strengths = {}
-            metrics = Metric.objects.filter(submission=submission)
-            Via().review_process_metrics(strengths, metrics)
+    return data
 
-            # Process the strengths
-            for strength in strengths['strengths']:
-                if (strength['is_signature']):
-                    name = strength['strength']
-                    if (name not in via_data):
-                        via_data[name] = {}
-                        via_data[name]['value'] = 0
+def format_graph_data(preformatted):
+    """ Format data as needed for displaying graphs.
+        Expects data to be a dict containing users,
+        metric_analysis, and submission_counts as
+        returned by generate_data_from_sessions.
+    """
 
-                    via_data[name]['value'] += 1
+    # Returned data set
+    data = {inventory.name: {} for inventory in inventory_cls_list}
 
-        # Add the via data
-        if (len(via_data.items()) > 0):
-            data[Via.name] = {'metrics': {}}
-            for key, value in via_data.items():
-                value['name'] = via_inverse[key] # Via category
-                value['key'] = key
-                data[Via.name]['metrics'][key] = [value]
+    # Format the analysis
+    for analysis in preformatted['metrics_analysis']:
+        # Inventory
+        inventory = inventory_by_id[analysis['submission__inventory_id']]
+
+        # If not initialized, add the analysis
+        if ('analysis' not in data[inventory.name]):
+            data[inventory.name]['analysis'] = {}
+
+        # Add the analysis
+        key = analysis['key']
+        data[inventory.name]['analysis'][key] = [
+            {'metric': key, 'type': 'min', 'value': analysis['min']},
+            {'metric': key, 'type': 'max', 'value': analysis['max']},
+            {'metric': key, 'type': 'mean', 'value': analysis['mean']},
+            {'metric': key, 'type': 'standard_deviation', 'value': analysis['standard_deviation']},
+        ]
+
+    # Format the submission counts
+    for inventory in preformatted['submission_counts']:
+        # Inventory
+        inventory_name = inventory_by_id[inventory['inventory_id']].name
+
+        # Set the submission count
+        data[inventory_name]['submission_count'] = inventory['count']
+
+    # Format the metrics for all users
+    metric_id = 0
+    for user in preformatted['users']:
+        # For all submissions the user has made
+        for submission in user.submission_set.all():
+            inventory_name = inventory_by_id[submission.inventory_id].name
+
+            # Initialize metrics if it doesn't exist
+            if ('metrics' not in data[inventory_name]):
+                data[inventory_name]['metrics'] = {}
+
+            # TODO process VIA metrics differently
+            # TODO exclude analysis for non staff
+
+            # For each metric in the submission
+            for metric in submission.metric_set.all():
+                # If the metric list does not exist
+                if (metric.key not in data[inventory_name]['metrics']):
+                    data[inventory_name]['metrics'][metric.key] = []
+
+                # Append the value to the data set
+                data[inventory_name]['metrics'][metric.key].append({
+                    "name": ("Metric-{}".format(metric_id)),
+                    "key": metric.key,
+                    "value": metric.value
+                })
+
+                metric_id += 1
 
     # Return an ordered list
     data_list = []
@@ -211,7 +212,7 @@ def generate_data_from_sessions(sessions, user):
 
     data_list = sorted(data_list, key=lambda k: k['inventory'])
 
-    if (len(data_list) == 0):
-        raise LookupError(NO_DATA)
-
     return data_list
+
+def format_file_data(preformatted):
+    pass

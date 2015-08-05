@@ -7,7 +7,7 @@ from gl_site.custom_auth import login_required
 from gl_site.statistics.statistics_form import  statistics_request_form, statistics_download_form
 
 # Data
-from .data_generation import generate_data_from_sessions, get_queryset, validate_sessions
+from .data_generation import format_graph_data, format_file_data, generate_data_from_sessions, get_queryset, validate_sessions
 
 # IO
 from django.core.files.base import ContentFile
@@ -18,6 +18,10 @@ import json
 
 # Excel
 import xlsxwriter
+
+from django.db import connection, reset_queries
+from pprint import pprint
+
 
 # Response statuses
 BAD_REQUEST = 400
@@ -79,8 +83,16 @@ def load_data(request):
             request.user
         )
 
-        # Generate the data
+        reset_queries()
+
+
+        # Generate and format the data
         data = generate_data_from_sessions(sessions, request.user)
+        data = format_graph_data(data)
+
+        pprint(data)
+
+        pprint(connection.queries)
 
         # Return the JSON encoded response
         return JsonResponse(data, safe=False)
