@@ -23,9 +23,6 @@
                         Choose Sample
                     </legend>
                     <p>
-                        You are currently viewing data for users who belong to the
-                        (organization/session) <span class="sample-name">[name here]</span>.
-                        There are <span class="sample-users">[#]</span> users in this sample.
                         Use the form below to change the sample.
                     </p>
                     <form id="statistics_request_form" action="{% url 'load_data' %}" method="get">
@@ -87,6 +84,9 @@
         <div class="row">
             <div id="graph-column" class="col-md-offset-2 col-md-8">
                 <div class="lead-panel">
+                    <p>
+                        There are <span class="sample-users">[#]</span> users in this sample.
+                    </p>
                     <select id="inventory-selection" class="form-control"></select>
                     <!-- Base div each inventory graph is appended to -->
                     <div id="graphs" class="margin-top-20-px"></div>

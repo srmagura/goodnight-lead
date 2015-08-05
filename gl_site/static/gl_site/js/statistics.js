@@ -11,6 +11,9 @@ $(function() {
     // Drawn plots
     var graphs = {};
 
+    // Users in sample
+    var users_in_sample = {};
+
     // Store jquery elements in more convenient varialbes
     var $form = $("#statistics_request_form"),
         $org = $("#id_organization"),
@@ -90,6 +93,9 @@ $(function() {
         // Get the selected inventory
         var selected = $inventorySelect.val();
 
+        // Set users in sample
+        $(".sample-users").html(users_in_sample[selected]);
+
         // Empty the graphs, add the correct one, and draw
         $graphs.empty();
         $graphs.append($graphContainers.filter("#" + selected));
@@ -138,6 +144,9 @@ $(function() {
                     inventory_name = inventory.replace(/ /g, "-"),
                     inventory_data = data[key].data,
                     inventory_analysis = data[key].analysis;
+
+                // Set the count of users in sample
+                users_in_sample[inventory_name] = data[key].count;
 
                 // If there is an inventory analysis, build the table for it
                 if (inventory_analysis) {

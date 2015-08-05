@@ -10,9 +10,6 @@ from gl_site.inventories.via import Via
 # Via categories
 from gl_site.statistics import via_inverse
 
-
-from pprint import pprint
-
 # Minimum number of submissions needed to load data
 MINIMUM_SUBMISSIONS = 10
 
@@ -217,7 +214,7 @@ def format_graph_data(preformatted):
     # Return an ordered list
     data_list = []
     for key, value in data.items():
-        inventory = {'inventory': key, 'data': []}
+        inventory = {'inventory': key, 'count': value['submission_count'], 'data': []}
 
         if (key == Via.name):
             for strength, num_signature in value['metrics'].items():
