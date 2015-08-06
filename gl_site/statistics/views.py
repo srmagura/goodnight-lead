@@ -8,6 +8,7 @@ from gl_site.statistics.statistics_form import  statistics_request_form, statist
 
 # Data
 from .data_generation import format_graph_data, format_file_data, generate_data_from_sessions, get_queryset, validate_sessions
+from gl_site.statistics import inventory_keys
 
 # IO
 from django.core.files.base import ContentFile
@@ -17,8 +18,7 @@ from io import BytesIO
 import json
 
 # Excel
-import xlsxwriter
-
+import xlsxwrite
 # Response statuses
 BAD_REQUEST = 400
 FORBIDDEN = 403
@@ -113,6 +113,7 @@ def download_data(request):
 
             # Generate the data
             data = generate_data_from_sessions(sessions, request.user)
+            data = format_file_data(data)
         except LookupError:
             pass
 
@@ -129,32 +130,46 @@ def download_data(request):
         # Create a worksheet.
         worksheet = workbook.add_worksheet()
 
-        # Add data
-        row = 1
-        for inventory in data:
-            # Generate the writeable data
-            writeable_data = [inventory['data']]
-            if ('analysis' in inventory):
-                for value in inventory['analysis']:
-                    writeable_data.append(value)
+        # Set ID, Organization, and Session headers
+        worksheet.write('A1', 'User ID')
+        worksheet.write('B1', 'Organization')
+        worksheet.write('C1', 'Session')
 
-            # Write all the data
-            for data_set in writeable_data:
-                for data_point in data_set:
-                    # Start in column A
+        # Add all user IDs (row number), organization, and session information
+        row = 2
+        for user in data:
+            worksheet.write('A{}'.format(row), row - 1)
+            worksheet.write('B{}'.format(row), user['organization'])
+            worksheet.write('C{}'.format(row), user['session'])
+            row += 1
+
+        # Print inventory data starting at column D
+        prefix = ''
+        column = ord('D')
+        for inventory in inventory_keys:
+            # Print all metrics within the inventory
+            for key in inventory['keys']:
+                # If column is greater than 'Z' move to 'AA'
+                if (column > ord('Z')):
+                    prefix = 'A'
                     column = ord('A')
-                    cell = (chr(column) + '{}').format(row)
 
-                    # Write the inventory namew
-                    worksheet.write(cell, inventory['inventory'])
+                # Write the column header: Inventory - Metric
+                worksheet.write(prefix + chr(column) + '1', inventory['name'] + ' - ' + key)
 
-                    for value in data_point.values():
-                        column += 1
-                        cell = (chr(column) + '{}').format(row)
-                        worksheet.write(cell, value)
+                # Print metric data for each user
+                row = 2
+                for user in data:
+                    # Only print if the user has data for this inventory
+                    if (inventory['name'] in user):
+                        cell = (prefix + chr(column) + '{}').format(row)
+                        worksheet.write(cell, user[inventory['name']][key])
 
                     # Move on to the next row
                     row += 1
+
+                # Move on to the next column
+                column += 1
 
         # Close the workbook
         workbook.close()

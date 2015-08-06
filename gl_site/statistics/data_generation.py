@@ -1,6 +1,6 @@
 # Models
 from gl_site.models import Metric, Submission, Organization, Session
-from django.db.models import Count, Min, Max, Avg, StdDev
+from django.db.models import Count, Min, Max, Avg, StdDev, Prefetch
 from django.contrib.auth.models import User
 
 # Inventories
@@ -123,11 +123,26 @@ def generate_data_from_sessions(sessions, user):
     # user.submission_set as the reverse many to one foreign
     # key relationship held by Submission. Prefetch all metrics
     # by submission_set.metric_set as the reverse many to one
-    # foreign key relationship held by Metric.
+    # foreign key relationship held by Metric. Select organization
+    # and session to pre cache values. Order by organization and
+    # then by session
+    metrics = Prefetch('metric_set',
+        to_attr='metrics',
+        queryset=Metric.objects.all()
+    )
+    submissions = Prefetch(
+        'submission_set',
+        to_attr='submissions',
+        queryset=Submission.objects.exclude(inventory_id__in=excludes).prefetch_related(metrics)
+    )
     data['users'] = User.objects.prefetch_related(
-        'submission_set__metric_set'
+        submissions
+    ).select_related(
+        'leaduserinfo__organization', 'leaduserinfo__session'
     ).filter(
         leaduserinfo__session__in=sessions
+    ).order_by(
+        'leaduserinfo__organization', 'leaduserinfo__session'
     )
 
     return data
@@ -173,7 +188,7 @@ def format_graph_data(preformatted):
     metric_id = 0
     for user in preformatted['users']:
         # For all submissions the user has made
-        for submission in user.submission_set.all():
+        for submission in user.submissions:
             inventory_name = inventory_by_id[submission.inventory_id].name
 
             # Initialize metrics if it doesn't exist
@@ -183,7 +198,7 @@ def format_graph_data(preformatted):
             # Process VIA
             if (inventory_name == Via.name):
                 # Get the signature strengths from the metrics
-                metrics = submission.metric_set.all().order_by('key')
+                metrics = submission.metrics
                 strength_list = sorted(metrics, key=lambda metric: metric.value, reverse=True)
                 strength_list = strength_list[:Via.n_signature]
 
@@ -197,7 +212,7 @@ def format_graph_data(preformatted):
             # Non VIA inventories
             else:
                 # For each metric in the submission
-                for metric in submission.metric_set.all():
+                for metric in submission.metrics:
                     # If the metric list does not exist
                     if (metric.key not in data[inventory_name]['metrics']):
                         data[inventory_name]['metrics'][metric.key] = []
@@ -240,4 +255,33 @@ def format_graph_data(preformatted):
     return data_list
 
 def format_file_data(preformatted):
-    pass
+    """ Format data as needed for downloading files.
+        Expects data to be a dict containing users,
+        metric_analysis, and submission_counts as
+        returned by generate_data_from_sessions.
+    """
+
+    # Data list to be returned
+    data = []
+
+    # Process each user
+    for user in preformatted['users']:
+        if (user.submissions):
+            user_data = {
+                'organization': user.leaduserinfo.organization.name,
+                'session': user.leaduserinfo.session.name
+            }
+
+            # Process all submissions
+            for submission in user.submissions:
+                inventory_name = inventory_by_id[submission.inventory_id].name
+                user_data[inventory_name] = {}
+
+                # Proccess all metrics
+                for metric in submission.metrics:
+                    user_data[inventory_name][metric.key] = metric.value
+
+            # Append data
+            data.append(user_data)
+
+    return data
