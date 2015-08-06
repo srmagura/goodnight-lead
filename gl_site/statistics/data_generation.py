@@ -229,10 +229,10 @@ def format_graph_data(preformatted):
     # Return an ordered list
     data_list = []
     for key, value in data.items():
-        inventory = {'inventory': key, 'count': value['submission_count'], 'data': []}
-
         # Only add the metrics if any exist
         if ('metrics' in value):
+            inventory = {'inventory': key, 'count': value['submission_count'], 'data': []}
+            
             if (key == Via.name):
                 for strength, num_signature in value['metrics'].items():
                     inventory['data'].append({
