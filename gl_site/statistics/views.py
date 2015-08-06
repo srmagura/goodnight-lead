@@ -18,7 +18,8 @@ from io import BytesIO
 import json
 
 # Excel
-import xlsxwrite
+import xlsxwriter
+
 # Response statuses
 BAD_REQUEST = 400
 FORBIDDEN = 403
