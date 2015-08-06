@@ -231,16 +231,18 @@ def format_graph_data(preformatted):
     for key, value in data.items():
         inventory = {'inventory': key, 'count': value['submission_count'], 'data': []}
 
-        if (key == Via.name):
-            for strength, num_signature in value['metrics'].items():
-                inventory['data'].append({
-                    'name': via_inverse[strength], # Via category
-                    'key': strength,
-                    'value': num_signature
-                })
-        else:
-            for sublist in value['metrics'].values():
-                inventory['data'] += sublist
+        # Only add the metrics if any exist
+        if ('metrics' in value):
+            if (key == Via.name):
+                for strength, num_signature in value['metrics'].items():
+                    inventory['data'].append({
+                        'name': via_inverse[strength], # Via category
+                        'key': strength,
+                        'value': num_signature
+                    })
+            else:
+                for sublist in value['metrics'].values():
+                    inventory['data'] += sublist
 
         if ('analysis' in value):
             inventory['analysis'] = []
