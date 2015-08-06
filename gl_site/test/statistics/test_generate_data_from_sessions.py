@@ -6,7 +6,8 @@ from django.test import TestCase
 from gl_site.test.factory import Factory
 
 # Models
-from gl_site.models import Metric
+from gl_site.models import Metric, Submission
+from django.db.models import Count, Min, Max, Avg, StdDev
 
 # Inventories
 from gl_site.inventories import inventory_cls_list
@@ -28,7 +29,7 @@ class TestGenerateData(TestCase):
         self.session3 = Factory.create_session(self.org, self.admin)
         self.sessions = [self.session1, self.session2, self.session3]
 
-        # Attach an explicit, no staff user, to the organization
+        # Attach an explicit, non staff user, to the organization
         self.user, self.info = Factory.create_user(self.session1)
 
         # Generate data (3 sets of submissions) for each session
@@ -50,8 +51,10 @@ class TestGenerateData(TestCase):
         # Request the data and verify it exists
         data = generate_data_from_sessions(self.sessions, self.user)
 
-        # One entry for each of the 6 inventories
-        self.assertEqual(6, len(data))
+        # All three sets of subdata should exist
+        self.assertIn('submission_counts', data)
+        self.assertIn('metrics_analysis', data)
+        self.assertIn('users', data)
 
     def test_not_enough_user_regular(self):
         """ Regular users should not be able to view statistics without data.
@@ -73,6 +76,14 @@ class TestGenerateData(TestCase):
         # Generate the 10th set of data
         Factory.create_set_of_submissions(self.user)
 
+        # Generate the data for a non staff
+        data = generate_data_from_sessions(self.sessions, self.user)
+
+        # Verify non staff do not have access to analysis
+        self.assertIn('submission_counts', data)
+        self.assertNotIn('metrics_analysis', data)
+        self.assertIn('users', data)
+
         # Set staff to check for analysis
         self.user.is_staff = True
         self.user.save()
@@ -80,29 +91,58 @@ class TestGenerateData(TestCase):
         # Load the data
         data = generate_data_from_sessions(self.sessions, self.user)
 
-        # All 6 inventories should be listed
-        self.assertEqual(6, len(data))
+        # Verify staff have all data
+        self.assertIn('submission_counts', data)
+        self.assertIn('metrics_analysis', data)
+        self.assertIn('users', data)
 
-        inventories_by_name = {i.name: i for i in inventory_cls_list}
+        # Verify each submission has a submission count
+        self.assertEqual(6, len(data['submission_counts']))
 
-        # Validate each inventory
-        for entry in data:
-            # Data is present
-            self.assertIn('inventory', entry)
-            self.assertIn('data', entry)
-            if (entry['inventory'] != Via.name):
-                self.assertIn('analysis', entry)
+        # Verify the submission count is correct
+        for submission in data['submission_counts']:
+            correct_count = Submission.objects.filter(inventory_id=submission['inventory_id']).count()
+            self.assertEqual(submission['count'], correct_count)
 
-            # Grab all the metrics
-            metrics = Metric.objects.filter(
-                submission__inventory_id=inventories_by_name[entry['inventory']].inventory_id,
-                submission__user__leaduserinfo__session__in=self.sessions
-            ).count()
+        # Verify that there is a metric analysis for each metric
+        # That does not belong to Via.
+        correct_count = Metric.objects.exclude(
+            submission__inventory_id=Via.inventory_id
+        ).distinct('key', 'submission__inventory_id').count()
+        self.assertEqual(len(data['metrics_analysis']), correct_count)
 
-            # If not via number of data points is equal to the nubmer of metrics
-            if entry['inventory'] != Via.name:
-                self.assertEqual(metrics, len(entry['data']))
-            # Via datapoints is equal to the number of signature
-            # strengths. There should be at least three
-            else:
-                self.assertTrue(len(entry['data']) >= 3)
+        # Verify that the metric analysis for each inventory is correct
+        for analysis in data['metrics_analysis']:
+            correct_analysis = Metric.objects.filter(
+                key=analysis['key'],
+                submission__inventory_id=analysis['submission__inventory_id']
+            ).values(
+                'key', 'submission__inventory_id'
+            ).annotate(
+                min=Min('value'),
+                max=Max('value'),
+                mean=Avg('value'),
+                standard_deviation=StdDev('value')
+            )
+
+            self.assertDictEqual(analysis, correct_analysis[0])
+
+        # Verify that the user data is correct
+        for user in data['users']:
+            # The correct number of submissions has been attached
+            num_submissions = Submission.objects.filter(user=user).count()
+            self.assertEqual(len(user.submissions), num_submissions)
+
+            # For each user submission
+            for submission in user.submissions:
+                # The submission belongs to the user
+                self.assertEqual(user, submission.user)
+
+                # The correct metrics exist in the submission
+                num_metrics = Metric.objects.filter(submission=submission).count()
+                self.assertEqual(len(submission.metrics), num_metrics)
+
+                # For each submission metric
+                for metric in submission.metrics:
+                    # The metric belongs to the submission
+                    self.assertEqual(submission, metric.submission)
