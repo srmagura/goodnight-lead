@@ -11,6 +11,8 @@ from django.db.models import Count, Min, Max, Avg, StdDev
 
 # Inventories
 from gl_site.inventories import inventory_cls_list
+from gl_site.inventories.big_five import BigFive
+from gl_site.inventories.ambiguity import Ambiguity
 from gl_site.inventories.via import Via
 
 class TestGenerateData(TestCase):
@@ -137,6 +139,59 @@ class TestGenerateData(TestCase):
             for submission in user.submissions:
                 # The submission belongs to the user
                 self.assertEqual(user, submission.user)
+
+                # The correct metrics exist in the submission
+                num_metrics = Metric.objects.filter(submission=submission).count()
+                self.assertEqual(len(submission.metrics), num_metrics)
+
+                # For each submission metric
+                for metric in submission.metrics:
+                    # The metric belongs to the submission
+                    self.assertEqual(submission, metric.submission)
+
+    def test_partial_excludes(self):
+        """ Data is only supposed to be generated for non staff users
+            for inventories that have 10 submissions. Previous tests
+            checked for all inventories at this boundary. Test that if
+            some inventories have 10 submissions and some have less,
+            only the ones which meet the requirement are returned
+            within the data set.
+        """
+
+        # Create a submission for Big Five, Ambiguity, and Via
+        Factory.create_submission(self.user, BigFive)
+        Factory.create_submission(self.user, Ambiguity)
+        Factory.create_submission(self.user, Via)
+
+        # List of inventory id's a valid submission may have
+        valid_submissions = [BigFive.inventory_id, Ambiguity.inventory_id, Via.inventory_id]
+
+        # Grab the data
+        data = generate_data_from_sessions(self.sessions, self.user)
+
+        # A count of all submissions exists
+        self.assertEqual(6, len(data['submission_counts']))
+
+        # Verify the submission count is correct
+        for submission in data['submission_counts']:
+            correct_count = Submission.objects.filter(inventory_id=submission['inventory_id']).count()
+            self.assertEqual(submission['count'], correct_count)
+
+        # Non admin does not have analysis
+        self.assertNotIn('metrics_analysis', data)
+
+        # Verify that the user data is correct
+        for user in data['users']:
+            # The correct number of submissions has been attached
+            self.assertEqual(len(user.submissions), len(valid_submissions))
+
+            # For each user submission
+            for submission in user.submissions:
+                # The submission belongs to the user
+                self.assertEqual(user, submission.user)
+
+                # The submission is valid
+                self.assertIn(submission.inventory_id, valid_submissions)
 
                 # The correct metrics exist in the submission
                 num_metrics = Metric.objects.filter(submission=submission).count()

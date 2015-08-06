@@ -148,23 +148,29 @@ class Factory:
         return form
 
     @classmethod
+    def create_submission(cls, user, inventory_cls):
+        """ Generate and save a single submission for an inventory """
+
+        # Create an inventory
+        inventory =  inventory_cls()
+
+        # Generate the submission
+        submission = Submission()
+        submission.inventory_id = inventory.inventory_id
+        submission.user = user
+        submission.current_page = inventory.n_pages - 1
+        submission.save()
+        inventory.set_submission(submission)
+
+        # Set answers and compute metrics
+        inventory.answers = get_answers(inventory_cls.__name__)
+        inventory.compute_metrics()
+
+        # Save the metrics
+        inventory.save_metrics()
+
+    @classmethod
     def create_set_of_submissions(cls, user):
         """ Generate and save a single set of submissions for each inventory """
         for inventory_cls in inventory_cls_list:
-            # Create an inventory
-            inventory =  inventory_cls()
-
-            # Generate the submission
-            submission = Submission()
-            submission.inventory_id = inventory.inventory_id
-            submission.user = user
-            submission.current_page = inventory.n_pages - 1
-            submission.save()
-            inventory.set_submission(submission)
-
-            # Set answers and compute metrics
-            inventory.answers = get_answers(inventory_cls.__name__)
-            inventory.compute_metrics()
-
-            # Save the metrics
-            inventory.save_metrics()
+            cls.create_submission(user, inventory_cls)
