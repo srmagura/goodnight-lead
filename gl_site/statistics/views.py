@@ -161,8 +161,9 @@ def download_data(request):
                 # Print metric data for each user
                 row = 2
                 for user in data:
+                    inventory_name = inventory['name']
                     # Only print if the user has data for this inventory
-                    if (inventory['name'] in user):
+                    if (inventory_name in user and key in user[inventory_name]):
                         cell = (prefix + chr(column) + '{}').format(row)
                         worksheet.write(cell, user[inventory['name']][key])
 
