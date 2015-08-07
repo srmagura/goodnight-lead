@@ -76,6 +76,8 @@ def generate_data_from_sessions(sessions, user):
     # Aggregate by count and annotate results
     data['submission_counts'] = Submission.objects.filter(
         user__leaduserinfo__session__in=sessions
+    ).exclude(
+        metric__isnull=True
     ).values(
         'inventory_id'
     ).annotate(
@@ -133,7 +135,11 @@ def generate_data_from_sessions(sessions, user):
     submissions = Prefetch(
         'submission_set',
         to_attr='submissions',
-        queryset=Submission.objects.exclude(inventory_id__in=excludes).prefetch_related(metrics)
+        queryset=Submission.objects.exclude(
+            inventory_id__in=excludes
+        ).exclude(
+            metric__isnull=True
+        ).prefetch_related(metrics)
     )
     data['users'] = User.objects.prefetch_related(
         submissions

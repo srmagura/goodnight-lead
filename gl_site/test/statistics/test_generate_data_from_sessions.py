@@ -201,3 +201,33 @@ class TestGenerateData(TestCase):
                 for metric in submission.metrics:
                     # The metric belongs to the submission
                     self.assertEqual(submission, metric.submission)
+
+    def test_incomplete_submissions(self):
+        """ Data generation should ignore incomplete submissions
+            Incomplete submissions have no metrics to process.
+        """
+
+        # Set as admin.
+        self.user.is_staff=True
+        self.user.save()
+
+        # Create a new submission.
+        submission = Submission(
+            user=self.user,
+            inventory_id=Via.inventory_id,
+            current_page=0
+        )
+        submission.save()
+
+        # Generate data
+        data = generate_data_from_sessions(self.sessions, self.user)
+
+        for submission in data['submission_counts']:
+            # Verify the Via count is correct
+            correct_count = Submission.objects.filter(
+                inventory_id=submission['inventory_id']
+            ).exclude(
+                metric__isnull=True
+            ).count()
+
+            self.assertEqual(submission['count'], correct_count)
