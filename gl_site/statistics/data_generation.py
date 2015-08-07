@@ -232,7 +232,7 @@ def format_graph_data(preformatted):
         # Only add the metrics if any exist
         if ('metrics' in value):
             inventory = {'inventory': key, 'count': value['submission_count'], 'data': []}
-            
+
             if (key == Via.name):
                 for strength, num_signature in value['metrics'].items():
                     inventory['data'].append({
@@ -244,13 +244,13 @@ def format_graph_data(preformatted):
                 for sublist in value['metrics'].values():
                     inventory['data'] += sublist
 
-        if ('analysis' in value):
-            inventory['analysis'] = []
+            if ('analysis' in value):
+                inventory['analysis'] = []
 
-            for analysis in value['analysis'].values():
-                inventory['analysis'].append(analysis)
+                for analysis in value['analysis'].values():
+                    inventory['analysis'].append(analysis)
 
-        data_list.append(inventory)
+            data_list.append(inventory)
 
     data_list = sorted(data_list, key=lambda k: k['inventory'])
 
