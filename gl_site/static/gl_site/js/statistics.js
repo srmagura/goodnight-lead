@@ -4,6 +4,15 @@
  * Refer to http://api.jquery.com/jQuery.ajax/
  * for ajax documentation.
  */
+
+VIA = "VIA"
+BAR = "bar"
+BOX = "box"
+
+function getPlotType(inventoryName){
+    return (inventoryName === VIA) ? BAR : BOX;
+}
+
 $(function() {
     // Graph height
     var graph_height = 600;
@@ -38,9 +47,6 @@ $(function() {
         MEAN = 2,
         STANDARD_DEVIATION = 3,
         PRECISION = 2,
-        VIA = "VIA",
-        BAR = "bar",
-        BOX = "box",
         ANALYSIS_PRIFIX = "#analysis-";
 
     // Hide the graphs and analysis
@@ -113,6 +119,12 @@ $(function() {
         } else {
             $analysis.hide();
         }
+
+        if(getPlotType(selected) === BOX){
+            $('.boxplot-popover').show()
+        } else {
+            $('.boxplot-popover').hide()
+        }
     });
 
     // Bind the form submit action to a custom function
@@ -155,7 +167,7 @@ $(function() {
                         '" class="table table-hover table-collapsed"></table>'
                     );
                     $table.append(
-                        $("<caption>" + inventory + "</caption>"),
+                        $("<caption>Additional statistics for " + inventory + "</caption>"),
                         $("<thead></thead>").append(
                             $("<th>Metric</th>"),
                             $("<th>Min</th>"),
@@ -194,7 +206,7 @@ $(function() {
                     $tables = $tables.add($table);
                 }
 
-                var type = (inventory_name === VIA) ? BAR : BOX;
+                var type = getPlotType(inventory_name)
 
                 // Append the select option and graph div for the inventory
                 $inventorySelect.append(

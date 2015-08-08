@@ -55,9 +55,9 @@
                         Export Data
                     </legend>
                     <p>
-                        Use this form to export data to a file. Export files contain the inventory scores ("metrics")
-                        that were used to generate the plots displayed below, as well as the mean, standard deviation,
-                        and range for each metric type. <a href="">Visit the wiki for more information</a>
+                        Use this form to export the inventory scores ("metrics")
+                        that were used to generate the plots displayed below.
+                        <a href="">Visit the wiki for more information</a>
                     </p>
                     <br>
                     <form id="statistics_download_form" action="{% url 'download_data' %}" method="get">
@@ -90,6 +90,33 @@
                     <select id="inventory-selection" class="form-control"></select>
                     <!-- Base div each inventory graph is appended to -->
                     <div id="graphs" class="margin-top-20-px"></div>
+
+                    <div class="bottom-popover-container-wrapper boxplot-popover">
+                        <div class="bottom-popover-container">
+                            <a class="popover-toggle" data-toggle="popover"
+                                tabindex="0" role="button"
+                                data-trigger="focus" data-placement="top"
+                                data-html="true"
+                                data-content="<p>A boxplot, also known as a box-and-whisker plot, is
+                                a graphical representation of a distribution of data. Move your mouse
+                                over the box to bring up an informational dialog.</p>
+
+                                <p>Here's a list that describes what each part of the plot represents.
+                                The interquartile range (IQR) is the third quartile minus the first quartile.</p>
+                                <ul>
+                                    <li><b>Bottom whisker:</b> the &quot;bottom Tukey&quot;, the smallest data point within
+                                        1.5 &times; IQR of the median.
+                                    </li>
+                                    <li><b>Bottom edge of box:</b> the first quartile (25th percentile)</li>
+                                    <li><b>Line through the box:</b> the median (50th percentile)</li>
+                                    <li><b>Top edge of box:</b> the third quartile (75th percentile)</li>
+                                    <li><b>Top whisker:</b> the &quot;top Tukey&quot;, the largest data point within
+                                        1.5 &times; IQR of the median.
+                                    </li>
+                                </ul>">
+                                Understanding boxplots <span class="glyphicon glyphicon-info-sign"></span></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
