@@ -211,16 +211,28 @@ $(function() {
                     .container(("#" + inventory_name))
                     .data(inventory_data)
                     .type(type)
-                    .id("name")
                     .x("key")
                     .y("value")
                     .height(graph_height)
-                    .width($graphs.width())
-                    .text("mute");
+                    .width($graphs.width());
 
                 // Set the color for bar graphs like VIA
                 if (type == BAR) {
-                    graphs[inventory_name].color("name");
+                    graphs[inventory_name].id(["name", "key"])
+                        .color("name")
+                        .text({
+                            "name": "name",
+                            "key": "key"
+                        })
+                        .tooltip({
+                            "Strength": "key"
+                        })
+                        .y({
+                            "label": "Total number of people with this signature strength"
+                        });
+                } else {
+                    graphs[inventory_name].id("name")
+                        .text("mute");
                 }
             }
 
