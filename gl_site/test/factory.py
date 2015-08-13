@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from datetime import date
 
 # Inventories
-from gl_site.inventories import inventory_cls_list
+from gl_site.inventories import inventory_cls_list as all_inventory_classes
 from .statistics.inventory_answers import get_answers
 
 class Factory:
@@ -169,8 +169,19 @@ class Factory:
         # Save the metrics
         inventory.save_metrics()
 
+        # Mark the submission as complete
+        submission.current_page = None
+        submission.save()
+
     @classmethod
-    def create_set_of_submissions(cls, user):
-        """ Generate and save a single set of submissions for each inventory """
+    def create_set_of_submissions(cls, user,
+        inventory_cls_list=all_inventory_classes):
+        """
+        Create and save a submission for each inventory class present
+        in the inventory_cls_list argument.
+
+        If this argument is not provided, a submission for each
+        inventory will be created.
+        """
         for inventory_cls in inventory_cls_list:
             cls.create_submission(user, inventory_cls)
