@@ -93,9 +93,9 @@ def generate_data_from_sessions(sessions, user):
             if (submission['count'] < MINIMUM_SUBMISSIONS):
                 excludes.append(submission['inventory_id'])
 
-    # If there are no inventories in the submission counts, or excludes
-    # contains all inventories, there is no data to return.
-    if (len(excludes) == len(inventory_cls_list) or not data['submission_counts']):
+    # If all inventories are excluded, or the number of excluded inventories
+    # is equal to the number of inventories which have counts.
+    if (len(excludes) == len(inventory_cls_list) or len(excludes) == len(data['submission_counts'])):
         raise LookupError(NO_DATA)
 
     # If the user is staff they have access to extra analysis

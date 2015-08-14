@@ -30,9 +30,12 @@ class SessionWidget(forms.widgets.Select):
             selected_html = ''
 
         try:
-            org = Session.objects.get(name=option_label).organization.id
+            if (option_value == ''):
+                option_value = 0
+            org = Session.objects.get(id=option_value).organization.id
         except Session.DoesNotExist:
             org = ''
+            option_value=''
 
         return format_html('<option organization="{}" value="{}"{}>{}</option>',
                            org,
