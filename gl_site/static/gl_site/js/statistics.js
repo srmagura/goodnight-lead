@@ -9,7 +9,7 @@ VIA = "VIA"
 BAR = "bar"
 BOX = "box"
 
-function getPlotType(inventoryName){
+function getPlotType(inventoryName) {
     return (inventoryName === VIA) ? BAR : BOX;
 }
 
@@ -47,7 +47,9 @@ $(function() {
         MEAN = 2,
         STANDARD_DEVIATION = 3,
         PRECISION = 2,
-        ANALYSIS_PRIFIX = "#analysis-";
+        ANALYSIS_PRIFIX = "#analysis-",
+        MIN_DATA_POINTS_FOR_PLOT = 6,
+        DATA_ERROR = "There are not enough data points to render a box plot";
 
     // Hide the graphs and analysis
     $graphColumn.hide();
@@ -120,7 +122,7 @@ $(function() {
             $analysis.hide();
         }
 
-        if(getPlotType(selected) === BOX){
+        if (getPlotType(selected) === BOX) {
             $('.boxplot-popover').show()
         } else {
             $('.boxplot-popover').hide()
@@ -167,7 +169,8 @@ $(function() {
                         '" class="table table-hover table-collapsed"></table>'
                     );
                     $table.append(
-                        $("<caption>Additional statistics for " + inventory + "</caption>"),
+                        $("<caption>Additional statistics for " +
+                            inventory + "</caption>"),
                         $("<thead></thead>").append(
                             $("<th>Metric</th>"),
                             $("<th>Min</th>"),
@@ -243,8 +246,11 @@ $(function() {
                             "label": "Total number of people with this signature strength"
                         });
                 } else {
-                    graphs[inventory_name].id("name")
-                        .text("mute");
+                    graphs[inventory_name].id("name").text("mute");
+
+                    if (inventory_data.length < MIN_DATA_POINTS_FOR_PLOT) {
+                        graphs[inventory_name].error(DATA_ERROR);
+                    }
                 }
             }
 
