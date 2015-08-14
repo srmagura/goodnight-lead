@@ -34,8 +34,15 @@ class Session(models.Model):
         compare groups in a meaningful way.
     """
 
+    class Meta:
+        # All sessions within an organization should
+        # have a unique name. Organizations may have
+        # sessions named the same as a session within
+        # another organization.
+        unique_together = ('name', 'organization')
+
     # Session name
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
 
     # The creating user of a session
     created_by = models.ForeignKey(User)
