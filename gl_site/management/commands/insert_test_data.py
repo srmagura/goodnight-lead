@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
         # Organization where not everyone has completed all of the inventories
         incomplete = Factory.create_organization(admin, name='Incompletionists')
-        incomplete_session = Factory.create_session(incomplete, admin, name='Fall 2019')
+        incomplete_session = Factory.create_session(incomplete, admin, name='Fall 2016')
 
         for i in range(10):
             # Everyone completes BigFive
