@@ -230,7 +230,7 @@ def format_graph_data(preformatted):
                         "value": metric.value
                     })
 
-            metric_id += 1
+                    metric_id += 1
 
     # Return an ordered list
     data_list = []
