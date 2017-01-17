@@ -11,6 +11,7 @@ SECRET_KEY = 'q(1n%=3@_7q-1fsqfvgbyjou_wsnm6t_@xahz3=i0fnnl&*hs='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Debug is set through environment variables for development.
+# E.g. export GOODNIGHT_LEAD_DEBUG=1
 # The default value is false if the env does not exist.
 # Prod and test do not run in debug mode.
 DEBUG = os.getenv('GOODNIGHT_LEAD_DEBUG', False)
