@@ -1,6 +1,6 @@
 # Goodnight LEAD Lab
 
-Authors: Eric Horton, Sam Magura (śȑmȧgũŗa@ncsu.edu)
+Authors: Eric Horton, Sam Magura (śȑmȧgũŗa@ncsu.edu)   
 License: GPL
 
 LEAD Lab is a web application that lets users answer psychological questionnaires to learn more about themselves. It was developed for use in leadership training seminars run by Goodnight Scholars Program at NC State University.
