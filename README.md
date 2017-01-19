@@ -5,7 +5,7 @@ License: GPL
 
 LEAD Lab is a web application that lets users answer psychological questionnaires to learn more about themselves. It was developed for use in leadership training seminars run by Goodnight Scholars Program at NC State University.
 
-LEAD Lab is written in Python and built on top of the Django web framework. The project is designed to be deployed on Heroku, and as such uses PostgreSQL.
+LEAD Lab is written in Python and built on top of the Django web framework. The project uses PostgresSQL and is designed to be deployed on Heroku.
 
 ## Feature overview
 * **Psychological inventories:** LEAD Lab allows users to fill out and view the results of six different psychological questionnaries, including the Big Five personality test. The results are displayed graphically to make it easy to interpret the results in the context of the general population:
@@ -21,6 +21,11 @@ LEAD Lab is written in Python and built on top of the Django web framework. The 
 [image of registration page]
 
 * **Django admin site:** All administrative tasks are performed via the Django admin site.
+
+* **Customizable dashboard:** In particular, the admin site can be used to edit the HTML content displayed on the dashboard via a WYSIWYG editor.
+[image of WYSIWYG]
+
+The organization and design of LEAD Lab follows the standard conventions for Django projects. The main source code is in the `gl_site` directory. The directory `gl_site/test` contains unit tests for all of the main features.
 
 ## Development and administration information
 The [GitHub Wiki](https://github.com/srmagura/goodnight-lead/wiki) contains guides on deployment, administration, and development of the project.
