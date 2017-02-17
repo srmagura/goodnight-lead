@@ -1,7 +1,16 @@
+"""
+Definition of the tolerance of ambiguity inventory. Features a single page of
+questions.
+"""
+
 from .shared import Inventory, NumberQuestion
 from .view_objects import Slider, SliderContainer, SliderMarker
 
 class AmbiguityQuestion(NumberQuestion):
+    """
+    Question definition for the tolerance of ambiguity inventory.
+    Questions are on a 1 to 7 scale (strongly disagree to strongly agree).
+    """
 
     minimum = 1
     maximum = 7
@@ -13,6 +22,9 @@ class AmbiguityQuestion(NumberQuestion):
 
 
 class Ambiguity(Inventory):
+    """
+    Tolerance of ambiguity inventory.
+    """
 
     name = 'Ambiguity'
     template = 'ambiguity.html'
@@ -37,6 +49,9 @@ class Ambiguity(Inventory):
     }
 
     def __init__(self):
+        """
+        Create question objects
+        """
         self.questions = []
 
         for qid in range(1, len(self.question_text)+1):
@@ -44,6 +59,12 @@ class Ambiguity(Inventory):
             self.questions.append(AmbiguityQuestion(qid, text))
 
     def compute_metrics(self):
+        """
+        Compute the score for this inventory.
+
+        The inventory defines only a single metric, called "score".
+        Even-numbered questions are reverse-scored.
+        """
         score = 0
 
         for qid, answer in self.answers.items():
@@ -55,7 +76,13 @@ class Ambiguity(Inventory):
         self.metrics = {'score': score}
 
     def review_process_metrics(self, data, metrics):
+        """
+        Pass score and slider configuration to the review page
+        """
         score = int(metrics[0].value)
         marker = SliderMarker('you', 'You', score)
-        slider = Slider(16, 112, (marker,))
+
+        min_score = 16
+        max_score = 112
+        slider = Slider(min_score, max_score, (marker,))
         data['slider_container'] = SliderContainer(('', ''), slider)
