@@ -1,9 +1,18 @@
+"""
+Definition of Big Five inventory.
+"""
+
 # pylint: disable=no-init, no-member
 
 from .shared import Inventory, NumberQuestion
 from .view_objects import Slider, SliderMarker, SliderContainer
 
 class BigFiveQuestion(NumberQuestion):
+    """
+    Question definition for Big Five inventory.
+
+    Answer is on a scale of 1 to 7 (strong disagree to strongly agree).
+    """
 
     minimum = 1
     maximum = 7
@@ -15,7 +24,10 @@ class BigFiveQuestion(NumberQuestion):
 
 
 class BigFive(Inventory):
-
+    """
+    Big Five inventory. 10 questions assessing 5 different core personality
+    traits
+    """
 
     name = 'Big Five'
     template = 'big_five.html'
@@ -34,6 +46,9 @@ class BigFive(Inventory):
     }
 
     def __init__(self):
+        """
+        Create question objects
+        """
         self.questions = []
 
         for qid in range(1, len(self.question_text)+1):
@@ -41,6 +56,13 @@ class BigFive(Inventory):
             self.questions.append(BigFiveQuestion(qid, text))
 
     def compute_metrics(self):
+        """
+        Compute the five metrics defined by the inventory: extraversion,
+        agreeableness, conscientiousness, emotional_stability, and openness.
+
+        In the comments below, we say which question numbers are associated
+        with each metric. The letter R indicates a reverse-scored question.
+        """
         def reverse(s):
             return 8 - int(s)
 
@@ -66,10 +88,15 @@ class BigFive(Inventory):
         self.metrics['openness'] =\
             int(self.answers[5]) + reverse(self.answers[10])
 
+        # Each metric has two questions
+        # Divide by two to get the average of the two responses
         for key in self.metrics:
             self.metrics[key] /= 2
 
     def review_process_metrics(self, data, metrics):
+        """
+        Provide the labels, values, and sliders for the review page.
+        """
         keys = (
             'extraversion',
             'agreeableness',
@@ -78,8 +105,11 @@ class BigFive(Inventory):
             'openness'
         )
 
+        # Mean metric values
         means = (4.44, 5.23, 5.4, 4.83, 5.38)
 
+        # Labels for the two ends of each slider, along with descriptive
+        # explanations for what the terms mean
         labels = (
             (
                 ('Introverted', 'Extroverted'),
@@ -107,6 +137,7 @@ class BigFive(Inventory):
         for metric in metrics:
             values[metric.key] = metric.value
 
+        # Create sliders
         slider_containers = []
 
         for i in range(len(keys)):
@@ -120,4 +151,5 @@ class BigFive(Inventory):
             slider_container.sublabels = labels[i][1]
             slider_containers.append(slider_container)
 
+        # Pass to view
         data['slider_containers'] = slider_containers
