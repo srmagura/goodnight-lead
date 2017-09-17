@@ -42,7 +42,6 @@ urlpatterns = patterns('',
 
     # Admin site
     url(r'^admin', include(admin.site.urls)),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
 
     # Catch-all for URLs that do not match any of the above patterns
