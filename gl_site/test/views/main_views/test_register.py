@@ -219,6 +219,9 @@ class TestRegister(TestCase, AccountFormValidator):
             'last_name': 'user'
         }
 
+        # Fields allowed to be empty
+        allowed_fields = ['graduation_date']
+
         # Make the post request
         response = self.client.post('/register/{}'.format(self.info.session.uuid),
             registration_form, follow = True)
@@ -237,6 +240,8 @@ class TestRegister(TestCase, AccountFormValidator):
         # lead stuff
         info_form = response.context['info_form']
         for field in info_form:
+            if field.name in allowed_fields:
+                continue
             self.assertEqual(field.value(), None)
             self.assertEqual(re.sub(r'\* ', '', field.errors.as_text()),
                 'This field is required.')

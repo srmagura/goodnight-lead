@@ -143,7 +143,7 @@ class LeadUserInfo(models.Model):
     education = models.CharField(max_length = 2, choices = education_choices)
 
     # User graduation date
-    graduation_date = models.DateField()
+    graduation_date = models.DateField(blank=True, null=True)
 
     # Foreign key linking to an organization
     organization = models.ForeignKey(Organization)
