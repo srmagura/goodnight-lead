@@ -86,7 +86,7 @@ class LeadUserInfo(models.Model):
     gender_choices = (
         ('M', 'Male'),
         ('F', 'Female'),
-        ('O', 'Other'),
+        ('O', 'Self-Identify'),
         ('N', 'Prefer not to respond'),
     )
     gender = models.CharField(max_length=1, choices=gender_choices)
