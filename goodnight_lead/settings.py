@@ -24,7 +24,6 @@ SECRET_KEY = 'q(1n%=3@_7q-1fsqfvgbyjou_wsnm6t_@xahz3=i0fnnl&*hs='
 # The default value is false if the env does not exist.
 # Prod and test do not run in debug mode.
 DEBUG = os.getenv('GOODNIGHT_LEAD_DEBUG', False)
-TEMPLATE_DEBUG = os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False)
 
 
 # Allow all host headers
@@ -112,3 +111,19 @@ CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
 # Default url for login page (override django default)
 LOGIN_URL = '/login'
+
+
+# Template configuration
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False),
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ]
+        },
+    },
+]
