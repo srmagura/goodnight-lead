@@ -97,13 +97,20 @@ class TestChangePassword(TestCase):
         """
 
         # Log in
-        self.client.login(username = self.user.username, password = Factory.default_password)
+        self.client.login(
+            username=self.user.username,
+            password=Factory.default_password
+        )
 
         # Make the POST request
-        response = self.client.post('/account-settings/password', {
+        response = self.client.post(
+            '/account-settings/password',
+            {
                 'password1': 'new',
                 'password2': 'new'
-            }, follow = True)
+            },
+            follow=True
+        )
 
         # Verify redirected to the account-settings page
         self.assertRedirects(response, '/account-settings')
@@ -115,4 +122,7 @@ class TestChangePassword(TestCase):
 
         # Verify user password changed
         self.client.logout()
-        self.assertTrue(self.client.login(username = self.user.username, password = 'new'))
+        self.assertTrue(self.client.login(
+            username=self.user.username,
+            password='new'
+        ))

@@ -54,10 +54,10 @@ MIDDLEWARE_CLASSES = (
     # Other
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
 
 )
 
@@ -123,6 +123,7 @@ TEMPLATES = [
             'debug': os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False),
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ]
         },
     },

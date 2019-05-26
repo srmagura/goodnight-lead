@@ -1,13 +1,16 @@
-#View imports
+"""Account views."""
+
+
+# Imports
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from gl_site.custom_auth import login_required
 
-#Form imports
+from gl_site.custom_auth import login_required
 from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm
 
-from django.contrib import messages
 
 @login_required
 def account_settings(request):
@@ -54,6 +57,7 @@ def password(request):
             user = request.user
             user.set_password(userPassword)
             user.save()
+            update_session_auth_hash(request, user)
 
             messages.success(request, "Password set successfully")
             return HttpResponseRedirect(reverse('account-settings'))

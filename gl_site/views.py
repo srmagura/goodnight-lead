@@ -72,28 +72,29 @@ def login(request):
 
         if user is None:
             valid = False
-            message = 'Incorrect username or password.'
+            messages.warning(request, 'Incorrect username or password.')
         elif not user.is_active:
             valid = False
-            message = 'Account is disabled.'
+            messages.warning(request, 'Account is disabled.')
         else:
             lead_user_info = LeadUserInfo.objects.filter(user=user)
             if not lead_user_info.exists():
                 valid = False
-                message = ('Your account has no associated demographic '
+                messages.warning(
+                    request,
+                    'Your account has no associated demographic '
                     'information, and thus you are not allowed to login. '
                     'This can only occur if your account was not created '
                     'through the user registration form. '
                     'If you are an administrator, you can still login to '
                     'the admin site. If you would like to access the public '
                     'part of the site, please create a new account through '
-                    'the user registration form.')
+                    'the user registration form.'
+                )
 
         if valid:
             auth.login(request, user)
             return HttpResponseRedirect('/')
-        else:
-            messages.warning(request, message)
 
     return render(request, 'user/login.html')
 
