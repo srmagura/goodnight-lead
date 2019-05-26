@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='leaduserinfo',
             name='session',
-            field=models.ForeignKey(null=True, to='gl_site.Session'),
+            field=models.ForeignKey(null=True, to='gl_site.Session', on_delete=models.PROTECT),
         ),
     ]

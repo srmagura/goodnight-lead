@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=120, unique=True)),
                 ('creation_date', models.DateField(auto_now_add=True)),
                 ('uuid', models.CharField(max_length=32, unique=True)),
-                ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-                ('organization', models.ForeignKey(to='gl_site.Organization')),
+                ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT)),
+                ('organization', models.ForeignKey(to='gl_site.Organization', on_delete=models.CASCADE)),
             ],
         ),
         migrations.RunPython(

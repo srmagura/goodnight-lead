@@ -24,4 +24,4 @@ class AuthTestUtil:
         self.assertTemplateUsed(response, template_name = 'user/login.html')
 
         # Not authenticated
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertFalse(response.context['user'].is_authenticated)

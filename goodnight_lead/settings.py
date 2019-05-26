@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'gl_site'
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
 
     # Security
     'django.middleware.security.SecurityMiddleware',

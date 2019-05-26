@@ -71,4 +71,4 @@ class TestLogin(TestCase, AuthTestUtil):
         self.assertTemplateUsed(response, template_name = 'dashboard.html')
 
         # User authenticated
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)

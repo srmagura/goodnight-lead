@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('major', models.CharField(max_length=100)),
                 ('year', models.IntegerField(choices=[(1, b'Freshman'), (2, b'Sophmore'), (3, b'Junior'), (4, b'Senior')], validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(4)])),
                 ('organization', models.CharField(max_length=100, choices=[(b'gsp', b'Goodnight Scholars Program')])),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -46,17 +46,17 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('inventory_id', models.IntegerField()),
                 ('current_page', models.IntegerField(default=None, null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.AddField(
             model_name='metric',
             name='submission',
-            field=models.ForeignKey(to='gl_site.Submission'),
+            field=models.ForeignKey(to='gl_site.Submission', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='answer',
             name='submission',
-            field=models.ForeignKey(to='gl_site.Submission'),
+            field=models.ForeignKey(to='gl_site.Submission', on_delete=models.CASCADE),
         ),
     ]

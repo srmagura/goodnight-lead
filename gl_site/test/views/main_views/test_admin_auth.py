@@ -38,7 +38,7 @@ class TestAdminAuth(TestCase, AuthTestUtil):
         Assert that we are on the login page and unauthenticated.
         """
         self.assertTemplateUsed(response, template_name='user/login.html')
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertFalse(response.context['user'].is_authenticated)
 
     def test_logged_in_view_login(self):
         """

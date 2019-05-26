@@ -38,7 +38,7 @@ class TestRegister(TestCase, AccountFormValidator):
         response = self.client.get('/register/{}'.format(self.info.session.uuid), follow = True)
 
         # Sanity check
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)
 
         # Verify redirect to dashboard
         self.assertTemplateUsed(response, 'dashboard.html')

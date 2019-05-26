@@ -22,7 +22,7 @@ class Organization(models.Model):
     creation_date = models.DateField(auto_now_add=True)
 
     # Creating user
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -45,13 +45,13 @@ class Session(models.Model):
     name = models.CharField(max_length=120)
 
     # The creating user of a session
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     # Date of creation for record keeping
     creation_date = models.DateField(auto_now_add=True)
 
     # Organization associated with this session
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(Organization, models.CASCADE)
 
     # Universally unique identifier, stored as hex.
     # Used for generating session registration urls.
@@ -80,7 +80,7 @@ class LeadUserInfo(models.Model):
     """
 
     #Linked User
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, models.CASCADE)
 
     #Additional fields
     gender_choices = (
@@ -146,13 +146,13 @@ class LeadUserInfo(models.Model):
     graduation_date = models.DateField(blank=True, null=True)
 
     # Foreign key linking to an organization
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(Organization, models.PROTECT)
 
     # Foreign key linking to a session
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(Session, models.PROTECT)
 
 class Submission(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, models.CASCADE)
     inventory_id = models.IntegerField()
     current_page = models.IntegerField(default=None, null=True)
 
@@ -160,11 +160,11 @@ class Submission(models.Model):
         return self.current_page is None
 
 class Answer(models.Model):
-    submission = models.ForeignKey(Submission)
+    submission = models.ForeignKey(Submission, models.CASCADE)
     question_id = models.IntegerField()
     content = models.CharField(max_length=1000)
 
 class Metric(models.Model):
-    submission = models.ForeignKey(Submission)
+    submission = models.ForeignKey(Submission, models.CASCADE)
     key = models.CharField(max_length=50)
     value = models.FloatField()

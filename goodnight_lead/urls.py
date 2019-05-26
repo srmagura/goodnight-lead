@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^statistics/download_data$', statistic_views.download_data, name='download_data'),
 
     # Admin site
-    url(r'^admin', include(admin.site.urls)),
+    url(r'^admin', admin.site.urls),
     url(r'^set_base_url$', views.set_base_url, name='set_base_url'),
 
     # Catch-all for URLs that do not match any of the above patterns

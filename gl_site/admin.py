@@ -1,14 +1,12 @@
 # Import admin for model admin
 from django.contrib import admin
+from django.urls import reverse
 import django.contrib.auth as auth
 
 # Model imports
 from django.contrib.auth.models import User
 from gl_site.models import Organization, Session
 from gl_site.config_models import SiteConfig, DashboardText
-
-# Reverse and OS used for Session urls
-from django.core.urlresolvers import reverse
 
 
 admin.site.unregister(User)

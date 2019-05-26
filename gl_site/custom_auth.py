@@ -19,7 +19,7 @@ def is_authorized(request):
     an associated LeadUserInfo. LeadUserInfo is not required to login
     to the admin site.
     """
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return False
 
     lead_user_info = LeadUserInfo.objects.filter(user=request.user)

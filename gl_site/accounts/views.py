@@ -4,9 +4,9 @@
 # Imports
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from gl_site.custom_auth import login_required
 from gl_site.forms.user_registration_form import InfoForm, UserSettingsForm, PasswordChangeForm

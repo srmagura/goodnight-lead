@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='leaduserinfo',
             name='organization',
-            field=models.ForeignKey(default=1, to='gl_site.Organization'),
+            field=models.ForeignKey(default=1, to='gl_site.Organization', on_delete=models.PROTECT),
             preserve_default=False,
         ),
     ]
