@@ -1,5 +1,13 @@
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+"""LEAD settings."""
+
+
+# Imports
 import os
+
+import dj_database_url
+
+
+# Project base directory
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -9,16 +17,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'q(1n%=3@_7q-1fsqfvgbyjou_wsnm6t_@xahz3=i0fnnl&*hs='
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # Debug is set through environment variables for development.
 # E.g. export GOODNIGHT_LEAD_DEBUG=1
 # The default value is false if the env does not exist.
 # Prod and test do not run in debug mode.
 DEBUG = os.getenv('GOODNIGHT_LEAD_DEBUG', False)
-
 TEMPLATE_DEBUG = os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False)
 
-ALLOWED_HOSTS = []
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -35,13 +45,21 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+
+    # Security
+    'django.middleware.security.SecurityMiddleware',
+
+    # Whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    # Other
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware'
+
 )
 
 ROOT_URLCONF = 'goodnight_lead.urls'
@@ -62,16 +80,12 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-
-STATIC_URL = '/static/'
-
-
 # Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(default='postgres://gl_dev:pw@localhost/goodnight_lead')
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://gl_dev:pw@localhost/goodnight_lead'
+    )
+}
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -79,11 +93,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Always redirect to use https when not in DEBUG
 SECURE_SSL_REDIRECT = not DEBUG
 
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
-
 # Static asset configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 PROJECT_DIR = os.path.dirname(__file__)
@@ -92,13 +102,13 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, '../static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # We don't currently support uploading images from ckeditor, but we still
 # need to define this variable
 CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
-#Default url for login page (override django default)
+# Default url for login page (override django default)
 LOGIN_URL = '/login'
