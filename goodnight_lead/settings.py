@@ -53,11 +53,11 @@ MIDDLEWARE_CLASSES = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     # Other
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 
 )

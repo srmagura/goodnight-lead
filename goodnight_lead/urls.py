@@ -3,7 +3,7 @@ Define all of the URL patterns for the site.
 """
 
 # Import patterns ant url for registering urls
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
 # Import separate view files for linking urls
 # to the correct views
@@ -14,7 +14,7 @@ from gl_site.statistics import views as statistic_views
 
 from django.contrib import admin
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Dashboard
     url(r'^$', views.dashboard, name='dashboard'),
 
@@ -46,4 +46,4 @@ urlpatterns = patterns('',
 
     # Catch-all for URLs that do not match any of the above patterns
     url(r'^.*$', views.page_not_found, name='page_not_found'),
-)
+]
