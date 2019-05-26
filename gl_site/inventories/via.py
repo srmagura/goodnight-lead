@@ -1,7 +1,9 @@
 import sys
 from collections import OrderedDict
+from pathlib import Path
 
 from .shared import *
+
 
 class ViaQuestion(NumberQuestion):
 
@@ -25,8 +27,7 @@ class Via(Inventory):
     n_signature = 3
 
     def __init__(self):
-        format_str = '{}/gl_site/inventories/via_items.dat'
-        infile = open(format_str.format(sys.path[0]))
+        infile = open(Path(__file__).absolute().parent / 'via_items.dat')
         
         self.question_text = []
         self.scoring_dict = {}
