@@ -97,7 +97,7 @@
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner">
                         {% for quote in quotes %}
-                        <div class="item {% if forloop.counter = 1 %} active {% endif %}">
+                        <div class="item {% if forloop.counter == 1 %} active {% endif %}">
                             <div class="carousel-content-placeholder"></div>
                             <div class="carousel-caption">
                                 {{ quote }}
