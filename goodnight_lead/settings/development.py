@@ -2,11 +2,14 @@
 
 
 # Imports
+import dj_database_url
+
 from goodnight_lead.settings.common import *
 
 
 # Enable debug mode
 DEBUG = True
+TEMPLATES[0]['OPTIONS']['debug'] = True
 
 
 # Define a secret key for development

@@ -2,14 +2,11 @@
 
 
 # Imports
-import os
-
-
-import dj_database_url
+from pathlib import Path
 
 
 # Project base directory
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = Path(__file__).absolute().parent.parent.parent
 
 
 # Installed applications
@@ -74,7 +71,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 
 # We don't currently support uploading images from ckeditor, but we still
@@ -93,7 +90,6 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            'debug': os.getenv('GOODNIGHT_LEAD_TEMPLATE_DEBUG', False),
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',

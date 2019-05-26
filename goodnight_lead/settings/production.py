@@ -2,6 +2,9 @@
 
 
 # Imports
+import os
+
+import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
 from goodnight_lead.settings.common import *
@@ -9,6 +12,7 @@ from goodnight_lead.settings.common import *
 
 # Disable debug mode
 DEBUG = False
+TEMPLATES[0]['OPTIONS']['debug'] = False
 
 
 # Get secret key
