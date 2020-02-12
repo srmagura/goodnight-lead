@@ -35,11 +35,10 @@ class InlineSessionAdmin(admin.TabularInline):
 
     def get_url(self, instance):
         """ Return an absolute url to the session's registration page """
-        if instance.uuid is not "":
+        if instance.uuid != "":
             configs = SiteConfig.objects.all()
 
             if configs.exists():
-                config = configs[0]
                 base_url = configs[0].base_url
             else:
                 base_url = '[base_url]'
